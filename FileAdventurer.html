@@ -11,7 +11,7 @@
 		<title>File Adventurer</title>
 		<meta name="Into the Adventure"
 			content="Your solution for graphically exploring the files on your server."
-			author="Lukas Rickard, edited by Joseph Grant">
+			author="Lukas Rickard, edited by Joseph Grant and Nicholas Howes">
 			
 		<link rel="stylesheet" type="text/css" href="style.css">
 		 <meta http-equiv="Content-Script-Type" content="text/javascript">
@@ -21,18 +21,18 @@
 	<body>
 		<div id="ToolBar">
 			<div id="FileDropdown">
-				<img src="FileDropdown.svg" height="30">
+				<img src="svgs/FileDropdown.svg" height="30">
 			</div>
 			<div id="DirectoryBox">
 				<form  onsubmit="goToDir();">
-					Dir:<input type="text" name="DirectoryInput" value="Enter Directory Here">
-					<input type="submit" value=">">
+					Dir:<input type="text" name="DirectoryInput" placeholder="Enter Directory Here">
+					<input type="button" value=">">
 				</form>
 			</div>
-			<div id="DownloadButton"><img src="DownloadButton.svg" height="30"></div>
-			<div id="UploadButton"><img src="UploadButton.svg" height="30"></div>
-			<div id="DeleteButton"><img src="DeleteButton.svg" height="30"></div>
-			<div id="SSHButton"><img src="SSHButton.svg" height="30"></div>
+			<div id="DownloadButton"><img src="svgs/DownloadButton.svg" height="30"></div>
+			<div id="UploadButton"><img src="svgs/UploadButton.svg" height="30"></div>
+			<div id="DeleteButton"><img src="svgs/DeleteButton.svg" height="30"></div>
+			<div id="SSHButton"><img src="svgs/SSHButton.svg" height="30"></div>
 		</div>
 
 		<div id="FileView">
@@ -43,11 +43,5 @@
 			SSH window: <br />
   			<textarea cols="80" name="SSH Input">%</textarea>
 		</div>
-		
-		<footer>
-		  <hr>
-			<p id="foot"><a href="../index.html" title="Pacificminecraft.com">Logout</a> <br />
-			Copyright © Team Classy~</p>
-		</footer>
 	</body>
 </html>

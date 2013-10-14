@@ -28,10 +28,10 @@ function display()
 	for(i in dirInfo.files)
 	{
 		if(dirInfo.files[i].type == "folder"){
-			$("#FileView").append('<div class="FolderGraphic" id="' + dirInfo.files[i].name + '"><img src="FolderGraphic.svg" >'+ dirInfo.files[i].name+ '</div>');
+			$("#FileView").append('<div class="FolderGraphic" id="' + dirInfo.files[i].name + '"><img src="svgs/FolderGraphic.svg" >'+ dirInfo.files[i].name+ '</div>');
 		}
 		else{
-			$("#FileView").append('<div class="FileGraphic" id="' +dirInfo.files[i].name + '"><img src="FileGraphic.svg" >'+ dirInfo.files[i].name+ '</div>');
+			$("#FileView").append('<div class="FileGraphic" id="' +dirInfo.files[i].name + '"><img src="svgs/FileGraphic.svg" >'+ dirInfo.files[i].name+ '</div>');
 		}
 	}
 }
