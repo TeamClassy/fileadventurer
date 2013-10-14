@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 43363)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="128px" height="64px" viewBox="0 0 128 64" enable-background="new 0 0 128 64" xml:space="preserve">
+<font horiz-adv-x="2048">
+<!-- Verdana is a trademark of the Microsoft group of companies. -->
+<!-- Copyright: Copyright 2013 Adobe System Incorporated. All rights reserved. -->
+<font-face font-family="Verdana" units-per-em="2048" underline-position="-180" underline-thickness="120"/>
+<missing-glyph horiz-adv-x="2048" d="M256,0l0,1536l1536,0l0,-1536M384,128l1280,0l0,1280l-1280,0z"/>
+<glyph unicode="F" horiz-adv-x="1177" d="M1151,1313l-753,0l0,-420l647,0l0,-176l-647,0l0,-717l-198,0l0,1489l951,0z"/>
+<glyph unicode="e" horiz-adv-x="1220" d="M1120,539l-823,0C297,470 307,411 328,360C349,309 377,267 413,234C448,202 489,178 537,162C584,146 637,138 694,138C770,138 847,153 924,184C1001,214 1055,244 1088,273l10,0l0,-205C1035,41 970,19 904,1C838,-17 769,-26 696,-26C511,-26 366,24 262,125C158,225 106,367 106,552C106,735 156,880 256,987C355,1094 486,1148 649,1148C800,1148 916,1104 998,1016C1079,928 1120,803 1120,641M937,683C936,782 912,858 863,912C814,966 739,993 639,993C538,993 458,963 399,904C339,845 305,771 297,683z"/>
+<glyph unicode="i" horiz-adv-x="562" d="M387,1304l-212,0l0,195l212,0M375,0l-188,0l0,1117l188,0z"/>
+<glyph unicode="l" horiz-adv-x="562" d="M375,0l-188,0l0,1556l188,0z"/>
+</font>
+
+	<g>
+	<rect x="2.75" y="8.5" fill="#CCCCCC" width="122.5" height="46.218"/>
+	<g>
+		<path d="M125.25,53.218c-40.833,0-81.667,0-122.5,0c0.5,0.5,1,1,1.5,1.5c0-15.406,0-30.812,0-46.218c-0.5,0.5-1,1-1.5,1.5
+			c40.833,0,81.667,0,122.5,0c-0.5-0.5-1-1-1.5-1.5c0,15.406,0,30.812,0,46.218c0,1.935,3,1.935,3,0c0-15.406,0-30.812,0-46.218
+			c0-0.818-0.683-1.5-1.5-1.5C84.417,7,43.583,7,2.75,7c-0.818,0-1.5,0.682-1.5,1.5c0,15.406,0,30.812,0,46.218
+			c0,0.817,0.682,1.5,1.5,1.5c40.833,0,81.667,0,122.5,0C127.185,56.218,127.185,53.218,125.25,53.218z"/>
+	</g>
+</g>
+<g>
+	<rect x="9.5" y="13.25" fill="#E6E6E6" width="109" height="36.5"/>
+</g>
+<rect x="34.049" y="18.74" fill="none" width="60.421" height="26.521"/>
+<text transform="matrix(1 0 0 1 34.0493 44.7998)" font-family="'Verdana'" font-size="34.29">File</text>
+</svg>
