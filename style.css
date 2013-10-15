@@ -59,19 +59,25 @@ a{
 	left:80px;
 }
 
+#goToDir
+{
+	position:relative;
+	left:-10px;
+}
+
 #SSHButton
 {
 	position:fixed;
 	top:3px;
-	right:110px;
+	right:172px;
 	width:60px;
 }
 
-#DeleteButton
+#LogOutButton
 {	
 	position:fixed;
 	top:3px;
-	right:1px;
+	right:60px;
 	width:35px;
 }
 
@@ -79,7 +85,7 @@ a{
 {	
 	position:fixed;
 	top:3px;
-	right:73px;
+	right:133px;
 	width:35px;
 }
 
@@ -87,7 +93,7 @@ a{
 {	
 	position:fixed;
 	top:3px;
-	right:37px;
+	right:95px;
 	width:35px;
 }
 
@@ -107,6 +113,14 @@ a{
 	margin-left:15px;
 	width:80px;
 	text-align:center;
+}
+
+.fileText
+{
+	position:relative;
+	top:-5px;
+	margin:0px;
+	height:10px;
 }
 
 #SSH
