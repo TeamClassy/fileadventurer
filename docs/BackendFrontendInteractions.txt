@@ -1,0 +1,84 @@
+﻿All data sent to PHP will be by the POST method
+
+
+Web root:        /var/www/fileadventurer/
+Web Page:        index.php
+PHP Files:        /var/www/fileadventurer/
+
+
+JSON General flags:
+        "sessionStatus" : true/false
+
+
+Files:
+
+
+login.php
+        inputs:
+                user - entered username
+                pass - entered password
+        outputs:
+                JSON directory
+
+
+list_dir.php
+        inputs:
+                none
+        outputs:
+                JSON directory
+
+
+change_dir.php
+        inputs:
+                dir - absolute path relative to user's home directory
+        outputs:
+                JSON directory
+        flags:
+                "dirChange" : true/false
+
+
+mv_file.php
+        inputs:
+                from - absolute path relative to user's home directory
+                to   - absolute path relative to user's home directory
+        outputs:
+                JSON directory
+        flags:
+                "mvFile" : true/false
+
+
+cp_file.php
+        inputs:
+                from - absolute path relative to user's home directory
+                to   - absolute path relative to user's home directory
+        outputs:
+                JSON directory
+        flags:
+                "cpFile" : true/false
+
+
+rm_file.php
+        inputs:
+                file - absolute path relative to user's home directory
+        outputs:
+                JSON directory
+        flags:
+                "rmFile" : true/false
+
+
+upload.php
+        inputs:
+                file - absolute path relative to user's home directory to save as
+        outputs:
+                JSON directory
+        flags:
+                TODO: this
+
+
+download.php
+        inputs:
+                file - absolute path relative to user's home directory
+        outputs:
+                JSON directory
+        flags:
+                TODO: this

@@ -133,6 +133,7 @@ a{
 	position:absolute;
 	top: 93%;
 	left: 5px;
+	display: none;
 }
 
 footer{
