@@ -1,0 +1,46 @@
+{
+	"session_status" : true,
+	"dirName" : "EXAMPLENAME",
+	"files" : [
+		{
+			"type" : "text",
+			"name" : "EXAMPLENAME",
+			"date" : "EXAMPLEDATE",
+			"size" : "EXAMPLESIZE"
+		},
+		{
+			"type" : "dir",
+			"name" : "EXAMPLENAME",
+			"date" : "EXAMPLEDATE",
+			"size" : "EXAMPLESIZE",
+			"content" : [
+				{
+					"type" : "mp3",
+					"name" : "EXAMPLENAME",
+					"date" : "EXAMPLEDATE",
+					"size" : "EXAMPLESIZE"
+				},
+				{
+					"type" : "dir",
+					"name" : "EXAMPLENAME",
+					"date" : "EXAMPLEDATE",
+					"size" : "EXAMPLESIZE"
+				}
+			]
+		}
+	],
+	"parentDir" : [
+		{
+			"type" : "dir",
+			"name" : "EXAMPLENAME",
+			"date" : "EXAMPLEDATE",
+			"size" : "EXAMPLESIZE"
+		},
+		{
+			"type" : "file",
+			"name" : "EXAMPLENAME",
+			"date" : "EXAMPLEDATE",
+			"size" : "EXAMPLESIZE"
+		}
+	]
+}
