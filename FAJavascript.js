@@ -4,7 +4,6 @@
     //This object should always contain information about the current directory
     var dirInfo = {
         "dirName" : "~/lizards/",
-        
         "files" :[
         {"name":"..", "type":"folder"},
         {"name":"iguana1.png", "type":"file"},
@@ -16,7 +15,7 @@
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            display();
+            displayFiles();
             //Brings up an SSH window for users to enter SSH commands with
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
@@ -35,25 +34,46 @@
         function goToDir()
     ====================
     */
-    function goToDir() {
+    function goToDir(newDir) {
+        var curDir = $('#dirInput').attr('data-curDir');
 
+        if(newDir !== curDir) {
+            $.ajax({
+                url: 'change_dir.php',
+                type: 'POST',
+                data: { dir: newDir },
+                dataType: 'json',
+                success: function (json) {
+                    if(json.dirChange) {
+                        $('#dirInput').attr('data-curDir', newDir);
+                        dirInfo = json;
+                        displayFiles();
+                    } else {
+                        //TODO: insert failure code
+                    }
+                },
+                error: function(xhr, status) {
+                    //TODO: insert error code
+                }
+            });
+        }
     }
 
 
     /*
     ====================
-    display
+    displayFiles
         Creates objects from the current state of the dirInfo JSON object
         Should put a ".." file in any directory that is not home so the parent can be accessed
     ====================
     */
-    function display() {
+    function displayFiles() {
         for(var i in dirInfo.files)
         {
             if(dirInfo.files[i].type === 'folder'){
                 $('#FileView').append('<div class="FolderGraphic" id="' + dirInfo.files[i].name + '"><img src="svgs/FolderGraphic.svg" ><div class="fileText">'+ dirInfo.files[i].name+ '</div></div>');
             }else{
-                $('#FileView').append('<div class="FileGraphic" id="' +dirInfo.files[i].name + '"><img src="svgs/FileGraphic.svg" ><div class="fileText">'+ dirInfo.files[i].name+ '</div></div>');
+                $('#FileView').append('<div class="FileGraphic" id="' + dirInfo.files[i].name + '"><img src="svgs/FileGraphic.svg" ><div class="fileText">'+ dirInfo.files[i].name+ '</div></div>');
             }
         }
     }
