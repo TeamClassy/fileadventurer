@@ -2,6 +2,7 @@
 <html lang="en">
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<script type="text/javascript" src="jquery.min.js"></script>
 		<script type="text/javascript" src="FAJavascript.js"></script>
 		
@@ -11,8 +12,6 @@
 		<meta name="Into the Adventure"
 			content="Your solution for graphically exploring the files on your server."
 			author="Lukas Rickard, edited by Joseph Grant and Nicholas Howes">
-			
-		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	
 	<body>
