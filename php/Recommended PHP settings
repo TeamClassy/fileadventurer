@@ -1,0 +1,11 @@
+session.use_cookies			1
+session.cookie_secure		1
+session.use_only_cookies	1
+session.name				FILEADVENTURER
+session.auto_start			0
+session.cookie_lifetime		0
+session.cookie_path			/fileadventurer
+session.cookie_httponly		1
+session.gc_maxlifetime		600
+session.entropy_length		128
+session.hash_function		1
