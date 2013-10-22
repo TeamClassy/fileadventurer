@@ -82,3 +82,11 @@ download.php
                 JSON directory
         flags:
                 TODO: this
+
+view_file.php
+        input:
+                file - absolute path relative to user's home directory
+        outputs:
+                requested file
+        flags:
+                TODO: this
