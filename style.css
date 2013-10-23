@@ -101,7 +101,7 @@ a{
 	width:35px;
 }
 
-.FileGraphic
+.file
 {
 	float:left;
 	margin-left:15px;
@@ -110,7 +110,7 @@ a{
 	text-align:center;
 }
 
-.FolderGraphic
+.folder
 {
 	float:left;
 	margin-top:10px;
@@ -125,6 +125,11 @@ a{
 	top:-5px;
 	margin:0px;
 	height:10px;
+}
+
+.highlighted 
+{
+	background-color: #70A1E6;
 }
 
 #SSH

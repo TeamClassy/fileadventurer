@@ -1,21 +1,22 @@
-/* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true */
-(function () {
+/* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+//(function () {
     "use strict";
     //This object should always contain information about the current directory
-    var dirInfo = {
-        "dirName" : "~/lizards/",
-        "files" :[
-        {"name":"..", "type":"folder"},
-        {"name":"iguana1.png", "type":"file"},
-        {"name":"iguana2.png", "type":"file"},
-        {"name":"geco.png", "type":"file"}
-        ]
-    };
+    var dirInfo = {dirName: '~', files : []},
+        files = [];
      
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            displayFiles();
+            displayFiles({
+                "dirName" : "~/lizards",
+                "files" :[
+                {"name":"..", "type":"dir"},
+                {"name":"iguana1.png", "type":"file"},
+                {"name":"iguana2.png", "type":"file"},
+                {"name":"geco.png", "type":"file"}
+                ]
+            });
             //Brings up an SSH window for users to enter SSH commands with
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
@@ -45,8 +46,6 @@
                 dataType: 'json',
                 success: function (json) {
                     if(json.dirChange) {
-                        $('#dirInput').attr('data-curDir', newDir).val(newDir);
-                        dirInfo = json;
                         displayFiles();
                     } else {
                         //TODO: insert failure code
@@ -59,68 +58,83 @@
         }
     }
 
-
     /*
     ====================
-    navToDir
-        This function is called when a directory is double clicked on.
-        It changes the view to that folder, then sends a request for PHP to change dirInfo to the target folder
-        function navToDir()
+    File
+        
     ====================
     */
-    function navToDir(newDir) {
-        var curDir = $('#dirInput').attr('data-curDir'),
-            dirInfoTmp = dirInfo;
+    function File(that) {
 
-        $.ajax({
-            url: 'change_dir.php',
-            type: 'POST',
-            data: { dir: newDir },
-            dataType: 'json',
-            success: function (json) {
-                if(json.dirChange) {
-                    $('#dirInput').attr('data-curDir', newDir).val(newDir);
-                    dirInfo = json;
-                    displayFiles();
-                } else {
-                    //TODO: insert failure code
+        //private
+        /*
+        ====================
+        navToDir
+            This function is called when a directory is double clicked on.
+            It changes the view to that folder, then sends a request for PHP to change dirInfo to the target folder
+        ====================
+        */
+        function navToDir() {
+            var curDir = dirInfo.dirName;
+            $.ajax({
+                url: 'change_dir.php',
+                type: 'POST',
+                data: { dir: that.path },
+                dataType: 'json',
+                success: function (json) {
+                    if(json.dirChange) {
+                        displayFiles(json);
+                    } else {
+                        //TODO: insert failure code
+                    }
+                },
+                error: function(xhr, status) {
+                    //TODO: insert error code
                 }
-            },
-            error: function(xhr, status) {
-                //TODO: insert error code
-            }
+            });
+            displayFiles(that.content);   
+        }
+
+        //public
+        that.path = dirInfo.dirName + '/' + that.name;
+        that.date = new Date(that.date);
+        that.invis = (that.name[0] === '.');
+        that.element = $('<div>', {
+            'class': that.type === 'dir' ? 'folder' : 'file',
+            id: that.name,
+            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
+        });
+        that.element.click(function (event) {
+            that.element.toggleClass('highlighted');
         });
 
-        if(newDir === '..'){
-            dirInfoTmp = dirInfoTmp.parentDir;
-        } else {
-            for (var i = dirInfo.files.length - 1; i >= 0; i--) {
-                if(dirInfo.files[i].name === newDir) {
-                    dirInfoTmp = dirInfoTmp.files[i].content;
-                    break;
-                }
-            }
+        if (that.name === '..') {
+            that.content = dirInfo.parentDir;
         }
-        displayFiles(dirInfoTmp);
-        
+        $('#FileView').append(that.element);
+        return that;
     }
 
     /*
     ====================
     displayFiles
-        Creates objects from the current state of the dirInfo JSON object, or the passed JSON object if it exists
+        Creates objects from the the passed JSON object
         Should put a ".." file in any directory that is not home so the parent can be accessed
     ====================
     */
-    function displayFiles(dirInfoAlt) {
-        var dirs = dirInfoAlt || dirInfo;
-        for(var i in dirs.files)
-        {
-            if(dirs.files[i].type === 'folder'){
-                $('#FileView').append('<div class="FolderGraphic" id="' + dirs.files[i].name + '"><img src="svgs/FolderGraphic.svg" ><div class="fileText">'+ dirs.files[i].name+ '</div></div>');
-            }else{
-                $('#FileView').append('<div class="FileGraphic" id="' + dirs.files[i].name + '"><img src="svgs/FileGraphic.svg" ><div class="fileText">'+ dirs.files[i].name+ '</div></div>');
-            }
+    function displayFiles(json) {
+        var dirs = json || dirInfo;
+        $('#dirInput').attr('data-curDir', dirs.dirName + '/').val(dirs.dirName + '/');
+        for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+            dirInfo.files[i].element.remove();
         }
+        if('parentDir' in dirs) {
+            dirs.files.unshift({type: 'dir', name: '..'});
+        }
+        for(var j in dirs.files)
+        {
+            dirs.files[j] = File(dirs.files[j]);
+        }
+        dirInfo = dirs;
     }
-})();
+//})();
