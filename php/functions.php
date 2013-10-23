@@ -23,7 +23,7 @@ function is_user_valid()
 	return true;
 }
 
-function json_dir($flag, $value)
+function json_dir($flag = FALSE, $value)
 {
 	session_start();
 	$dir_name = $_SESSION['rootdir'];
@@ -31,7 +31,7 @@ function json_dir($flag, $value)
 		$dir_name.= '/'.$_SESSION['curdir'];
 	$output = '{"sessionStatus":true,';
 	//custom flag
-	if($flag)
+	if($flag !== FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
 	$output.= '"dirName":"'.$dir_name.'",';
 	$output.= '"files":[';
