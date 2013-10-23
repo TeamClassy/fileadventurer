@@ -20,14 +20,6 @@ login.php
         outputs:
                 JSON directory
 
-
-list_dir.php
-        inputs:
-                none
-        outputs:
-                JSON directory
-
-
 change_dir.php
         inputs:
                 dir - absolute path relative to user's home directory

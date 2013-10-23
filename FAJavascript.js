@@ -1,5 +1,5 @@
 /* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
-//(function () {
+(function () {
     "use strict";
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '~', files : []},
@@ -8,20 +8,12 @@
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            displayFiles({
-                "dirName" : "~/lizards",
-                "files" :[
-                {"name":"..", "type":"dir"},
-                {"name":"iguana1.png", "type":"file"},
-                {"name":"iguana2.png", "type":"file"},
-                {"name":"geco.png", "type":"file"}
-                ]
-            });
+            displayFiles({"sessionStatus":true,"dirName":"/home/connor/www","files":[{"type":"file","name":"index.php","date":"2013-10-22T00:09:32-04:00","size":"2164"}],"parentDir":[{"type":"file","name":".bash_history","date":"2013-10-22T15:05:45-04:00","size":"6999"},{"type":"file","name":".mysql_history","date":"2013-10-18T13:14:11-04:00","size":"2199"},{"type":"file","name":"dark_magic_user.php","date":"2013-10-22T15:05:38-04:00","size":"2184"},{"type":"file","name":".bashrc","date":"2013-09-22T16:53:24-04:00","size":"3391"},{"type":"file","name":".bash_logout","date":"2013-09-22T16:53:24-04:00","size":"220"},{"type":"dir","name":"www","date":"2013-10-21T22:45:40-04:00","size":"4096"},{"type":"file","name":".profile","date":"2013-09-22T16:53:24-04:00","size":"675"},{"type":"file","name":"setup_login.sql","date":"2013-09-24T14:42:38-04:00","size":"106"}]});
             //Brings up an SSH window for users to enter SSH commands with
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
             });
-    }); 
+    });
 
     
 
@@ -107,6 +99,12 @@
         that.element.click(function (event) {
             that.element.toggleClass('highlighted');
         });
+        if(that.type = 'dir'){
+            that.element.dblclick(function (event) {
+                navToDir();
+            });
+        }
+        
 
         if (that.name === '..') {
             that.content = dirInfo.parentDir;
@@ -137,4 +135,4 @@
         }
         dirInfo = dirs;
     }
-//})();
+})();
