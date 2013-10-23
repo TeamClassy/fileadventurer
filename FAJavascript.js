@@ -80,11 +80,11 @@
                         //TODO: insert failure code
                     }
                 },
-                error: function(xhr, status) {
+                error: function (xhr, status) {
                     //TODO: insert error code
                 }
             });
-            displayFiles(that.content);   
+            displayFiles({dirName: that.path, files: that.content});   
         }
 
         //public
@@ -99,7 +99,7 @@
         that.element.click(function (event) {
             that.element.toggleClass('highlighted');
         });
-        if(that.type = 'dir'){
+        if(that.type === 'dir') {
             that.element.dblclick(function (event) {
                 navToDir();
             });
@@ -126,6 +126,7 @@
         for (var i = dirInfo.files.length - 1; i >= 0; i--) {
             dirInfo.files[i].element.remove();
         }
+        dirInfo = dirs;
         if('parentDir' in dirs) {
             dirs.files.unshift({type: 'dir', name: '..'});
         }
@@ -133,6 +134,5 @@
         {
             dirs.files[j] = File(dirs.files[j]);
         }
-        dirInfo = dirs;
     }
 })();
