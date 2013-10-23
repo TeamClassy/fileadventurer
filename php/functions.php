@@ -23,7 +23,7 @@ function is_user_valid()
 	return true;
 }
 
-function json_dir($flag = FALSE, $value)
+function json_dir($flag = FALSE, $value = FALSE)
 {
 	session_start();
 	$dir_name = $_SESSION['rootdir'];
