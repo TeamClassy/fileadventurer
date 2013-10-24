@@ -1,5 +1,5 @@
 <?php
-require_once 'functions.php'
+require_once 'php/functions.php';
 
 $username = $_POST['user'];
 //$password = $_POST['pass'];

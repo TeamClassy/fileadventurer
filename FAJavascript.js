@@ -2,13 +2,13 @@
 (function () {
     "use strict";
     //This object should always contain information about the current directory
-    var dirInfo = {dirName: '~', files : []},
+    var dirInfo = {dirName: '', files : []},
         files = [];
      
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            displayFiles({"sessionStatus":true,"dirName":"/home/connor/www","files":[{"type":"file","name":"index.php","date":"2013-10-22T00:09:32-04:00","size":"2164"}],"parentDir":[{"type":"file","name":".bash_history","date":"2013-10-22T15:05:45-04:00","size":"6999"},{"type":"file","name":".mysql_history","date":"2013-10-18T13:14:11-04:00","size":"2199"},{"type":"file","name":"dark_magic_user.php","date":"2013-10-22T15:05:38-04:00","size":"2184"},{"type":"file","name":".bashrc","date":"2013-09-22T16:53:24-04:00","size":"3391"},{"type":"file","name":".bash_logout","date":"2013-09-22T16:53:24-04:00","size":"220"},{"type":"dir","name":"www","date":"2013-10-21T22:45:40-04:00","size":"4096"},{"type":"file","name":".profile","date":"2013-09-22T16:53:24-04:00","size":"675"},{"type":"file","name":"setup_login.sql","date":"2013-09-24T14:42:38-04:00","size":"106"}]});
+            goToDir('');
             //Brings up an SSH window for users to enter SSH commands with
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
@@ -28,9 +28,9 @@
     ====================
     */
     function goToDir(newDir) {
-        var curDir = $('#dirInput').attr('data-curDir');
+        var curDir = dirInfo.dirname;
 
-        if(newDir !== curDir) {
+        //if(newDir !== curDir) {
             $.ajax({
                 url: 'change_dir.php',
                 type: 'POST',
@@ -38,7 +38,7 @@
                 dataType: 'json',
                 success: function (json) {
                     if(json.dirChange) {
-                        displayFiles();
+                        displayFiles(json);
                     } else {
                         //TODO: insert failure code
                     }
@@ -47,7 +47,7 @@
                     //TODO: insert error code
                 }
             });
-        }
+        //}
     }
 
     /*
