@@ -3,15 +3,20 @@
 
 Web root:        /var/www/fileadventurer/
 Web Page:        index.php
-PHP Files:        /var/www/fileadventurer/
+PHP Files:       /var/www/fileadventurer/
 
 
 JSON General flags:
         "sessionStatus" : true/false
 
+File/Directory input string format
+        Never begin with '/'
+        Never trail with '/'
+        If root directory, just use ''
+        Ex: somedir/somedir
+
 
 Files:
-
 
 login.php
         inputs:
@@ -23,6 +28,7 @@ login.php
 change_dir.php
         inputs:
                 dir - absolute path relative to user's home directory
+                    - '..' if back one dir (To Be Implemented)
         outputs:
                 JSON directory
         flags:
