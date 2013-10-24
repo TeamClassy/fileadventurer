@@ -33,7 +33,7 @@ function json_dir($flag = FALSE, $value = FALSE)
 	//custom flag
 	if($flag !== FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
-	$output.= '"dirName":"'.$dir_name.'",';
+	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
 	$output.= '"files":[';
 	$dir_handle = opendir($dir_name);
 	//begin main directory
