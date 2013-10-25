@@ -1,6 +1,7 @@
 <?php
 require_once 'php/functions.php';
 
+session_start();
 if(isset($_POST['user']) && isset($_POST['pass'])) {
 	$username = $_POST['user'];
 	$password = $_POST['pass'];
@@ -13,26 +14,20 @@ if(isset($_POST['user']) && isset($_POST['pass'])) {
 	}
 	$result = $db->query('select * from user where username="'.$username.'"');
 	if(!$result) {
-		echo json_bad();
+		echo json_bad();	//user doesn't exist
 		$db->close();
 		exit;
 	}
 	$rows = $result->fetch_assoc();
-	//Why was this a thing?
-	//$db_user = $rows['username'];
-	//if($db_user !== $username) {
-	//	echo json_bad();
-	//	$db->close();
-	//	exit;
-	//}
 	if($rows['password'] === crypt($password, $rows['salt'])) {
 		begin_user_session($username, $rows['directory']);
 		echo json_dir();
 	} else {
-		echo json_bad();
+		echo json_bad();	//wrong password
 	}
 	$db->close();
 } else {
+	//thanks for not POSTing
 	echo json_bad();
 }
 

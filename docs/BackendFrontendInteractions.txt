@@ -10,11 +10,9 @@ JSON General flags:
         "sessionStatus" : true/false
 
 File/Directory input string format
-        Never begin with '/'
-        Never trail with '/'
-        If root directory, just use ''
-        Ex: somedir/somedir
-
+        Absolute path with respect to user's home
+                !!OR!!
+        Path relative to current directory
 
 Files:
 
@@ -27,18 +25,24 @@ login.php
 
 change_dir.php
         inputs:
-                dir - absolute path relative to user's home directory
-                    - '..' if back one dir (To Be Implemented)
+                dir - path to directory
         outputs:
                 JSON directory
         flags:
                 "dirChange" : true/false
 
+view_file.php
+        input:
+                file - file to view (image/text)
+        outputs:
+                requested file
+        flags:
+                TODO: this
 
 mv_file.php
         inputs:
-                from - absolute path relative to user's home directory
-                to   - absolute path relative to user's home directory
+                from - file to move
+                to   - destination
         outputs:
                 JSON directory
         flags:
@@ -47,8 +51,8 @@ mv_file.php
 
 cp_file.php
         inputs:
-                from - absolute path relative to user's home directory
-                to   - absolute path relative to user's home directory
+                from - file to copy
+                to   - destination
         outputs:
                 JSON directory
         flags:
@@ -57,7 +61,7 @@ cp_file.php
 
 rm_file.php
         inputs:
-                file - absolute path relative to user's home directory
+                file - file/directory destination
         outputs:
                 JSON directory
         flags:
@@ -66,7 +70,7 @@ rm_file.php
 
 upload.php
         inputs:
-                file - absolute path relative to user's home directory to save as
+                file - destination to upload to
         outputs:
                 JSON directory
         flags:
@@ -75,16 +79,8 @@ upload.php
 
 download.php
         inputs:
-                file - absolute path relative to user's home directory
+                file - file to download
         outputs:
                 JSON directory
-        flags:
-                TODO: this
-
-view_file.php
-        input:
-                file - absolute path relative to user's home directory
-        outputs:
-                requested file
         flags:
                 TODO: this
