@@ -16,9 +16,11 @@
 	
 	<body>
 		<div id="LoginDiv">
-			<input type="text" id="userInput" placeholder="Username">
-			<input type="text" id="passInput" placeholder="Password">
-			<input id="loginBtn" type="button" value="Login">
+			<form>
+				<input type="text" id="userInput" placeholder="Username">
+				<input type="text" id="passInput" placeholder="Password">
+				<input id="loginBtn" type="submit" value="Login">
+			</form>
 		</div>
 		<div id="ToolBar">
 			<div id="FileDropdown">

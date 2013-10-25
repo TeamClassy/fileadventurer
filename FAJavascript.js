@@ -8,16 +8,16 @@
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            goToDir('');
             //Brings up an SSH window for users to enter SSH commands with
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
             });
-            $('#loginBtn').click(function (event) {
+            $('#loginBtn').on('click', function (eventObject) {
+                eventObject.preventDefault();
                 $.ajax({
                     url: 'login.php',
                     type: 'POST',
-                    data: { user: $('#passInput').val(), pass: $('userInput').val() },
+                    data: { user: $('#userInput').val(), pass: $('passInput').val() },
                     dataType: 'json',
                     success: function (json) {
                         if(json.sessionStatus) {
@@ -28,7 +28,7 @@
                         }
                     },
                     error: function (xhr, status) {
-                        alert('Login Failed');
+                        alert('Request Failed');
                     }
                 });
             });
