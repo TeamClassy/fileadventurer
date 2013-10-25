@@ -51,16 +51,10 @@ function json_dir($flag = FALSE, $value = FALSE)
 	$output = '{"sessionStatus":true,';
 	if($flag !== FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
-<<<<<<< HEAD
-<<<<<<< HEAD
 	//current dir JSON
 	$output.= '"dirName":"'.$dir_name.'",';
-=======
 	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
->>>>>>> 0883e1264d212171dacd0831160d60278958bd71
-=======
 	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
->>>>>>> 0883e1264d212171dacd0831160d60278958bd71
 	$output.= '"files":[';
 	$dir_handle = opendir($dir_name);
 	while($file = readdir($dir_handle)) {
@@ -133,16 +127,4 @@ function json_file_info($file_path)
 	return $output;
 }
 
-<<<<<<< HEAD
 ?>
-=======
-function json_bad()
-{
-	return '{"sessionStatus":false}';
-}
-
-?>
-<<<<<<< HEAD
->>>>>>> 0883e1264d212171dacd0831160d60278958bd71
-=======
->>>>>>> 0883e1264d212171dacd0831160d60278958bd71
