@@ -29,7 +29,7 @@ if(isset($_POST['dir'])) {
 			}
 		}
 		//victory
-		$_SESSION['curdir'] = $path;
+		$_SESSION['curdir'] = substr($path,strlen($_SESSION['rootdir'].'/'));
 		echo json_dir("dirChange","true");
 	} else {
 		//loss
