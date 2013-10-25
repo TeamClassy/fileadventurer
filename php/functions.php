@@ -7,9 +7,10 @@
 //	Outputs:
 //		TRUE  on success
 //		FALSE on failure
+//	Assumptions:
+//		session is already started
 function begin_user_session($username, $directory)
 {
-	session_start();
 	if(!session_regenerate_id(true))
 		return false;
 	$_SESSION['username'] = $username;
@@ -25,9 +26,10 @@ function begin_user_session($username, $directory)
 //	Outputs:
 //		TRUE  if user is logged in
 //		FALSE if user not logged in OR possible attack
+//	Assumptions:
+//		session is already started
 function is_user_valid()
 {
-	session_start();
 	if(!isset($_SESSION['username'])
 	|| !isset($_SESSION['fingerprint']))
 		return false;
@@ -42,9 +44,10 @@ function is_user_valid()
 //		$value - value of flag to assign
 //	Outputs:
 //		JSON directory plus supplied flags
+//	Assumptions:
+//		session is already started
 function json_dir($flag = FALSE, $value = FALSE)
 {
-	session_start();
 	//construct current dir name
 	$dir_name = realpath($_SESSION['rootdir'].'/'.$_SESSION['curdir']);
 	//flags
