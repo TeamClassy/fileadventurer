@@ -17,7 +17,7 @@
                 $.ajax({
                     url: 'login.php',
                     type: 'POST',
-                    data: { user: $('#userInput').val(), pass: $('passInput').val() },
+                    data: { user: $('#userInput').val(), pass: $('#passInput').val() },
                     dataType: 'json',
                     success: function (json) {
                         if(json.sessionStatus) {
