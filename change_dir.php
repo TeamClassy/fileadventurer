@@ -12,12 +12,12 @@ if(isset($_POST['dir'])) {
 	$path = realpath($_SESSION['rootdir'].'/'.$_POST['dir']);
 	if(is_dir($path)) {
 		//split paths
-		$root_elements = explode($_SESSION['rootdir']);
+		$root_elements = explode($_SESSION['rootdir'],'/');
 		$root_count = count($root_elements);
-		$path_elements = explode($path);
+		$path_elements = explode($path, '/');
 		$path_count = count($path_elements);
 		//check if path is in bounds
-		if($num_elements < $root_elements) {
+		if($path_elements < $root_elements) {
 			echo json_bad();
 			exit;
 		}

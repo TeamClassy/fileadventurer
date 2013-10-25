@@ -53,8 +53,6 @@ function json_dir($flag = FALSE, $value = FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
 	//current dir JSON
 	$output.= '"dirName":"'.$dir_name.'",';
-	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
-	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
 	$output.= '"files":[';
 	$dir_handle = opendir($dir_name);
 	while($file = readdir($dir_handle)) {
