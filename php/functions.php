@@ -56,21 +56,27 @@ function json_dir($flag = FALSE, $value = FALSE)
 	$output.= '"files":[';
 	$dir_handle = opendir($dir_name);
 	while($file = readdir($dir_handle)) {
+		if(basename($file) === '.' || basename($file) === '..')
+			continue;
 		$cur_file= $dir_name.'/'.$file;
 		$output.= json_file_info($cur_file);
 		//child dir JSON
-		if(is_dir($dir_name.'/'.$file)) {
+		if(is_dir($cur_file)) {
 			$output = rtrim($output, '},');
 			$output.= ',"content":[';	//notice comma
 			$file = opendir($cur_file);
-			while($child_file = readdir($file))
+			while($child_file = readdir($file)) {
+				if(basename($child_file) === '.' || basename($child_file) === '..')
+					continue;
 				$output.= json_file_info($cur_file.'/'.$child_file);
+			}
 			closedir($file);
 			$output = rtrim($output, ',');
 			$output.= ']';
 			$output.= '},';
 		}
 	}
+	closedir($dir_handle);
 	$output = rtrim($output, ',');
 	$output.= ']';
 	//parent dir JSON
@@ -78,13 +84,15 @@ function json_dir($flag = FALSE, $value = FALSE)
 		$output.= ',"parentDir":[';	//notice comma
 		$parent_name = dirname($dir_name);
 		$parent_dir  = opendir($parent_name);
-		while($file = readdir($parent_dir))
+		while($file = readdir($parent_dir)) {
+			if(basename($file) === '.' || basename($file) === '..')
+				continue;
 			$output.= json_file_info($parent_name.'/'.$file);
+		}
 		closedir($parent_dir);
 		$output = rtrim($output, ',');
 		$output.=']';
 	}
-	closedir($dir_handle);
 	$output.= '}';
 	return $output;
 }
@@ -93,7 +101,7 @@ function json_dir($flag = FALSE, $value = FALSE)
 //	Inputs:
 //		none
 //	Outpus:
-//		JSON flag for bad login
+//		JSON flag for bad function
 function json_bad()
 {
 	return '{"sessionStatus":false}';
@@ -114,8 +122,6 @@ function json_bad()
 //		JSON format of file data
 function json_file_info($file_path)
 {
-	if(basename($file_path) === '.' || basename($file_path) === '..')
-		return '';
 	$output = '{';
 	$output.= '"type":"'.filetype($file_path).'",';
 	$output.= '"name":"'.basename($file_path).'",';
