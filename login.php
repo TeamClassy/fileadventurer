@@ -1,7 +1,7 @@
 <?php
 require_once 'php/functions.php';
 
-if(isset($_POST['user'] && isset($_POST['pass'])) {
+if(isset($_POST['user']) && isset($_POST['pass'])) {
 	$username = $_POST['user'];
 	$password = $_POST['pass'];
 	//Connect and check for errors
@@ -35,6 +35,5 @@ if(isset($_POST['user'] && isset($_POST['pass'])) {
 } else {
 	echo json_bad();
 }
-
 
 ?>
