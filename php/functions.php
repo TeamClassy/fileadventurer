@@ -1,5 +1,12 @@
 <?php
 
+//=====================================
+//	Inputs:
+//		$username  - username to start session for
+//		$directory - user's home directory
+//	Outputs:
+//		TRUE  on success
+//		FALSE on failure
 function begin_user_session($username, $directory)
 {
 	session_start();
@@ -12,6 +19,12 @@ function begin_user_session($username, $directory)
 	return true;
 }
 
+//=====================================
+//	Inputs:
+//		none
+//	Outputs:
+//		TRUE  if user is logged in
+//		FALSE if user not logged in OR possible attack
 function is_user_valid()
 {
 	session_start();
@@ -23,77 +36,113 @@ function is_user_valid()
 	return true;
 }
 
+//=====================================
+//	Inputs:
+//		$flag  - flag name to enter into JSON
+//		$value - value of flag to assign
+//	Outputs:
+//		JSON directory plus supplied flags
 function json_dir($flag = FALSE, $value = FALSE)
 {
 	session_start();
-	$dir_name = $_SESSION['rootdir'];
-	if($_SESSION['curdir'] !== '')
-		$dir_name.= '/'.$_SESSION['curdir'];
+	//construct current dir name
+	$dir_name = realpath($_SESSION['rootdir'].'/'.$_SESSION['curdir']);
+	//flags
 	$output = '{"sessionStatus":true,';
-	//custom flag
 	if($flag !== FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
+<<<<<<< HEAD
+<<<<<<< HEAD
+	//current dir JSON
+	$output.= '"dirName":"'.$dir_name.'",';
+=======
 	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
+>>>>>>> 0883e1264d212171dacd0831160d60278958bd71
+=======
+	$output.= '"dirName":"'.$_SESSION['curdir'].'",';
+>>>>>>> 0883e1264d212171dacd0831160d60278958bd71
 	$output.= '"files":[';
 	$dir_handle = opendir($dir_name);
-	//begin main directory
 	while($file = readdir($dir_handle)) {
-		if($file === '.') continue;
-		if($file === '..') continue;
 		$cur_file= $dir_name.'/'.$file;
 		$output.= json_file_info($cur_file);
-		//child directory
+		//child dir JSON
 		if(is_dir($dir_name.'/'.$file)) {
+			$output = rtrim($output, '},');
 			$output.= ',"content":[';	//notice comma
 			$file = opendir($cur_file);
-			while($child_file = readdir($file)) {
-				if($child_file === '.') continue;
-				if($child_file === '..') continue;
+			while($child_file = readdir($file))
 				$output.= json_file_info($cur_file.'/'.$child_file);
-				$output.= '},';
-			}
 			closedir($file);
 			$output = rtrim($output, ',');
 			$output.= ']';
-		}
-		$output.= '},';
-	}
-	$output = rtrim($output, ',');
-	$output.= ']';	//no comma - only if parent dir exists
-	//parent directory
-	if($_SESSION['curdir'] !== '') {	//only if not in root
-		$output.= ',"parentDir":[';	//notice the comma
-		$parent_name = dirname($dir_name);
-		$parent_dir  = opendir($parent_name);
-		while($file = readdir($parent_dir)) {
-			if($file === '.') continue;
-			if($file === '..') continue;
-			$output.= json_file_info($parent_name.'/'.$file);
 			$output.= '},';
 		}
+	}
+	$output = rtrim($output, ',');
+	$output.= ']';
+	//parent dir JSON
+	if($dir_name !== $_SESSION['rootdir']) {	//only if not in root
+		$output.= ',"parentDir":[';	//notice comma
+		$parent_name = dirname($dir_name);
+		$parent_dir  = opendir($parent_name);
+		while($file = readdir($parent_dir))
+			$output.= json_file_info($parent_name.'/'.$file);
 		closedir($parent_dir);
 		$output = rtrim($output, ',');
 		$output.=']';
 	}
-
-	$output.= '}';
 	closedir($dir_handle);
+	$output.= '}';
 	return $output;
 }
 
+//===================================
+//	Inputs:
+//		none
+//	Outpus:
+//		JSON flag for bad login
+function json_bad()
+{
+	return '{"sessionStatus":false}';
+}
+
+
+
+
+
+
+//========================================
+//	Not to be used outside of this file
+//========================================
+
+//	Inputs:
+//		$file_path - absolute path to file
+//	Outputs:
+//		JSON format of file data
 function json_file_info($file_path)
 {
+	if(basename($file_path) === '.' || basename($file_path) === '..')
+		return '';
 	$output = '{';
 	$output.= '"type":"'.filetype($file_path).'",';
 	$output.= '"name":"'.basename($file_path).'",';
 	$output.= '"date":"'.date("Y-m-d\TH:i:sP",filemtime($file_path)).'",';
 	$output.= '"size":"'.filesize($file_path).'"';
+	$output.= '},';
 	return $output;
 }
 
+<<<<<<< HEAD
+?>
+=======
 function json_bad()
 {
 	return '{"sessionStatus":false}';
 }
 
 ?>
+<<<<<<< HEAD
+>>>>>>> 0883e1264d212171dacd0831160d60278958bd71
+=======
+>>>>>>> 0883e1264d212171dacd0831160d60278958bd71
