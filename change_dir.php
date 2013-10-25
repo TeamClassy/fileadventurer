@@ -24,7 +24,7 @@ if(isset($_POST['dir'])) {
 		//check if home path is user's
 		for($i=0; $i<$root_count; $i++) {
 			if($path_elements[$i] !== $root_elements[$i]) {
-				echo json_bad();
+				echo json_dir("dirChange","false");
 				exit;
 			}
 		}
