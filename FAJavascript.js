@@ -13,6 +13,25 @@
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
             });
+            $('#loginBtn').click(function (event) {
+                $.ajax({
+                    url: 'login.php',
+                    type: 'POST',
+                    data: { user: $('#passInput').val(), pass: $('userInput').val() },
+                    dataType: 'json',
+                    success: function (json) {
+                        if(json.sessionStatus) {
+                            $('#LoginDiv').toggleClass('hidden');
+                            displayFiles(json);
+                        } else {
+                            alert('Login Failed');
+                        }
+                    },
+                    error: function (xhr, status) {
+                        alert('Login Failed');
+                    }
+                });
+            });
     });
 
     
@@ -49,6 +68,7 @@
             });
         //}
     }
+
 
     /*
     ====================

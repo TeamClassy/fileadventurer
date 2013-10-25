@@ -21,6 +21,12 @@ a{
   font-size: 1.5em;
  }
 
+ #LoginDiv 
+ {
+ 	position: absolute;
+ 	top: 50px;
+ }
+
  #gridTable
  {
  	position:fixed;
@@ -127,6 +133,11 @@ a{
 	height:10px;
 }
 
+.hidden
+{
+	display: none!important;
+}
+
 .highlighted 
 {
 	background-color: #70A1E6;
@@ -150,4 +161,4 @@ footer{
 	display:block;
 }
 
-p#foot{text-align:center;}
+#foot{text-align:center;}

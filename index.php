@@ -15,6 +15,11 @@
 	</head>
 	
 	<body>
+		<div id="LoginDiv">
+			<input type="text" id="userInput" placeholder="Username">
+			<input type="text" id="passInput" placeholder="Password">
+			<input id="loginBtn" type="button" value="Login">
+		</div>
 		<div id="ToolBar">
 			<div id="FileDropdown">
 				<img src="svgs/FileDropdown.svg" height="30">
