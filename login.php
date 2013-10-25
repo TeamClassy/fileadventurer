@@ -27,7 +27,7 @@ if(isset($_POST['user']) && isset($_POST['pass'])) {
 	//}
 	if($rows['password'] === crypt($password, $rows['salt'])) {
 		begin_user_session($username, $rows['directory']);
-		echo json_dir()
+		echo json_dir();
 	} else {
 		echo json_bad();
 	}
