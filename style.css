@@ -145,11 +145,31 @@ a{
 
 #SSH
 {
-	min-width:500px;
 	position:absolute;
-	top: 93%;
-	left: 5px;
+	left:10%;
+	width:80%;
+	height:600px;
+	background-color:black;
+	margin-top:150px;
 	display: none;
+	color:white;
+	font-size:12pt;
+}
+
+input
+{	
+	cursor:pointer;
+}
+
+#sshTerminal
+{
+	width:100%;
+	outline: 0 none;
+	background:black;
+	color:white;
+	border:0px;
+	font-size:11pt;
+	font-family:Courier, "Courier New", monospace;
 }
 
 footer{
@@ -162,3 +182,4 @@ footer{
 }
 
 #foot{text-align:center;}
+

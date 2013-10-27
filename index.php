@@ -47,8 +47,12 @@
 		</div>
 
 		<div id="SSH">
-			SSH window: <br />
-  			<textarea cols="80" name="SSH Input">%</textarea>
+			SSH Window </br>
+			Enter Input on next Line
+			<form onbsubmit="return someFunction();"> 
+				<!--someFunction should be able to handle the input and show output on the console window-->
+				<input id="sshTerminal" type ="text" value="" tableindex="1"</input>
+			</form>
 		</div>
 	</body>
 </html>
