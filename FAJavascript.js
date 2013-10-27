@@ -12,6 +12,9 @@
             $('#SSHButton').on('click', function (event) {
                 $('#SSH').toggle();
             });
+            $('#goToDir').on('click', function (event) {
+                goToDir($('#dirInput').val());
+            });
             $('#loginBtn').on('click', function (eventObject) {
                 eventObject.preventDefault();
                 $.ajax({
@@ -29,6 +32,7 @@
                     },
                     error: function (xhr, status) {
                         alert('Request Failed');
+                        console.log(xhr);
                     }
                 });
             });
@@ -59,12 +63,12 @@
                     if(json.dirChange) {
                         displayFiles(json);
                     } else {
-                    	alert(newDir + ' does not exist');
+                        alert(newDir + ' does not exist');
                     }
                 },
                 error: function(xhr, status) {
-                    alert('error code:' + status);
-		    console.log(xhr);
+                    alert('error: ' + status);
+                    console.log(xhr);
                 }
             });
         //}
@@ -98,22 +102,22 @@
                     if(json.dirChange) {
                         displayFiles(json);
                     } else {
-                        alert(that.path + 'does not exist);
-			goToDir(that.parent);
+                        alert(that.path + 'does not exist');
+                        goToDir(that.parent);
                     }
                 },
                 error: function (xhr, status) {
                     alert('error: ' + status);
-		    console.log(xhr);
+                    console.log(xhr);
                 }
             });
             displayFiles({dirName: that.path, files: that.content});   
         }
 
         //public
-        that.path = dirInfo.dirName + '/' + that.name;
+        that.parent = dirInfo.dirName;
+        that.path = that.parent + '/' + that.name;
         that.date = new Date(that.date);
-	that.parent = dirInfo.dirName;
         that.invis = (that.name[0] === '.');
         that.element = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
