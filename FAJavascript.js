@@ -59,11 +59,12 @@
                     if(json.dirChange) {
                         displayFiles(json);
                     } else {
-                        //TODO: insert failure code
+                    	alert(newDir + ' does not exist');
                     }
                 },
                 error: function(xhr, status) {
-                    //TODO: insert error code
+                    alert('error code:' + status);
+		    console.log(xhr);
                 }
             });
         //}
@@ -97,11 +98,13 @@
                     if(json.dirChange) {
                         displayFiles(json);
                     } else {
-                        //TODO: insert failure code
+                        alert(that.path + 'does not exist);
+			goToDir(that.parent);
                     }
                 },
                 error: function (xhr, status) {
-                    //TODO: insert error code
+                    alert('error: ' + status);
+		    console.log(xhr);
                 }
             });
             displayFiles({dirName: that.path, files: that.content});   
@@ -110,6 +113,7 @@
         //public
         that.path = dirInfo.dirName + '/' + that.name;
         that.date = new Date(that.date);
+	that.parent = dirInfo.dirName;
         that.invis = (that.name[0] === '.');
         that.element = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
