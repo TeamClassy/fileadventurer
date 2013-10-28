@@ -10,9 +10,10 @@ JSON General flags:
         "sessionStatus" : true/false
 
 File/Directory input string format
-        Absolute path with respect to user's home
-                !!OR!!
         Path relative to current directory
+                !!!OR!!!
+        Absolute path with respect to user's home
+                MUST BEGIN WTIH '/'
 
 Files:
 
@@ -22,6 +23,12 @@ login.php
                 pass - entered password
         outputs:
                 JSON directory
+
+logout.php
+        inputs:
+                none
+        outputs:
+                JSON bad directory
 
 change_dir.php
         inputs:

@@ -4,40 +4,17 @@ require_once 'php/functions.php';
 session_start();
 if(!is_user_valid()) {
 	echo json_bad();
-	exit;
+	exit(0);
 }
 
 if(isset($_POST['dir'])) {
-	//clean up path
-	$path = realpath($_SESSION['rootdir'].'/'.$_POST['dir']);
-	if(is_dir($path)) {
-		//split paths
-		$root_elements = explode($_SESSION['rootdir'],'/');
-		$root_count = count($root_elements);
-		$path_elements = explode($path, '/');
-		$path_count = count($path_elements);
-		//check if path is in bounds
-		if($path_elements < $root_elements) {
-			echo json_bad();
-			exit;
-		}
-		//check if home path is user's
-		for($i=0; $i<$root_count; $i++) {
-			if($path_elements[$i] !== $root_elements[$i]) {
-				echo json_dir("dirChange","false");
-				exit;
-			}
-		}
-		//victory
-		$_SESSION['curdir'] = substr($path,strlen($_SESSION['rootdir'].'/'));
-		echo json_dir("dirChange","true");
-	} else {
-		//loss
-		echo json_dir("dirChange","false");
+	$cur_dir = ftp_pwd($_SESSION['ftp']);
+	@ftp_chdir($_SESSION['ftp'], $cur_dir);
+	if($cur_dir !== ftp_pwd($_SESSION['ftp'])) {
+		echo json_dir('dirChange','true');
+		exit(0);
 	}
-} else {
-	//fail...thanks for not POSTing
-	echo json_dir("dirChange","false");
 }
+echo json_dir('dirChange','false');
 
 ?>
