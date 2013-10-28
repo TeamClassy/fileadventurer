@@ -7,6 +7,7 @@ if(!is_user_valid()) {
 	exit(0);
 }
 
+$_SESSION['ftp'] = ftp_connect('localhost', 7821);
 ftp_login($_SESSION['ftp'], $_SESSION['username'], $_SESSION['password']);
 
 if(isset($_POST['dir'])) {

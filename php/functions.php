@@ -11,8 +11,8 @@
 function is_user_valid()
 {
 	if(!isset($_SESSION['username'])
+	|| !isset($_SESSION['password'])
 	|| !isset($_SESSION['fingerprint'])
-	|| !isset($_SESSION['ftp'])
 	|| !isset($_SESSION['ssh']))
 		return false;
 	if($_SESSION['fingerprint'] !== sha1($_SERVER['HTTP_USER_AGENT']))
@@ -98,7 +98,7 @@ function json_bad()
 function json_file_info($file_name)
 {
 	//type check
-	ftp_chdir($_SESSION['ftp'], $file_name);
+	@ftp_chdir($_SESSION['ftp'], $file_name);
 	if($file_name === basename(ftp_pwd($_SESSION['ftp']))) {
 		$type = '"dir"';
 		ftp_cdup($_SESSION['ftp']);
