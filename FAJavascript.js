@@ -116,7 +116,7 @@
 
         //public
         that.parent = dirInfo.dirName;
-        that.path = that.parent + '/' + that.name;
+        that.path = (that.name !== '..') ? that.parent + '/' + that.name : that.parent;
         that.date = new Date(that.date);
         that.invis = (that.name[0] === '.');
         that.element = $('<div>', {
