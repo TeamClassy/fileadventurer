@@ -7,6 +7,8 @@ if(!is_user_valid()) {
 	exit(0);
 }
 
+ftp_login($_SESSION['ftp'], $_SESSION['username'], $_SESSION['password']);
+
 if(isset($_POST['dir'])) {
 	$cur_dir = ftp_pwd($_SESSION['ftp']);
 	@ftp_chdir($_SESSION['ftp'], $cur_dir);
