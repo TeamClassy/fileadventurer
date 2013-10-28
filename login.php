@@ -5,7 +5,9 @@ session_start();
 if(isset($_POST['user']) && isset($_POST['pass'])) {
 	$username = $_POST['user'];
 	$password = $_POST['pass'];
-	if($ftp_resource=ftp_connect('localhost', 7821) && $ssh_resource=ssh2_connect('localhost',7822)) {
+	$ftp_resource = ftp_connect('localhost', 7821);
+	$ssh_resource=ssh2_connect('localhost',7822)
+	if($ftp_resource!==FALSE && $ssh_resource!==FALSE) {
 		if(ftp_login($ftp_resource, $username, $password) && ssh2_auth_password($ssh_resource, $username, $password)) {
 			if(session_regenerate_id(true)) {
 				$_SESSION['username'] = $username;
