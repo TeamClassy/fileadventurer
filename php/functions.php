@@ -28,7 +28,7 @@ function is_user_valid()
 //		JSON directory plus supplied flags
 //	Assumptions:
 //		session is already started
-//		$_SESSION['ftp'] is set with resource
+//		$_SESSION['ftp'] is set with initiated FTP resource
 function json_dir($flag = FALSE, $value = FALSE)
 {
 	//flags
