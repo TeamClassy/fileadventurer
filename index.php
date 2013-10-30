@@ -29,7 +29,7 @@
 			
 			<div id="DirectoryBox">
 					Dir:
-					<input type="text" id="dirInput" value="~/" placeholder="Enter Directory Here" data-curDir="~/">
+					<input type="text" id="dirInput" value="/" placeholder="Enter Directory Here">
 					<input id="goToDir" type="button" value=">">
 			</div>
 			

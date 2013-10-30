@@ -38,7 +38,7 @@
         });
         $('#FileView').click(function (event) {
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
-                dirInfo.files[i].element.removeClass('#highlighted');
+                dirInfo.files[i].element.removeClass('highlighted');
             }
         });
     });
