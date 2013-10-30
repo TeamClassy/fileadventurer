@@ -8,34 +8,39 @@
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
             
-            //Brings up an SSH window for users to enter SSH commands with
-            $('#SSHButton').on('click', function (event) {
-                $('#SSH').toggle();
-            });
-            $('#goToDir').on('click', function (event) {
-                goToDir($('#dirInput').val());
-            });
-            $('#loginBtn').on('click', function (eventObject) {
-                eventObject.preventDefault();
-                $.ajax({
-                    url: 'login.php',
-                    type: 'POST',
-                    data: { user: $('#userInput').val(), pass: $('#passInput').val() },
-                    dataType: 'json',
-                    success: function (json) {
-                        if(json.sessionStatus) {
-                            $('#LoginDiv').toggleClass('hidden');
-                            displayFiles(json);
-                        } else {
-                            alert('Login Failed');
-                        }
-                    },
-                    error: function (xhr, status) {
-                        alert('Request Failed');
-                        console.log(xhr);
+        //Brings up an SSH window for users to enter SSH commands with
+        $('#SSHButton').on('click', function (event) {
+            $('#SSH').toggle();
+        });
+        $('#goToDir').on('click', function (event) {
+            goToDir($('#dirInput').val());
+        });
+        $('#loginBtn').on('click', function (eventObject) {
+            eventObject.preventDefault();
+            $.ajax({
+                url: 'login.php',
+                type: 'POST',
+                data: { user: $('#userInput').val(), pass: $('#passInput').val() },
+                dataType: 'json',
+                success: function (json) {
+                    if(json.sessionStatus) {
+                        $('#LoginDiv').toggleClass('hidden');
+                        displayFiles(json);
+                    } else {
+                        alert('Login Failed');
                     }
-                });
+                },
+                error: function (xhr, status) {
+                    alert('Request Failed');
+                    console.log(xhr);
+                }
             });
+        });
+        $('#FileView').click(function (event) {
+            for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+                dirInfo.files[i].element.removeClass('#highlighted');
+            }
+        });
     });
 
     
@@ -125,10 +130,12 @@
             html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
         });
         that.element.click(function (event) {
+            event.stopPropagation();
             that.element.toggleClass('highlighted');
         });
         if(that.type === 'dir') {
             that.element.dblclick(function (event) {
+                event.stopPropagation();
                 navToDir();
             });
         }
