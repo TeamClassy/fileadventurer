@@ -15,13 +15,6 @@
 	</head>
 	
 	<body>
-		<div id="LoginDiv">
-			<form>
-				<input type="text" id="userInput" placeholder="Username">
-				<input type="password" id="passInput" placeholder="Password">
-				<input id="loginBtn" type="submit" value="Login">
-			</form>
-		</div>
 		<div id="ToolBar">
 			<div id="FileDropdown">
 				<img src="svgs/FileDropdown.svg" height="30">
@@ -45,7 +38,13 @@
 		<div id="FileView">
 				<!-- This will automatically fill with file descriptions -->
 		</div>
-
+		<div id="LoginDiv">
+			<form>
+				<input type="text" id="userInput" placeholder="Username">
+				<input type="password" id="passInput" placeholder="Password">
+				<input id="loginBtn" type="submit" value="Login">
+			</form>
+		</div>
 		<div id="SSH">
 			SSH Window </br>
 			Enter Input on next Line
