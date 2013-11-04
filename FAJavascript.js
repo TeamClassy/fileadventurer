@@ -36,15 +36,16 @@
                 }
             });
         });
-        $('#LogOutButton').on('click', function (eventObject) {
-            eventObject.preventDefault();
+        $('#LogOutButton').on('click', function (event) {
+            event.preventDefault();
             $.ajax({
                 url: 'logout.php',
                 type: 'POST',
                 dataType:'json',
                 success: function (json) {
                     if(!json.sessionStatus) {
-                        $('#LoginDiv').toggleClass('hidden');
+                        $('#LoginDiv').toggleClass('hidden', $('#LoginDiv').hasClass('hidden'));
+                        displayFiles({dirname:""});
                     } else {
                         alert('Logout Failed')
                     }
