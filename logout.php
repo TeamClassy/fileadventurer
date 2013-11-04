@@ -1,4 +1,5 @@
 <?php
+require_once 'php/functions.php';
 
 session_start();
 session_destroy();
@@ -7,4 +8,5 @@ setcookie(session_name(), '', time()-604800, $cookieParams['path'], $cookieParam
 session_unset();
 echo json_bad();
 
+exit(0);
 ?>
