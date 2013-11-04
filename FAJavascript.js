@@ -43,7 +43,7 @@
                 type: 'POST',
                 dataType:'json',
                 success: function (json) {
-                    if(json.sessionStatus) {
+                    if(!json.sessionStatus) {
                         $('#LoginDiv').toggleClass('hidden');
                     } else {
                         alert('Logout Failed')
