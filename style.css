@@ -108,6 +108,28 @@ a{
 	width:35px;
 }
 
+#UploadDialog
+{
+	position:absolute;
+	top:40px;
+	right:85px; 
+	width:320px;
+}
+
+#LoginTitle
+{
+	position:fixed;
+	top:0px;
+	width:100%;
+}
+
+.dragging
+{
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+
 .file
 {
 	float:left;
@@ -141,7 +163,7 @@ a{
 
 .highlighted 
 {
-	background-color: #70A1E6;
+	border: 2px gray solid;
 }
 
 #SSH

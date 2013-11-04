@@ -1,9 +1,11 @@
-/* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+/* jshin;t jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 (function () {
     "use strict";
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
         files = [];
+
+	var dragging, dropping;
      
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
@@ -12,10 +14,12 @@
         $('#SSHButton').on('click', function (event) {
             $('#SSH').toggle();
         });
-        $('#goToDir').on('click', function (event) {
+        
+		$('#goToDir').on('click', function (event) {
             goToDir($('#dirInput').val());
         });
-        $('#loginBtn').on('click', function (eventObject) {
+        
+		$('#loginBtn').on('click', function (eventObject) {
             eventObject.preventDefault();
             $.ajax({
                 url: 'login.php',
@@ -36,6 +40,7 @@
                 }
             });
         });
+
         $('#LogOutButton').on('click', function (eventObject) {
             eventObject.preventDefault();
             $.ajax({
@@ -55,11 +60,18 @@
                 }
             })
         });
-        $('#FileView').click(function (event) {
+        
+		$('#FileView').click(function (event) {
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].element.removeClass('highlighted');
             }
         });
+
+		$('Fileview').mousemove(function (event) {
+			//Set the dragging class coords equal to the mouse's
+			// $.('#dragging').css("{top:" + y + ";left:" + x + "}";
+		}
+
     });
 
     
@@ -159,6 +171,28 @@
             });
         }
         
+		//Can I make this a while loop?
+		//I want to move the file back after mousedown stops
+		that.element.mousedown(function (event) {
+			dragging = that.path;
+			that.attr('class', 'dragging');
+		}
+
+		that.element.mouseup(function (event) {
+			dropping = that.path;
+			if( dropping !== dragging) {
+			$.ajax({
+				url: 'mv_file.php',
+				type: 'POST',
+				data: {from: dragging, to: dropping },
+				datType: 'json',
+				success: function (json) {
+					if(json.mvFile) {
+						displayFiles(json);
+					}
+				}
+			}
+		}
 
         if (that.name === '..') {
             that.content = dirInfo.parentDir;
