@@ -36,6 +36,25 @@
                 }
             });
         });
+        $('#LogOutButton').on('click', function (eventObject) {
+            eventObject.preventDefault();
+            $.ajax({
+                url: 'logout.php',
+                type: 'POST',
+                dataType:'json',
+                success: function (json) {
+                    if(json.sessionStatus) {
+                        $('#LoginDiv').toggleClass('hidden');
+                    } else {
+                        alert('Logout Failed')
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('Request Failed');
+                    console.log(xhr);
+                }
+            })
+        });
         $('#FileView').click(function (event) {
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].element.removeClass('highlighted');
