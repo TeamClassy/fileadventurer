@@ -155,6 +155,7 @@ a{
 	display: none;
 	color:white;
 	font-size:12pt;
+	font-family:Courier, "Courier New", monospace;
 }
 
 input
@@ -162,15 +163,14 @@ input
 	cursor:pointer;
 }
 
-#sshTerminal
+.sshUser 
 {
-	width:100%;
-	outline: 0 none;
-	background:black;
-	color:white;
-	border:0px;
-	font-size:11pt;
-	font-family:Courier, "Courier New", monospace;
+	color: lime;
+}
+
+.sshPath 
+{
+	color: #1400FF;	
 }
 
 footer{

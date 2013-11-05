@@ -45,13 +45,8 @@
 				<input id="loginBtn" type="submit" value="Login">
 			</form>
 		</div>
-		<div id="SSH">
-			SSH Window </br>
-			Enter Input on next Line
-			<form onbsubmit="return someFunction();"> 
-				<!--someFunction should be able to handle the input and show output on the console window-->
-				<input id="sshTerminal" type ="text" value="" tableindex="1"</input>
-			</form>
+		<div id="SSH" contenteditable="true">
+			<span id="sshStatic" contenteditable="false"><span class="sshUser">user@server</span><span>:</span><span class="sshPath">~</span><span>$</span></span> 
 		</div>
 	</body>
 </html>
