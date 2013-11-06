@@ -13,58 +13,72 @@ function is_user_valid()
 	if(!isset($_SESSION['username'])
 	|| !isset($_SESSION['password'])
 	|| !isset($_SESSION['fingerprint'])
-	|| !isset($_SESSION['ssh']))
-		return false;
-	if($_SESSION['fingerprint'] !== sha1($_SERVER['HTTP_USER_AGENT']))
+	|| $_SESSION['fingerprint'] !== sha1($_SERVER['HTTP_USER_AGENT']))
 		return false;
 	return true;
 }
 
 //=====================================
 //	Inputs:
+//		none
+//	Outputs:
+//		user's password
+//	Assumptions:
+//		session is already started
+function get_user_pass()
+{
+	//TODO:
+	//implement user password encryption
+	//store AES key in a cookie
+	//store ciphertext in session var
+	return $_SESSION['password'];
+}
+
+//=====================================
+//	Inputs:
+//		$ftp   - ftp resource handle
 //		$flag  - flag name to enter into JSON
 //		$value - value of flag to assign
 //	Outputs:
 //		JSON directory plus supplied flags
 //	Assumptions:
 //		session is already started
-//		$_SESSION['ftp'] is set with initiated FTP resource
-function json_dir($flag = FALSE, $value = FALSE)
+//		$ftp is set with initiated FTP resource
+function json_dir($ftp, $flag = FALSE, $value = FALSE)
 {
 	//flags
 	$output = '{"sessionStatus":true,';
 	if($flag !== FALSE)
 		$output.= '"'.$flag.'":'.$value.',';
 	//save current directory
-	$curdir = ftp_pwd($_SESSION['ftp']);
+	$curdir = ftp_pwd($ftp);
 	//current dir JSON
 	$output.= '"dirName":"'.$curdir.'",';
 	$output.= '"files":[';
-	foreach(ftp_nlist($_SESSION['ftp'], '-A') as $file) {
-		$output.= json_file_info($file);
+	foreach(ftp_nlist($ftp, '-A') as $file) {
+		$output.= json_file_info($ftp, $file);
 		//child dir JSON
-		@ftp_chdir($_SESSION['ftp'], $file);
-		if($curdir !== ftp_pwd($_SESSION['ftp'])) {
+		@ftp_chdir($ftp, $file);
+		if($curdir !== ftp_pwd($ftp)) {
 			$output = rtrim($output, '},');
 			$output.= ',"content":[';	//notice comma prefix
-			foreach(@ftp_nlist($_SESSION['ftp'], '-A') as $child_file)
-				$output.= json_file_info($child_file);
-			ftp_cdup($_SESSION['ftp']);
+			foreach(@ftp_nlist($ftp, '-A') as $child_file)
+				$output.= json_file_info($ftp, $child_file);
+			ftp_cdup($ftp);
 			$output = rtrim($output, ',');
 			$output.= ']';
 			$output.= '},';
 		}
 	}
-	//ftp_cdup($_SESSION['ftp']);
 	$output = rtrim($output, ',');
 	$output.= ']';
 	//parent dir JSON
-	ftp_cdup($_SESSION['ftp']);
-	if($curdir !== ftp_pwd($_SESSION['ftp'])) {
+	ftp_cdup($ftp);
+	if($curdir !== ftp_pwd($ftp)) {
 		$output.= ',"parentDir":[';	//notice comma prefix
-		foreach(ftp_nlist($_SESSION['ftp'], '-A') as $parent_file)
-			$output.= json_file_info($parent_file);
-		ftp_chdir($_SESSION['ftp'], $curdir);
+		foreach(ftp_nlist($ftp, '-A') as $parent_file)
+			$output.= json_file_info($ftp, $parent_file);
+		ftp_chdir($ftp, $curdir);
 		$output = rtrim($output, ',');
 		$output.=']';
 	}
@@ -93,25 +107,26 @@ function json_bad()
 
 //========================================
 //	Inputs:
+//		$ftp       - ftp resource handle
 //		$file_path - absolute path to file
 //	Outputs:
 //		JSON format of file data
-function json_file_info($file_name)
+function json_file_info($ftp, $file_name)
 {
 	//type check
-	@ftp_chdir($_SESSION['ftp'], $file_name);
-	if($file_name === basename(ftp_pwd($_SESSION['ftp']))) {
+	@ftp_chdir($ftp, $file_name);
+	if($file_name === basename(ftp_pwd($ftp))) {
 		$type = '"dir"';
-		ftp_cdup($_SESSION['ftp']);
+		ftp_cdup($ftp);
 	} else {
 		$type = strrpos($file_name, '.');
 		$type = ($type == 0 ? 'false' : '"'.trim(substr($file_name, $type), '.').'"');	//implicit conversion
 	}
 	//date check
-	$date = ftp_mdtm($_SESSION['ftp'],$file_name);
+	$date = ftp_mdtm($ftp,$file_name);
 	$date = ($date===-1 ? 'false' : '"'.date('Y-m-d\TH:i:sP',$date).'"');
 	//size check
-	$size = ftp_size($_SESSION['ftp'],$file_name);
+	$size = ftp_size($ftp,$file_name);
 	$size = ($size===-1 ? 'false' : '"'.$size.'"');
 	//set output
 	$output = '{';

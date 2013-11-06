@@ -7,26 +7,27 @@ if(!is_user_valid()) {
 	exit(0);
 }
 
-$_SESSION['ftp'] = ftp_connect('localhost', 7821);
-ftp_login($_SESSION['ftp'], $_SESSION['username'], $_SESSION['password']);
+$ftp = ftp_connect('localhost', 7821);
+ftp_login($ftp, $_SESSION['username'], get_user_pass());
 
 if(isset($_POST['dir'])) {
-	/*
-	if(strpos($_POST['dir'], '/') !== FALSE)
-		$dir = realpath($_POST['dir']);
-	else
-		$dir = $_POST['dir'];
-	*/
-	@ftp_chdir($_SESSION['ftp'], $_POST['dir']);
-	echo json_dir('dirChange','true');
-	exit(0);
-	/*
-	if($dir === ftp_pwd($_SESSION['ftp'])) {
+	$req_dir = $_POST['dir'];
+	$cur_dir = ftp_pwd($ftp);
+	if(strpos($req_dir, '/') === 0) $req_dir = $req_dir;	//absolute path
+	else							$req_dir = $cur_dir.'/'.$req_dir;	//relative path
+	@ftp_chdir($ftp, $req_dir);
+	if(ftp_pwd($ftp) !== $req_dir) {
+		//failed
+		@ftp_chdir($ftp, $cur_dir);
+		echo json_dir('dirChange','false');
+	} else {
 		echo json_dir('dirChange','true');
-		exit(0);
 	}
-	*/
+} else {
+	echo json_dir('dirChange','false');
 }
-echo json_dir('dirChange','false');
+
+ftp_close($ftp);
+exit(0);
 
 ?>
