@@ -80,7 +80,8 @@ $.fn.appendText = function(text) {
 
         $('Fileview').mousemove(function (event) {
             //Set the dragging class coords equal to the mouse's
-            // $.('#dragging').css("{top:" + y + ";left:" + x + "}";
+            
+				$.('#dragging').css( "top": event.pageY , "left": event.pageX);
         });
 
     });
@@ -275,11 +276,9 @@ $.fn.appendText = function(text) {
             });
         }
         
-        //Can I make this a while loop?
-        //I want to move the file back after mousedown stops
         that.el.mousedown(function (event) {
             dragging = that.path;
-            that.attr('class', 'dragging');
+            that.el.attr('class', 'dragging');
         });
 
         that.el.mouseup(function (event) {
@@ -296,6 +295,7 @@ $.fn.appendText = function(text) {
                         }
                     }
                 });
+				that.a
             }
         });
 
