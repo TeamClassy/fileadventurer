@@ -15,7 +15,7 @@
 	</head>
 	
 	<body>
-		<div id="ToolBar">
+		<div id="ToolBar" class="hidden">
 			<div id="FileDropdown">
 				<img src="svgs/FileDropdown.svg" height="30">
 			</div>

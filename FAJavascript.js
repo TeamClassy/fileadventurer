@@ -1,5 +1,6 @@
 /* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 
+(function (){
 /*
 ====================
 jQuery plugin courtesy of StackOverflow user lonesomeday: http://stackoverflow.com/users/417562/lonesomeday
@@ -14,7 +15,7 @@ $.fn.appendText = function(text) {
     });
 };
 
-(function () {
+
     'use strict';
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
@@ -41,6 +42,9 @@ $.fn.appendText = function(text) {
                     if(json.sessionStatus) {
                         $('#LoginDiv').toggleClass('hidden');
                         displayFiles(json);
+			$('#ToolBar').toggleClass('hidden');
+			$('#LoginTitle').toggleClass('hidden');
+			
                     } else {
                         alert('Login Failed');
                     }
@@ -78,11 +82,10 @@ $.fn.appendText = function(text) {
             }
         });
 
-        $('Fileview').mousemove(function (event) {
+        $('#Fileview').mousemove(function (event) {
             //Set the dragging class coords equal to the mouse's
-            
-				$.('#dragging').css( "top": event.pageY , "left": event.pageX);
-        });
+       		$('#dragging').css({ "top": event.pageY.toString()+'px', "left": event.pageX.toString()+'px'});
+        });		
 
     });
     
@@ -278,7 +281,7 @@ $.fn.appendText = function(text) {
         
         that.el.mousedown(function (event) {
             dragging = that.path;
-            that.el.attr('class', 'dragging');
+            //that.el.attr('class', 'dragging');
         });
 
         that.el.mouseup(function (event) {
@@ -328,4 +331,4 @@ $.fn.appendText = function(text) {
             dirs.files[j] = File(dirs.files[j]);
         }
     }
-})();
+}) ();
