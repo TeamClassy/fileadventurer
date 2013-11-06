@@ -129,7 +129,7 @@ $.fn.appendText = function(text) {
     */
     function SSH(obj) {
         var that = obj || {},
-            cmdHist = [" "],
+            cmdHist = [],
             cmdHistIndex = 0;
 
         function sendCmd(inputNode, input) {
@@ -146,7 +146,7 @@ $.fn.appendText = function(text) {
                     console.log(xhr);
                 }
             });*/
-            cmdHist.splice(cmdHist.length - 1, 0, input);
+            cmdHist.push(cmdHist.length - 1, 0, input);
             cmdHistIndex = cmdHist.length - 1;
             inputNode.remove();
             that.el.find('div').remove();
