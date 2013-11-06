@@ -12,11 +12,10 @@ if(isset($_POST['user']) && isset($_POST['pass'])) {
 			if(session_regenerate_id(true)) {
 				$_SESSION['username'] = $username;
 				$_SESSION['password'] = $password;
-				$_SESSION['ftp'] = $ftp_resource;
-				$_SESSION['ssh'] = $ssh_resource;	//check persistance of this when implemented
+				//$_SESSION['ssh'] = $ssh_resource;	//check persistance of this when implemented
 				$_SESSION['fingerprint'] = sha1($_SERVER['HTTP_USER_AGENT']);
 				//ssh2_exec($ssh_resource, 'exit');
-				echo json_dir();
+				echo json_dir($ftp_resource);
 				ftp_close($ftp_resource);
 				exit(0);
 			}
