@@ -19,12 +19,12 @@ if(isset($_POST['dir'])) {
 	if(ftp_pwd($ftp) !== $req_dir) {
 		//failed
 		@ftp_chdir($ftp, $cur_dir);
-		echo json_dir('dirChange','false');
+		echo json_dir($ftp,'dirChange','false');
 	} else {
-		echo json_dir('dirChange','true');
+		echo json_dir($ftp,'dirChange','true');
 	}
 } else {
-	echo json_dir('dirChange','false');
+	echo json_dir($ftp,'dirChange','false');
 }
 
 ftp_close($ftp);
