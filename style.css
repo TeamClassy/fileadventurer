@@ -6,35 +6,15 @@ body {
 	user-select: none; 
 }
 
-a:link,a:visited{
- 	color: #333333;
-  	text-decoration: none;
-}
-
-a:active, a:hover{
-  	color: #990066;
-	font-weight: bold;
- 	text-decoration: none;
- }
- 
-a{
-  font-size: 1.5em;
- }
-
  #LoginDiv 
  {
  	position: absolute;
  	top: 50px;
  }
 
- #gridTable
- {
- 	position:fixed;
- 	height:800px;
- 	width:800px;
- }
 #ToolBar
 {	
+	display:none;
 	min-width:750px;
 	position:fixed;				
 	top:0;
@@ -194,15 +174,4 @@ input
 {
 	color: #1400FF;	
 }
-
-footer{
-	width:400px;
-	position:absolute;
-	margin-left:33%;
-	top:80%;
-	text-align:center;
-	display:block;
-}
-
-#foot{text-align:center;}
 
