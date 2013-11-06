@@ -35,19 +35,20 @@
 			<div id="SSHButton"><img src="svgs/SSHButton.svg" height="30"></div>
 
 			<div id="UploadDialog"><img src="svgs/UploadDialog.svg" height="40"></div>
-
-			<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
-					
+							
 		</div>
+
+		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
+
 
 		<div id="FileView">
 				<!-- This will automatically fill with file descriptions -->
 		</div>
 		<div id="LoginDiv">
 			<form>
-				<input type="text" id="userInput" placeholder="Username"></br>
-				<input type="password" id="passInput" placeholder="Password"></br>
-				<input id="loginBtn" type="submit" value="Login"></br>
+				<input type="text" id="userInput" placeholder="Username">
+				<input type="password" id="passInput" placeholder="Password">
+				<input id="loginBtn" type="submit" value="Login">
 			</form>
 		</div>
 		<div id="SSH" contenteditable="true">
