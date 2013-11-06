@@ -34,7 +34,7 @@ http://stackoverflow.com/a/7619765/1968930
         $('#loginBtn').on('click', function (eventObject) {
             var hostDefault = 'localhost',
                 sshDefault = '7822',
-                ftpDefault = '78221';
+                ftpDefault = '7821';
             eventObject.preventDefault();
             if($('#hostInput').val() !== "") {
                 hostDefault = $('#hostInput').val();
@@ -43,7 +43,7 @@ http://stackoverflow.com/a/7619765/1968930
                 sshDefault = $('#sshInput').val();
             }
             if($('#ftpInput').val() !== "") {
-                sshDefault = $('#ftpInput').val();
+                ftpDefault = $('#ftpInput').val();
             }
             $.ajax({
                 url: 'login.php',
