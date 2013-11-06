@@ -1,4 +1,4 @@
-/* jshint jquery: true, camelcase: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+/* jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 
 (function (){
 /*
@@ -7,13 +7,13 @@ jQuery plugin courtesy of StackOverflow user lonesomeday: http://stackoverflow.c
 http://stackoverflow.com/a/7619765/1968930
 ====================
 */
-$.fn.appendText = function(text) {
+/*$.fn.appendText = function(text) {
     'use strict';
     this.each(function() {
         var textNode = document.createTextNode(text);
         $(this).append(textNode);
     });
-};
+};*/
 
 
     'use strict';
@@ -32,19 +32,31 @@ $.fn.appendText = function(text) {
         });
         
         $('#loginBtn').on('click', function (eventObject) {
+            var hostDefault = 'localhost',
+                sshDefault = '7822',
+                ftpDefault = '78221';
             eventObject.preventDefault();
+            if($('#hostInput').val() !== "") {
+                hostDefault = $('#hostInput').val();
+            }
+            if($('#sshInput').val() !== "") {
+                sshDefault = $('#sshInput').val();
+            }
+            if($('#ftpInput').val() !== "") {
+                sshDefault = $('#ftpInput').val();
+            }
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-                data: { user: $('#userInput').val(), pass: $('#passInput').val() },
+                data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
                     if(json.sessionStatus) {
                         $('#LoginDiv').toggleClass('hidden');
                         displayFiles(json);
-			$('#ToolBar').toggleClass('hidden');
-			$('#LoginTitle').toggleClass('hidden');
-			
+            $('#ToolBar').toggleClass('hidden');
+            $('#LoginTitle').toggleClass('hidden');
+            
                     } else {
                         alert('Login Failed');
                     }
@@ -84,8 +96,8 @@ $.fn.appendText = function(text) {
 
         $('#Fileview').mousemove(function (event) {
             //Set the dragging class coords equal to the mouse's
-       		$('#dragging').css({ "top": event.pageY.toString()+'px', "left": event.pageX.toString()+'px'});
-        });		
+            $('#dragging').css({ "top": event.pageY.toString()+'px', "left": event.pageX.toString()+'px'});
+        });     
 
     });
     
@@ -298,7 +310,7 @@ $.fn.appendText = function(text) {
                         }
                     }
                 });
-				that.a
+                //that.a
             }
         });
 

@@ -48,6 +48,9 @@
 			<form>
 				<input type="text" id="userInput" placeholder="Username">
 				<input type="password" id="passInput" placeholder="Password">
+				<input type="text" id="hostInput" placeholder="Hostname">
+				<input type="password" id="sshInput" placeholder="SSH Port">
+				<input type="text" id="ftpInput" placeholder="FTP Port">
 				<input id="loginBtn" type="submit" value="Login">
 			</form>
 		</div>
