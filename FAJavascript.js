@@ -273,6 +273,7 @@ http://stackoverflow.com/a/7619765/1968930
         //public
         that.parent = dirInfo.dirName;
         that.path = (that.name !== '..') ? that.parent + '/' + that.name : that.parent.slice(0, that.parent.lastIndexOf('/') + 1);
+        that.path = that.path.replace('//','/');
         that.date = new Date(that.date);
         that.invis = (that.name[0] === '.');
         that.el = $('<div>', {
