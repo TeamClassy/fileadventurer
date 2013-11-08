@@ -3,7 +3,7 @@
 //=====================================
 //	Inputs:
 //		none
-//	Outputs:
+//	Returns:
 //		TRUE  if user is logged in
 //		FALSE if user not logged in OR possible attack
 //	Assumptions:
@@ -12,6 +12,8 @@ function is_user_valid()
 {
 	if(!isset($_SESSION['username'])
 	|| !isset($_SESSION['password'])
+	|| !isset($_SESSION['host'])
+	|| !isset($_SESSION['ftp_port'])
 	|| !isset($_SESSION['fingerprint'])
 	|| $_SESSION['fingerprint'] !== sha1($_SERVER['HTTP_USER_AGENT']))
 		return false;
@@ -21,7 +23,7 @@ function is_user_valid()
 //=====================================
 //	Inputs:
 //		none
-//	Outputs:
+//	Returns:
 //		user's password
 //	Assumptions:
 //		session is already started
@@ -39,7 +41,7 @@ function get_user_pass()
 //		$ftp   - ftp resource handle
 //		$flag  - flag name to enter into JSON
 //		$value - value of flag to assign
-//	Outputs:
+//	Returns:
 //		JSON directory plus supplied flags
 //	Assumptions:
 //		session is already started
@@ -89,7 +91,7 @@ function json_dir($ftp, $flag = FALSE, $value = FALSE)
 //===================================
 //	Inputs:
 //		none
-//	Outpus:
+//	Returns:
 //		JSON flag for bad function
 function json_bad()
 {
@@ -109,10 +111,13 @@ function json_bad()
 //	Inputs:
 //		$ftp       - ftp resource handle
 //		$file_path - absolute path to file
-//	Outputs:
+//	Returns:
 //		JSON format of file data
 function json_file_info($ftp, $file_name)
 {
+	//Bill, this is what you want to do to escape chars for JSON
+	// $filename = filter_var($filename, FILTER_SANITIZE_STRING, array(FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH));
+
 	//type check
 	@ftp_chdir($ftp, $file_name);
 	if($file_name === basename(ftp_pwd($ftp))) {
