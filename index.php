@@ -40,7 +40,7 @@
 
 		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
 
-		<div id="FileMenu"><img src="svgs/FileDropdownDropped.svg" height="120">
+		<div id="FileMenu" style ="display:none;"><img src="svgs/FileDropdownDropped.svg" height="120">
 			<div id='Delete'></div>
 			<div id='Download'></div>
 			<div id='Rename'></div>
