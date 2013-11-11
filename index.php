@@ -40,7 +40,13 @@
 
 		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
 
-
+		<div id="FileMenu"><img src="svgs/FileDropdownDropped.svg" height="120">
+			<div id='Delete'></div>
+			<div id='Download'></div>
+			<div id='Rename'></div>
+			<div id='Upload'></div>
+		</div>
+		
 		<div id="FileView">
 				<!-- This will automatically fill with file descriptions -->
 		</div>

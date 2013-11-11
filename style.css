@@ -11,7 +11,49 @@ body {
  	position: absolute;
  	top: 50px;
  }
-
+#FileMenu
+ {
+ 	display: none;
+ 	position:absolute;
+ 	top: 35px;
+ 	z-index:4;
+ }
+#Delete
+{
+	height: 30px;
+	background-color: black;
+	z-index:5;
+	position: absolute;
+	top:0px;
+	width:100px;
+}
+#Download
+{
+	height: 30px;
+	background-color: red;
+	z-index:5;
+	position: absolute;
+	top:30px;
+	width:100px;
+}
+#Rename
+{
+	height: 30px;
+	background-color: black;
+	z-index:5;
+	position: absolute;
+	top:60px;
+	width:100px;
+}
+#Upload
+{
+	height: 30px;
+	background-color: red;
+	z-index:5;
+	position: absolute;
+	top:90px;
+	width:100px;
+}
 #ToolBar
 {	
 	min-width:750px;

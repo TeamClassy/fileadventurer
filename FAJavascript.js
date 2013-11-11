@@ -31,6 +31,23 @@ http://stackoverflow.com/a/7619765/1968930
             goToDir($('#dirInput').val());
         });
         
+        //shows working order of file dropdown buttons
+        $('#FileDropdown').on('click',function (event) {
+            $('#FileMenu').toggle();
+        });
+        $('#Delete').on('click',function (event) {
+            alert('Clicked delete');
+        });
+        $('#Download').on('click',function (event) {
+            alert('Clicked download');
+        });
+        $('#Rename').on('click',function (event) {
+            alert('Clicked rename');
+        });
+        $('#Upload').on('click',function (event) {
+            alert('Clicked upload');
+        });
+
         $('#loginBtn').on('click', function (eventObject) {
             var hostDefault = 'localhost',
                 sshDefault = '7822',
@@ -76,7 +93,8 @@ http://stackoverflow.com/a/7619765/1968930
                 dataType:'json',
                 success: function (json) {
                     if(!json.sessionStatus) {
-                        $('#LoginDiv').toggleClass('hidden');
+                        $('#LoginDiv').toggleClass('hidden', $('#LoginDiv').hasClass('hidden'));
+                        displayFiles({dirname:""});
                     } else {
                         alert('Logout Failed');
                     }
