@@ -7,7 +7,6 @@ if(!is_user_valid()) {
 	exit(0);
 }
 
-
 $ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
 ftp_login($ftp, $_SESSION['username'], get_user_pass());
 
