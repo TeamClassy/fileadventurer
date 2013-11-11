@@ -71,8 +71,8 @@ http://stackoverflow.com/a/7619765/1968930
                     if(json.sessionStatus) {
                         $('#LoginDiv').toggleClass('hidden');
                         displayFiles(json);
-            $('#ToolBar').toggleClass('hidden');
-            $('#LoginTitle').toggleClass('hidden');
+                        $('#ToolBar').toggleClass('hidden');
+                        $('#LoginTitle').toggleClass('hidden');
             
                     } else {
                         alert('Login Failed');
@@ -93,7 +93,9 @@ http://stackoverflow.com/a/7619765/1968930
                 dataType:'json',
                 success: function (json) {
                     if(!json.sessionStatus) {
-                        $('#LoginDiv').toggleClass('hidden', $('#LoginDiv').hasClass('hidden'));
+                        $('#LoginDiv').toggleClass('hidden');
+                        $('#ToolBar').toggleClass('hidden');
+                        $('#LoginTitle').toggleClass('hidden');
                         displayFiles({dirname:""});
                     } else {
                         alert('Logout Failed');
