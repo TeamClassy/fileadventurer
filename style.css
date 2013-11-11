@@ -21,7 +21,6 @@ body {
 #Delete
 {
 	height: 30px;
-	background-color: black;
 	z-index:5;
 	position: absolute;
 	top:0px;
@@ -30,7 +29,6 @@ body {
 #Download
 {
 	height: 30px;
-	background-color: red;
 	z-index:5;
 	position: absolute;
 	top:30px;
@@ -39,7 +37,6 @@ body {
 #Rename
 {
 	height: 30px;
-	background-color: black;
 	z-index:5;
 	position: absolute;
 	top:60px;
@@ -48,7 +45,6 @@ body {
 #Upload
 {
 	height: 30px;
-	background-color: red;
 	z-index:5;
 	position: absolute;
 	top:90px;
