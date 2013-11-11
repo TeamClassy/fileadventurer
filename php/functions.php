@@ -1,5 +1,16 @@
 <?php
 
+//Constant Variables that define JSON fields
+define("SESSION_STATUS","sessionStatus");
+define("CUR_DIR","dirName");
+define("FILES","files");
+define("FILE_NAME","name");
+define("FILE_TYPE","type");
+define("FILE_SIZE","size");
+define("DATE","date");
+define("FOLDER_CONTENT","content");
+define("PARENT_DIR","parentDir");
+
 //=====================================
 //	Inputs:
 //		none
@@ -49,43 +60,48 @@ function get_user_pass()
 function json_dir($ftp, $flag = FALSE, $value = FALSE)
 {
 	//flags
-	$output = '{"sessionStatus":true,';
-	if($flag !== FALSE)
-		$output.= '"'.$flag.'":'.$value.',';
+    $json_data = array();
+	
 	//save current directory
 	$curdir = ftp_pwd($ftp);
+
 	//current dir JSON
-	$output.= '"dirName":"'.$curdir.'",';
-	$output.= '"files":[';
+    $files = array();
 	foreach(ftp_nlist($ftp, '-A') as $file) {
-		$output.= json_file_info($ftp, $file);
+		$temp_file = json_file_info($ftp, $file);
 		//child dir JSON
 		@ftp_chdir($ftp, $file);
 		if($curdir !== ftp_pwd($ftp)) {
-			$output = rtrim($output, '},');
-			$output.= ',"content":[';	//notice comma prefix
+            $child_content = array();
 			foreach(@ftp_nlist($ftp, '-A') as $child_file)
-				$output.= json_file_info($ftp, $child_file);
+            {
+                // push data from new file onto array
+				$child_content[] = json_file_info($ftp, $child_file);
+            }
 			ftp_cdup($ftp);
-			$output = rtrim($output, ',');
-			$output.= ']';
-			$output.= '},';
+            $temp_file[FOLDER_CONTENT] = $child_content;
 		}
+        // push most recent file into file array
+        $files[] = $temp_file;
 	}
-	$output = rtrim($output, ',');
-	$output.= ']';
+    $parent_dir = array();
 	//parent dir JSON
 	ftp_cdup($ftp);
 	if($curdir !== ftp_pwd($ftp)) {
-		$output.= ',"parentDir":[';	//notice comma prefix
 		foreach(ftp_nlist($ftp, '-A') as $parent_file)
-			$output.= json_file_info($ftp, $parent_file);
+			$parent_dir[] = json_file_info($ftp, $parent_file);
 		ftp_chdir($ftp, $curdir);
-		$output = rtrim($output, ',');
-		$output.=']';
 	}
-	$output.= '}';
-	return $output;
+    $json_data[SESSION_STATUS] = true;
+    if($flag !== FALSE)
+    {
+        //What is the purpose of this?
+        $json_data[$flag] = $value;
+    }
+    $json_data[CUR_DIR] = $curdir;
+    $json_data[FILES] = $files;
+    $json_data[PARENT_DIR] = $parent_dir;
+	return json_encode($json_data);
 }
 
 //===================================
@@ -183,32 +199,30 @@ function child_ssh($username, $password, $host, $port)
 //		JSON format of file data
 function json_file_info($ftp, $file_name)
 {
-	//Bill, this is what you want to do to escape chars for JSON
-	// $filename = filter_var($filename, FILTER_SANITIZE_STRING, array(FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH));
 
+    $json_file_data = array();
 	//type check
 	@ftp_chdir($ftp, $file_name);
+    $type = "";
 	if($file_name === basename(ftp_pwd($ftp))) {
-		$type = '"dir"';
+		$type = "dir";
 		ftp_cdup($ftp);
 	} else {
 		$type = strrpos($file_name, '.');
-		$type = ($type == 0 ? 'false' : '"'.trim(substr($file_name, $type), '.').'"');	//implicit conversion
+		$type = ($type == 0 ? false : trim(substr($file_name, $type), '.')."");	//implicit conversion
 	}
 	//date check
 	$date = ftp_mdtm($ftp,$file_name);
-	$date = ($date===-1 ? 'false' : '"'.date('Y-m-d\TH:i:sP',$date).'"');
+	$date = ($date===-1 ? false : date('Y-m-d\TH:i:sP',$date)."");
 	//size check
 	$size = ftp_size($ftp,$file_name);
-	$size = ($size===-1 ? 'false' : '"'.$size.'"');
+	$size = ($size===-1 ? false : $size."");
 	//set output
-	$output = '{';
-	$output.= '"type":'.$type.',';
-	$output.= '"name":"'.$file_name.'",';
-	$output.= '"date":'.$date.',';
-	$output.= '"size":'.$size;
-	$output.= '},';
-	return $output;
+    $json_file_data[FILE_TYPE] = $type;
+    $json_file_data[FILE_NAME] = $file_name;
+    $json_file_data[DATE] = $date;
+    $json_file_data[FILE_SIZE] = $size;
+	return $json_file_data;
 }
 
 ?>
