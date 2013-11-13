@@ -34,7 +34,9 @@
 			
 			<div id="SSHButton"><img src="svgs/SSHButton.svg" height="30"></div>
 
-			<div id="UploadDialog"><img src="svgs/UploadDialog.svg" height="40"></div>
+			<div id="UploadDialog" class="hidden">
+			    <img src="svgs/UploadDialog.svg" height="40">
+			</div>
 							
 		</div>
 

@@ -48,6 +48,12 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Clicked upload');
         });
 
+	
+	$('#UploadButton').on('click',function (event) {
+	   $('#UploadDialog').toggleClass('hidden'); 
+	});
+
+
         $('#loginBtn').on('click', function (eventObject) {
             var hostDefault = 'localhost',
                 sshDefault = '7822',
