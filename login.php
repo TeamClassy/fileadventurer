@@ -8,13 +8,13 @@ if( isset($_POST['user'])
 	&& isset($_POST['ssh_port'])
 	&& isset($_POST['ftp_port']) ) {
 	//sanitize
-	$username =	filter_var($_POST['user'],FILTER_SANITIZE_STRING);
-	$password =	filter_var($_POST['pass'],FILTER_SANITIZE_STRING);
+	$username =	filter_var(trim($_POST['user']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
+	$password =	filter_var(trim($_POST['pass']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
 	$host     = trim($_POST['host']);
 	if($host !== 'localhost') {
 		if(!$host=filter_var($host,FILTER_VALIDATE_IP)) {
 			if(!$host=filter_var($host,FILTER_VALIDATE_URL)) {
-				$host = 'localhost';	//should this default to something else?
+				$host = 'localhost';
 			}
 		}
 	}
