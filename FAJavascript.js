@@ -362,7 +362,7 @@ http://stackoverflow.com/a/7619765/1968930
             dirInfo.files[i].el.remove();
         }
         dirInfo = dirs;
-        if('parentDir' in dirs) {
+        if('parentDir' in dirs && dirs.parentDir.length === 0) {
             dirs.files.unshift({type: 'dir', name: '..'});
         }
         for(var j in dirs.files)
