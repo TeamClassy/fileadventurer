@@ -10,10 +10,11 @@ if(file_exists('/tmp/'.$_SESSION['username'].'.shin')) {
 	socket_write($sckt, 'exit');
 	socket_close($sckt);
 }
+//delete password cookie
+setcookie('FILEADVENTURER_KEY','',1);
 //destroy session
 session_destroy();
-$cookieParams = session_get_cookie_params();
-setcookie(session_name(), '', time()-604800, $cookieParams['path'], $cookieParams['domain'], $cookieParams['secure'], $cookieParams['httponly']);
+setcookie(session_name(), '', 1);
 session_unset();
 echo json_bad();
 exit(0);

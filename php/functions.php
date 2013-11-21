@@ -31,20 +31,42 @@ function is_user_valid()
 	return true;
 }
 
+//====================================
+//	Inputs:
+//		$plain - plaintext user password
+//	Returns:
+//		ciphertext - success
+//		false 	   - failure
+//	Assumptions:
+//		session is started
+function set_user_pass($plain)
+{
+	if($rand_src = fopen('/dev/urandom','r')) {
+		if($key = fread($rand_src, 32)) {
+			$key = md5($key);	//TODO: change hash? outputs 128, so simpler
+			fclose($rand_src);
+			$cipher = @mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $plain, MCRYPT_MODE_CBC);	//TODO: add IV? suppressed warning for now
+			if(setcookie('FILEADVENTURER_KEY', $key))
+				return rtrim($cipher,'\0');
+		}
+		fclose($rand_src);
+	}
+	return false;
+}
+
 //=====================================
 //	Inputs:
 //		none
 //	Returns:
 //		user's password
+//		false - failure (cookie not set)
 //	Assumptions:
 //		session is already started
 function get_user_pass()
 {
-	//TODO:
-	//implement user password encryption
-	//store AES key in a cookie
-	//store ciphertext in session var
-	return $_SESSION['password'];
+	if(isset($_COOKIE['FILEADVENTURER_KEY']))
+		return rtrim(@mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $_COOKIE['FILEADVENTURER_KEY'], $_SESSION['password'], MCRYPT_MODE_CBC),'\0');
+	return false;
 }
 
 //=====================================

@@ -42,7 +42,7 @@ if( isset($_POST['user'])
 						default:
 							//parent
 							$_SESSION['username'] = $username;
-							$_SESSION['password'] = $password;
+							$_SESSION['password'] = set_user_pass($password);
 							$_SESSION['host']     = $host;
 							$_SESSION['ftp_port'] = $ftp_port;
 							$_SESSION['fingerprint'] = sha1($_SERVER['HTTP_USER_AGENT']);
