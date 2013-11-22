@@ -22,8 +22,12 @@ http://stackoverflow.com/a/7619765/1968930
         files = [],
         ssh,
         dragging,
-        dropping;
+        dropping,
+		downx,
+		downy;
      
+		var mousex, mousey;
+		
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
         ssh = SSH();
@@ -71,6 +75,8 @@ http://stackoverflow.com/a/7619765/1968930
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
+		async: false,
+		timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
@@ -120,9 +126,17 @@ http://stackoverflow.com/a/7619765/1968930
             }
         });
 
-        $('#Fileview').mousemove(function (event) {
+        $('#FileView').mousemove(function (event) {
             //Set the dragging class coords equal to the mouse's
-            $('#dragging').css({ "top": event.pageY.toString()+'px', "left": event.pageX.toString()+'px'});
+			/*
+				if(mousx - downx === 10)
+				dragging nao	
+
+
+			*/
+			mousex = event.pageX.toString() - 80;
+			mousey = event.pageY.toString() - 150;
+			$('.dragging').css({ "top": mousey+'px', "left": mousex+'px'});
         });     
 
     });
@@ -318,27 +332,29 @@ http://stackoverflow.com/a/7619765/1968930
             });
         }
         
-        that.el.mousedown(function (event) {
+		that.el.mousedown(function (event) {
             dragging = that.path;
             //that.el.attr('class', 'dragging');
+	    	//that.el.addClass('dragging');
         });
 
         that.el.mouseup(function (event) {
-            dropping = that.path;
-            if( dropping !== dragging) {
-                $.ajax({
+            if(!that.el.hasClass('dragging')){
+				dropping = that.path;
+                /*$.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
                     data: {from: dragging, to: dropping },
-                    datType: 'json',
+                    dataType: 'json',
                     success: function (json) {
                         if(json.mvFile) {
                             displayFiles(json);
                         }
                     }
-                });
-                //that.a
-            }
+                });*/
+            }else{
+				that.el.removeClass('dragging')
+	    	}
         });
 
         if (that.name === '..') {
