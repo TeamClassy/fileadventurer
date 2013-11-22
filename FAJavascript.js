@@ -24,9 +24,9 @@ http://stackoverflow.com/a/7619765/1968930
         dragging,
         dropping,
 		downx,
-		downy;
-     
-		var mousex, mousey;
+		downy, 
+		mousex, 
+		mousey;
 		
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
@@ -134,8 +134,9 @@ http://stackoverflow.com/a/7619765/1968930
 
 
 			*/
-			mousex = event.pageX.toString() - 80;
-			mousey = event.pageY.toString() - 150;
+			mousex = event.pageX.toString() - 30;
+			mousey = event.pageY.toString() - 30;
+			
 			$('.dragging').css({ "top": mousey+'px', "left": mousex+'px'});
         });     
 
@@ -333,14 +334,16 @@ http://stackoverflow.com/a/7619765/1968930
         }
         
 		that.el.mousedown(function (event) {
-            dragging = that.path;
+            dragging = that;
+			downx = event.pageX.toString();
+			downy = event.pageY.toString();
             //that.el.attr('class', 'dragging');
 	    	//that.el.addClass('dragging');
         });
 
         that.el.mouseup(function (event) {
             if(!that.el.hasClass('dragging')){
-				dropping = that.path;
+				dropping = that;
                 /*$.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
@@ -378,7 +381,7 @@ http://stackoverflow.com/a/7619765/1968930
             dirInfo.files[i].el.remove();
         }
         dirInfo = dirs;
-        if('parentDir' in dirs && dirs.parentDir.length === 0) {
+        if('parentDir' in dirs && dirs.parentDir.length !== 0) {
             dirs.files.unshift({type: 'dir', name: '..'});
         }
         for(var j in dirs.files)
