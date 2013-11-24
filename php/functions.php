@@ -10,6 +10,7 @@ define("FILE_SIZE","size");
 define("DATE","date");
 define("FOLDER_CONTENT","content");
 define("PARENT_DIR","parentDir");
+define("DIR_IDENTIFIER","d");
 
 //=====================================
 //	Inputs:
@@ -68,6 +69,101 @@ function get_user_pass()
 		return rtrim(@mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $_COOKIE['FILEADVENTURER_KEY'], $_SESSION['password'], MCRYPT_MODE_CBC),'\0');
 	return false;
 }
+//=====================================
+//	Inputs:
+//		$element = string element from ftp_rawlist
+//	Returns:
+//		array with data element, that can be converted to json
+//	Assumptions:
+//		session is already started
+function parse_raw_element($element)
+{
+    //Each element of the array ftp_rawlist returns should look like
+    //"drwxr-x---  15 vincent  vincent      4096 Nov  3 21:31
+    //public_html"
+    $return_file = array();
+    //this line splits the input into tokens based on spaces
+    //it will split it into at most 9 tokens, this is so that the
+    //filename is always a single token
+    $tokens = preg_split("/\s+/",$element,9);
+    $filename = $tokens[8];
+    if($tokens[0][0] === 'd')
+    {
+        $return_file[FILE_TYPE] = "dir";
+    }
+    else
+    {
+        $return_file[FILE_TYPE] = trim(substr($filename,strrpos($filename,'.')),'.');
+    }
+    //$return_file['permissions'] = $tokens[0];
+    //$return_file['id'] = $tokens[1];
+    //$return_file['owner'] = $tokens[2];
+    //$return_file['group'] = $tokens[3];
+    if($return_file[FILE_TYPE] === "dir")
+    {
+        //the size info we get from rawlist is irrelevant for
+        //directories, so we ignore it
+        $return_file[FILE_SIZE] = false;
+    }
+    else
+    {
+        $return_file[FILE_SIZE] = $tokens[4];
+    }
+    //this date is currently overwritten else where
+    $month = $tokens[5];
+    $day = $tokens[6];
+    $time = $tokens[7];
+    $return_file[DATE] = $month.' '.$day.' '.$time."";
+
+    $return_file[FILE_NAME] = $tokens[8];
+
+    return $return_file;
+}
+
+
+//=====================================
+//	Inputs: 
+//        $ftp = ftp resource
+//        $depth = level to recur to (0) if no recursion (1) is
+//	      default. If you want infinite recusion pass INF
+//	Returns:
+//		All
+//	Assumptions:
+//		session is already started
+//		$ftp is set with initiated FTP resource
+//      ftp is set to the correct directory
+function files_in_cur_dir($ftp,$depth = 1)
+{   
+    //error_log("Getting data from ".ftp_pwd($ftp));
+    $files = array();
+    foreach(ftp_rawlist($ftp, '-A') as $file) {
+        $temp_file = parse_raw_element($file);
+
+        //we get the date out here, because we want it in a different
+        //format, then what we get from rawlist
+         $date = ftp_mdtm($ftp,$temp_file[FILE_NAME]);
+         $date = ($date===-1 ? false : date('Y-m-d\TH:i:sP',$date)."");
+         $temp_file[DATE] = $date;
+
+		if($temp_file[FILE_TYPE] === "dir" && $depth > 0  ) {
+            //if current element is a directory and we have a non-zero
+            //recursion level, then get recur and get subdirectory
+            //info
+            $child_content = array();
+            if(@ftp_chdir($ftp, $temp_file[FILE_NAME]))
+            {
+                // if we can access the folder get the info inside
+                $child_content = files_in_cur_dir($ftp,$depth - 1);
+                ftp_cdup($ftp);
+            }
+             $temp_file[FOLDER_CONTENT] = $child_content;
+		}
+        // push most recent file into file array
+        $files[] = $temp_file;
+	}
+    return $files;
+}
+
 
 //=====================================
 //	Inputs:
@@ -82,36 +178,20 @@ function get_user_pass()
 function json_dir($ftp, $flag = FALSE, $value = FALSE)
 {
 	//flags
+    error_log("in json_dir");
     $json_data = array();
 	
 	//save current directory
 	$curdir = ftp_pwd($ftp);
 
 	//current dir JSON
-    $files = array();
-	foreach(ftp_nlist($ftp, '-A') as $file) {
-		$temp_file = json_file_info($ftp, $file);
-		//child dir JSON
-		@ftp_chdir($ftp, $file);
-		if($curdir !== ftp_pwd($ftp)) {
-            $child_content = array();
-			foreach(@ftp_nlist($ftp, '-A') as $child_file)
-            {
-                // push data from new file onto array
-				$child_content[] = json_file_info($ftp, $child_file);
-            }
-			ftp_cdup($ftp);
-            $temp_file[FOLDER_CONTENT] = $child_content;
-		}
-        // push most recent file into file array
-        $files[] = $temp_file;
-	}
+    $files = files_in_cur_dir($ftp,1);
+
     $parent_dir = array();
 	//parent dir JSON
-	ftp_cdup($ftp);
-	if($curdir !== ftp_pwd($ftp)) {
-		foreach(ftp_nlist($ftp, '-A') as $parent_file)
-			$parent_dir[] = json_file_info($ftp, $parent_file);
+	//ftp_cdup($ftp);
+	if(@ftp_cdup($ftp)) {
+		$parent_dir = files_in_cur_dir($ftp,0);
 		ftp_chdir($ftp, $curdir);
 	}
     $json_data[SESSION_STATUS] = true;
@@ -123,6 +203,7 @@ function json_dir($ftp, $flag = FALSE, $value = FALSE)
     $json_data[CUR_DIR] = $curdir;
     $json_data[FILES] = $files;
     $json_data[PARENT_DIR] = $parent_dir;
+    error_log("returning data");
 	return json_encode($json_data);
 }
 
@@ -221,7 +302,6 @@ function child_ssh($username, $password, $host, $port)
 //		JSON format of file data
 function json_file_info($ftp, $file_name)
 {
-
     $json_file_data = array();
 	//type check
 	@ftp_chdir($ftp, $file_name);
