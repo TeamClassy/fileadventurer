@@ -127,16 +127,12 @@ http://stackoverflow.com/a/7619765/1968930
         });
 
         $('#FileView').mousemove(function (event) {
-            //Set the dragging class coords equal to the mouse's
-			/*
-				if(mousx - downx === 10)
-				dragging nao	
-
-
-			*/
-			mousex = event.pageX.toString() - 30;
-			mousey = event.pageY.toString() - 30;
-			
+           	mousex = (event.clientX.toString())-30;
+			mousey = (event.clientY.toString())-50;
+			//Making the element dragging 
+			if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10){
+				dragging.el.attr('class', 'dragging');	
+			}
 			$('.dragging').css({ "top": mousey+'px', "left": mousex+'px'});
         });     
 
@@ -335,9 +331,9 @@ http://stackoverflow.com/a/7619765/1968930
         
 		that.el.mousedown(function (event) {
             dragging = that;
-			downx = event.pageX.toString();
-			downy = event.pageY.toString();
-            //that.el.attr('class', 'dragging');
+			downx = (event.clientX.toString())-30;
+			downy = (event.clientY.toString())-30;
+           // that.el.attr('class', 'dragging');
 	    	//that.el.addClass('dragging');
         });
 
@@ -355,9 +351,11 @@ http://stackoverflow.com/a/7619765/1968930
                         }
                     }
                 });*/
-            }else{
-				that.el.removeClass('dragging')
-	    	}
+            }
+			if(dragging !== 0){
+				dragging.el.attr('class', 'file');
+				dragging = 0;
+			}
         });
 
         if (that.name === '..') {
