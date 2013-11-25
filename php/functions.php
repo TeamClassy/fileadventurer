@@ -69,6 +69,25 @@ function get_user_pass()
 		return rtrim(@mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $_COOKIE['FILEADVENTURER_KEY'], $_SESSION['password'], MCRYPT_MODE_CBC),'\0');
 	return false;
 }
+
+//=====================================
+//	Inputs:
+//		$ftp  - valid ftp resource handler
+//		$file - file to check
+//	Returns:
+//		true or false
+//	Assumptions:
+//		$file is absolute relative to home dir
+function ftp_file_exists($ftp, $file)
+{
+	$path = dirname($file);
+	$name = basename($file);
+	foreach (ftp_nlist($ftp, $path) as $list)
+		if(basename($list) === $name)
+			return true;
+	return false;
+}
+
 //=====================================
 //	Inputs:
 //		$element = string element from ftp_rawlist
