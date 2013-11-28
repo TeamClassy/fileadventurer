@@ -281,6 +281,7 @@ http://stackoverflow.com/a/7619765/1968930
         rmFile
             This function is called when the user presses enter while editing a file name
             Should change the name of the file on the server and return the file's name to uneditable state
+            TODO: Input checking
         ====================
         */
         function rmFile(){
@@ -309,7 +310,6 @@ http://stackoverflow.com/a/7619765/1968930
         navToDir
             This function is called when a directory is double clicked on.
             It changes the view to that folder, then sends a request for PHP to change dirInfo to the target folder
-            TODO: Input checking
         ====================
         */
         function navToDir() {
@@ -357,7 +357,7 @@ http://stackoverflow.com/a/7619765/1968930
             });
         }
         that.el.find('.fileText').keydown(function (event){
-           if(event.which===13) {
+           if(event.which===13 && that.name !== '..') {
                 event.preventDefault();
                 rmFile();
            }
@@ -407,13 +407,25 @@ http://stackoverflow.com/a/7619765/1968930
    =====================
    */
    function rmButton (){
-   var filArray = document.getElementsByClassName('file highlighted');
-   for(var i =0; i<filArray.length;i++){
-       var elem = document.getElementById(filArray[i].id);
-       $('#FileMenu').toggle();
-       elem.lastChild.setAttribute('contenteditable','true');
-       $(elem.lastChild).focus();
-       }
+        var filArray = document.getElementsByClassName('file highlighted');
+        var folArray = document.getElementsByClassName('folder highlighted');
+        if(filArray.length > 0 || folArray.length > 0){
+            alert('Cannot rename more than one file or folder.')
+        }else{
+            if(filArray[0] !== null && folArray[0] !== null){
+                alert('Cannot rename more than one file or folder.')
+            }else{
+                if(filArray[0] !== null){
+                    var elem = document.getElementById(filArray[0].id);
+                }
+                else{
+                    var elem = document.getElementById(folArray[0].id);
+                }
+                $('#FileMenu').toggle();
+                elem.lastChild.setAttribute('contenteditable','true');
+                $(elem.lastChild).focus();
+            }   
+        }
    }
     /*
     ====================
