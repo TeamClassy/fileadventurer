@@ -410,7 +410,7 @@ http://stackoverflow.com/a/7619765/1968930
         var filArray = document.getElementsByClassName('file highlighted');
         if(filArray.length > 1){
             alert('Cannot rename more than one file or folder.');
-        else{
+        }else{
             var elem = document.getElementById(filArray[0].id);
             var elemName = elem.lastChild.innerHtml;
             if(elemName !== '..'){
