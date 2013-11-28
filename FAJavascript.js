@@ -357,7 +357,7 @@ http://stackoverflow.com/a/7619765/1968930
             });
         }
         that.el.find('.fileText').keydown(function (event){
-           if(event.which===13 && that.name !== '..') {
+           if(event.which===13) {
                 event.preventDefault();
                 rmFile();
            }
@@ -408,23 +408,15 @@ http://stackoverflow.com/a/7619765/1968930
    */
    function rmButton (){
         var filArray = document.getElementsByClassName('file highlighted');
-        var folArray = document.getElementsByClassName('folder highlighted');
-        if(filArray.length > 1 || folArray.length > 1){
+        if(filArray.length > 1){
             alert('Cannot rename more than one file or folder.')
-        }else{
-            if(filArray.length === 1 && folArray.length === 1){
-                alert('Cannot rename both a file and a folder.')
-            }else{
-                if(filArray.length === 1){
-                    var elem = document.getElementById(filArray[0].id);
-                }
-                else{
-                    var elem = document.getElementById(folArray[0].id);
-                }
+        else{
+            var elem = document.getElementById(filArray[0].id);
+            if(elem.lastChild.innerHtml !== '..'){
                 $('#FileMenu').toggle();
                 elem.lastChild.setAttribute('contenteditable','true');
                 $(elem.lastChild).focus();
-            }   
+            }
         }
    }
     /*
