@@ -409,13 +409,13 @@ http://stackoverflow.com/a/7619765/1968930
    function rmButton (){
         var filArray = document.getElementsByClassName('file highlighted');
         var folArray = document.getElementsByClassName('folder highlighted');
-        if(filArray.length > 0 || folArray.length > 0){
+        if(filArray.length > 1 || folArray.length > 1){
             alert('Cannot rename more than one file or folder.')
         }else{
-            if(filArray[0] !== null && folArray[0] !== null){
-                alert('Cannot rename more than one file or folder.')
+            if(filArray.length === 1 && folArray.length === 1){
+                alert('Cannot rename both a file and a folder.')
             }else{
-                if(filArray[0] !== null){
+                if(filArray.length === 1){
                     var elem = document.getElementById(filArray[0].id);
                 }
                 else{
