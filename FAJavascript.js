@@ -275,13 +275,41 @@ http://stackoverflow.com/a/7619765/1968930
     ====================
     */
     function File(that) {
-
+         //private
+        /*
+        ====================
+        rmFile
+            This function is called when the user presses enter while editing a file name
+            Should change the name of the file on the server and return the file's name to uneditable state
+        ====================
+        */
+        function rmFile(){
+        that.el.find('.fileText').attr('contenteditable','false');
+        /*$.ajax({
+                url: 'rm_file.php',
+                type: 'POST',
+                data: { file: that.path },
+                dataType: 'json',
+                success: function (json) {
+                    if(!json.rmFile) {
+                        alert('Could not rename file.');
+                        displayFiles(json);
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });
+        */
+        }
         //private
         /*
         ====================
         navToDir
             This function is called when a directory is double clicked on.
             It changes the view to that folder, then sends a request for PHP to change dirInfo to the target folder
+            TODO: Input checking
         ====================
         */
         function navToDir() {
@@ -328,7 +356,7 @@ http://stackoverflow.com/a/7619765/1968930
                 navToDir();
             });
         }
-        that.el.find('.fileText').keydown(function(event){
+        that.el.find('.fileText').keydown(function (event){
            if(event.which===13) {
                 event.preventDefault();
                 rmFile();
@@ -372,10 +400,10 @@ http://stackoverflow.com/a/7619765/1968930
     }
     /*
    =====================
-   Renaming a File
+   rmButton
         Changes the contenteditable attr to true of the div holding the file or folders name
-        Should allow the user to rename a file and perform some input checking for illegal names
-        TODO: Add input filtering, make user able to rename only one file at a time, and test php function.
+        Should focus user on the selected file/folder's name and allow them to edit it.
+        TODO: Add functionality for folders and allow the user to rename only one thing at a time
    =====================
    */
    function rmButton (){
@@ -386,26 +414,6 @@ http://stackoverflow.com/a/7619765/1968930
        elem.lastChild.setAttribute('contenteditable','true');
        $(elem.lastChild).focus();
        }
-   }
-   function rmFile(){
-        that.el.find('.fileText').attr('contenteditable','false');
-        /*$.ajax({
-                url: 'rm_file.php',
-                type: 'POST',
-                data: { file: that.path },
-                dataType: 'json',
-                success: function (json) {
-                    if(!json.rmFile) {
-                        alert('Could not rename file.');
-                        displayFiles(json);
-                    }
-                },
-                error: function (xhr, status) {
-                    alert('error: ' + status);
-                    console.log(xhr);
-                }
-            });
-        */
    }
     /*
     ====================
