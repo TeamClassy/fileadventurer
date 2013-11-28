@@ -46,7 +46,7 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Clicked download');
         });
         $('#Rename').on('click',function (event) {
-            alert('Clicked rename');
+            rmButton();
         });
         $('#Upload').on('click',function (event) {
             alert('Clicked upload');
@@ -316,7 +316,7 @@ http://stackoverflow.com/a/7619765/1968930
         that.el = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
             id: that.name,
-            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
+            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText" contenteditable="false">'+ that.name+ '</div>'
         });
         that.el.click(function (event) {
             event.stopPropagation();
@@ -328,6 +328,12 @@ http://stackoverflow.com/a/7619765/1968930
                 navToDir();
             });
         }
+        that.el.find('.fileText').keydown(function(event){
+           if(event.which===13) {
+                event.preventDefault();
+                rmFile();
+           }
+       });
         
 		that.el.mousedown(function (event) {
             dragging = that;
@@ -364,7 +370,43 @@ http://stackoverflow.com/a/7619765/1968930
         $('#FileView').append(that.el);
         return that;
     }
-
+    /*
+   =====================
+   Renaming a File
+        Changes the contenteditable attr to true of the div holding the file or folders name
+        Should allow the user to rename a file and perform some input checking for illegal names
+        TODO: Add input filtering, make user able to rename only one file at a time, and test php function.
+   =====================
+   */
+   function rmButton (){
+   var filArray = document.getElementsByClassName('file highlighted');
+   for(var i =0; i<filArray.length;i++){
+       var elem = document.getElementById(filArray[i].id);
+       $('#FileMenu').toggle();
+       elem.lastChild.setAttribute('contenteditable','true');
+       $(elem.lastChild).focus();
+       }
+   }
+   function rmFile(){
+        that.el.find('.fileText').attr('contenteditable','false');
+        /*$.ajax({
+                url: 'rm_file.php',
+                type: 'POST',
+                data: { file: that.path },
+                dataType: 'json',
+                success: function (json) {
+                    if(!json.rmFile) {
+                        alert('Could not rename file.');
+                        displayFiles(json);
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });
+        */
+   }
     /*
     ====================
     displayFiles
