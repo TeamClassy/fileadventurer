@@ -412,7 +412,8 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Cannot rename more than one file or folder.');
         else{
             var elem = document.getElementById(filArray[0].id);
-            if(elem.lastChild.innerHtml !== '..'){
+            var elemName = elem.lastChild.innerHtml;
+            if(elemName !== '..'){
                 $('#FileMenu').toggle();
                 elem.lastChild.setAttribute('contenteditable','true');
                 $(elem.lastChild).focus();
