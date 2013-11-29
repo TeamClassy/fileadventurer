@@ -69,6 +69,48 @@ function get_user_pass()
 		return rtrim(@mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $_COOKIE['FILEADVENTURER_KEY'], $_SESSION['password'], MCRYPT_MODE_CBC),'\0');
 	return false;
 }
+
+//=====================================
+//	Inputs:
+//		$ftp  - valid ftp resource handler
+//		$file - file to check
+//	Returns:
+//		'dir', 'file', or false
+//	Assumptions:
+//		$file is sanitized
+function ftp_file_info($ftp, $file)
+{
+	if(strpos($file, '/') === 0) {
+		//absolute
+		$path = dirname($file);
+		$name = basename($file);
+	} else {
+		//relative
+		$path = ftp_pwd($ftp);
+		$name = $file;
+	}
+	foreach (ftp_rawlist($ftp, $path) as $list) {
+		//limit for possible spaces in name
+		$info = preg_split("/\s+/", $list, 9);
+		// [0]permissions	- drwxr-x---
+		// [1]hard links	- 15
+		// [2]owner			- connor
+		// [3]group 		- connor
+		// [4]size 			- 4096
+		// [5]month 		- Dec
+		// [6]day 			- 12
+		// [7]time 			- 14:36
+		// [8]name 			- cactus.o
+		if($info[8] === $name) {
+			//won't work for links...
+			if($list[0][0] === 'd')
+				return 'dir';
+			return 'file';
+		}
+	}
+	return false;
+}
+
 //=====================================
 //	Inputs:
 //		$element = string element from ftp_rawlist
@@ -109,7 +151,7 @@ function parse_raw_element($element)
     {
         $return_file[FILE_SIZE] = $tokens[4];
     }
-    //this date is currently overwritten else where
+    //this date is currently overwritten elsewhere
     $month = $tokens[5];
     $day = $tokens[6];
     $time = $tokens[7];
@@ -139,8 +181,8 @@ function files_in_cur_dir($ftp,$depth = 1)
     foreach(ftp_rawlist($ftp, '-A') as $file) {
         $temp_file = parse_raw_element($file);
 
-        //we get the date out here, because we want it in a different
-        //format, then what we get from rawlist
+        //we get the date out here because we want it in a different
+        //format than what we get from rawlist
          $date = ftp_mdtm($ftp,$temp_file[FILE_NAME]);
          $date = ($date===-1 ? false : date('Y-m-d\TH:i:sP',$date)."");
          $temp_file[DATE] = $date;
@@ -197,7 +239,7 @@ function json_dir($ftp, $flag = FALSE, $value = FALSE)
     $json_data[SESSION_STATUS] = true;
     if($flag !== FALSE)
     {
-        //What is the purpose of this?
+        //Bill: this is the 'flag' in the back/front doc
         $json_data[$flag] = $value;
     }
     $json_data[CUR_DIR] = $curdir;

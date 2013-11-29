@@ -17,6 +17,20 @@ File/Directory input string format
 
 Files:
 
+CURRENTLY TESTING:
+
+mv_file.php
+        inputs:
+                from      - file to move
+                to        - destination
+                overwrite - 'true' if overwrite, 'false' otherwise
+        outputs:
+                JSON directory
+        flags:
+                "mvFile" : true/false
+
+COMPLETE:
+
 login.php
         inputs:
                 user - entered username
@@ -38,6 +52,8 @@ change_dir.php
         flags:
                 "dirChange" : true/false
 
+INCOMPLETE:
+
 view_file.php
         input:
                 file - file to view (image/text)
@@ -45,16 +61,6 @@ view_file.php
                 requested file
         flags:
                 TODO: this
-
-mv_file.php
-        inputs:
-                from - file to move
-                to   - destination
-        outputs:
-                JSON directory
-        flags:
-                "mvFile" : true/false
-
 
 cp_file.php
         inputs:
@@ -65,7 +71,6 @@ cp_file.php
         flags:
                 "cpFile" : true/false
 
-
 rm_file.php
         inputs:
                 file - file/directory destination
@@ -74,7 +79,6 @@ rm_file.php
         flags:
                 "rmFile" : true/false
 
-
 upload.php
         inputs:
                 file - destination to upload to
@@ -82,7 +86,6 @@ upload.php
                 JSON directory
         flags:
                 TODO: this
-
 
 download.php
         inputs:
