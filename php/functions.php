@@ -130,7 +130,7 @@ function ftp_file_info($ftp, $file)
 		// [6]day 			- 12
 		// [7]time 			- 14:36
 		// [8]name 			- cactus.o
-		if($info[8] === $name) {
+		if(trim($info[8]) === $name) {
 			//won't work for links...
 			if($info[0][0] === 'd')
 				return 'dir';
@@ -359,45 +359,3 @@ function child_ssh($username, $password, $host, $port)
 	unlink('/tmp/'.$username.'.shin');
 	unlink('/tmp/'.$username.'.shout');
 }
-
-
-
-
-//========================================
-//	Not to be used outside of this file
-//========================================
-
-//========================================
-//	Inputs:
-//		$ftp       - ftp resource handle
-//		$file_path - absolute path to file
-//	Returns:
-//		JSON format of file data
-function json_file_info($ftp, $file_name)
-{
-    $json_file_data = array();
-	//type check
-	@ftp_chdir($ftp, $file_name);
-    $type = "";
-	if($file_name === basename(ftp_pwd($ftp))) {
-		$type = "dir";
-		ftp_cdup($ftp);
-	} else {
-		$type = strrpos($file_name, '.');
-		$type = ($type == 0 ? false : trim(substr($file_name, $type), '.')."");	//implicit conversion
-	}
-	//date check
-	$date = ftp_mdtm($ftp,$file_name);
-	$date = ($date===-1 ? false : date('Y-m-d\TH:i:sP',$date)."");
-	//size check
-	$size = ftp_size($ftp,$file_name);
-	$size = ($size===-1 ? false : $size."");
-	//set output
-    $json_file_data[FILE_TYPE] = $type;
-    $json_file_data[FILE_NAME] = $file_name;
-    $json_file_data[DATE] = $date;
-    $json_file_data[FILE_SIZE] = $size;
-	return $json_file_data;
-}
-
-?>
