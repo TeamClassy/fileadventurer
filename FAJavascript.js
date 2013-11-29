@@ -1,6 +1,6 @@
-/* jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+/ jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 
-(function (){
+//(function (){
 /*
 ====================
 jQuery plugin courtesy of StackOverflow user lonesomeday: http://stackoverflow.com/users/417562/lonesomeday
@@ -46,7 +46,7 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Clicked download');
         });
         $('#Rename').on('click',function (event) {
-            rmButton();
+            alert('Clicked rename');
         });
         $('#Upload').on('click',function (event) {
             alert('Clicked upload');
@@ -275,35 +275,7 @@ http://stackoverflow.com/a/7619765/1968930
     ====================
     */
     function File(that) {
-         //private
-        /*
-        ====================
-        rmFile
-            This function is called when the user presses enter while editing a file name
-            Should change the name of the file on the server and return the file's name to uneditable state
-            TODO: Input checking
-        ====================
-        */
-        function rmFile(){
-        that.el.find('.fileText').attr('contenteditable','false');
-        /*$.ajax({
-                url: 'rm_file.php',
-                type: 'POST',
-                data: { file: that.path },
-                dataType: 'json',
-                success: function (json) {
-                    if(!json.rmFile) {
-                        alert('Could not rename file.');
-                        displayFiles(json);
-                    }
-                },
-                error: function (xhr, status) {
-                    alert('error: ' + status);
-                    console.log(xhr);
-                }
-            });
-        */
-        }
+
         //private
         /*
         ====================
@@ -344,7 +316,7 @@ http://stackoverflow.com/a/7619765/1968930
         that.el = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
             id: that.name,
-            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText" contenteditable="false">'+ that.name+ '</div>'
+            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
         });
         that.el.click(function (event) {
             event.stopPropagation();
@@ -356,13 +328,7 @@ http://stackoverflow.com/a/7619765/1968930
                 navToDir();
             });
         }
-        that.el.find('.fileText').keydown(function (event){
-           if(event.which===13) {
-                event.preventDefault();
-                rmFile();
-           }
-       });
-        
+		
 		that.el.mousedown(function (event) {
             dragging = that;
 			downx = (event.clientX.toString())-30;
@@ -370,24 +336,37 @@ http://stackoverflow.com/a/7619765/1968930
            // that.el.attr('class', 'dragging');
 	    	//that.el.addClass('dragging');
         });
+       
+		that.el.mouseover(function (event) {
+			if(dragging !== that){
+				dropping = that;
+			}
+			console.log(that.path);
+			//console.log('butt');
+		});
+ 
 
         that.el.mouseup(function (event) {
-            if(!that.el.hasClass('dragging')){
-				dropping = that;
-                /*$.ajax({
+			//console.log(document.elementFromPoint(mousex, mousey));
+			//if(dragging !== that){
+			//	dropping = that;
+			//}
+            if(dragging !== dropping){
+                $.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
-                    data: {from: dragging, to: dropping },
+                    data: {from: dragging.path, to: dropping.path },
                     dataType: 'json',
                     success: function (json) {
                         if(json.mvFile) {
                             displayFiles(json);
                         }
                     }
-                });*/
+                });
             }
 			if(dragging !== 0){
-				dragging.el.attr('class', 'file');
+				dragging.el.removeClass('dragging');
+				dragging.el.addClass('file');
 				dragging = 0;
 			}
         });
@@ -398,28 +377,7 @@ http://stackoverflow.com/a/7619765/1968930
         $('#FileView').append(that.el);
         return that;
     }
-    /*
-   =====================
-   rmButton
-        Changes the contenteditable attr to true of the div holding the file or folders name
-        Should focus user on the selected file/folder's name and allow them to edit it.
-        TODO: Add functionality for folders and allow the user to rename only one thing at a time
-   =====================
-   */
-   function rmButton (){
-        var filArray = document.getElementsByClassName('file highlighted');
-        if(filArray.length > 1){
-            alert('Cannot rename more than one file or folder.');
-        }else{
-            var elem = document.getElementById(filArray[0].id);
-            var elemName = elem.lastChild.innerHtml;
-            if(elemName !== '..'){
-                $('#FileMenu').toggle();
-                elem.lastChild.setAttribute('contenteditable','true');
-                $(elem.lastChild).focus();
-            }
-        }
-   }
+
     /*
     ====================
     displayFiles
@@ -442,4 +400,4 @@ http://stackoverflow.com/a/7619765/1968930
             dirs.files[j] = File(dirs.files[j]);
         }
     }
-}) ();
+//}) ();
