@@ -23,7 +23,7 @@ mv_file.php
         inputs:
                 from      - file to move
                 to        - destination
-                overwrite - 'true' if overwrite, don't POST otherwise
+                overwrite - 'true' if overwrite, 'false' otherwise
         outputs:
                 JSON directory
         flags:
