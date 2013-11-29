@@ -19,6 +19,15 @@ Files:
 
 CURRENTLY TESTING:
 
+rm_file.php
+        inputs:
+                file      - file/directory destination
+                recursive - 'true' - if 'file' is a directory, delete the entire directory / 'false'
+        outputs:
+                JSON directory
+        flags:
+                "rmFile" : true/false !!!! may still partially delete if false && recursive
+
 mv_file.php
         inputs:
                 from      - file to move
@@ -27,7 +36,15 @@ mv_file.php
         outputs:
                 JSON directory
         flags:
-                "mvFile" : true/false
+                "mvFile"    : true/false
+
+mkdir.php
+        inputs:
+                dir - directory to create
+        outputs:
+                JSON directory
+        flags:
+                "mkDir" : true/false
 
 COMPLETE:
 
@@ -62,22 +79,17 @@ view_file.php
         flags:
                 TODO: this
 
-cp_file.php
-        inputs:
-                from - file to copy
-                to   - destination
+ssh.php
+        input:
+                read     - if reading shell output
+                command  - if sending command
+                minimize - if minimizing SSH window
         outputs:
-                JSON directory
+                next line out output
+                FILE_ADVENTURER_END_OUTPUT - on end of output
+                JSON dir - if 'minimize'
         flags:
-                "cpFile" : true/false
-
-rm_file.php
-        inputs:
-                file - file/directory destination
-        outputs:
-                JSON directory
-        flags:
-                "rmFile" : true/false
+                NONE
 
 upload.php
         inputs:

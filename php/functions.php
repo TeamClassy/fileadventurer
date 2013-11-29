@@ -72,10 +72,39 @@ function get_user_pass()
 
 //=====================================
 //	Inputs:
+//		$ftp - valid ftp resource handler
+//		$dir - directory to recursively delete
+//	Returns:
+//		true/false - may still partially delete if false
+//	Assumptions:
+//		$dir is sanitized
+function ftp_rm_recurse($ftp, $dir)
+{
+	foreach (ftp_rawlist($ftp, $dir) as $file) {
+		$info = preg_split("/\s+/", $file, 9);
+		//see ftp_file_info() for breakdown of array
+		if($info[0][0] === 'd') {
+			//directory, recurse
+			if(!ftp_rm_recurse($ftp, $dir.'/'.trim($info[8]))) return false;
+		} elseif($info[0][0] === 'l') {
+			//link, parse [8] more
+			$link_split = explode('->', $info[8]);
+			if(!ftp_delete($ftp, $dir.'/'.trim($link_split[0]))) return false;
+		} else {
+			//normal file
+			if(!ftp_delete($ftp, $dir.'/'.trim($info[8]))) return false;
+		}
+	}
+	if(!ftp_rmdir($ftp, $dir));
+	return true;
+}
+
+//=====================================
+//	Inputs:
 //		$ftp  - valid ftp resource handler
 //		$file - file to check
 //	Returns:
-//		'dir', 'file', or false
+//		'dir', 'link', 'file', or false
 //	Assumptions:
 //		$file is sanitized
 function ftp_file_info($ftp, $file)
@@ -103,8 +132,10 @@ function ftp_file_info($ftp, $file)
 		// [8]name 			- cactus.o
 		if($info[8] === $name) {
 			//won't work for links...
-			if($list[0][0] === 'd')
+			if($info[0][0] === 'd')
 				return 'dir';
+			elseif($info[0][0] === 'l')
+				return 'link';
 			return 'file';
 		}
 	}
