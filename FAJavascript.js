@@ -1,4 +1,4 @@
-/ jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+/* jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 
 //(function (){
 /*
@@ -46,7 +46,7 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Clicked download');
         });
         $('#Rename').on('click',function (event) {
-            rmButton();
+            renameButton();
         });
         $('#Upload').on('click',function (event) {
             alert('Clicked upload');
@@ -285,24 +285,23 @@ http://stackoverflow.com/a/7619765/1968930
         ====================
         */
         function renameFile(){
-        that.el.find('.fileText').attr('contenteditable','false');
-        /*$.ajax({
-                url: 'rm_file.php',
-                type: 'POST',
-                data: { file: that.path },
-                dataType: 'json',
-                success: function (json) {
-                    if(!json.rmFile) {
-                        alert('Could not rename file.');
-                        displayFiles(json);
+        	that.el.find('.fileText').attr('contenteditable','false');
+        	$.ajax({
+                    url: 'mv_file.php',
+                    type: 'POST',
+                    data: {from: that.path, to: that.el.find('.fileText').html() },
+                    dataType: 'json',
+                    success: function (json) {
+                	if(!json.mvFile) {
+                	   alert('Could not rename file.');
+                	   displayFiles(json);
+                    	}
+        	    },
+                    error: function (xhr, status) {
+                    	alert('error: ' + status);
+                    	console.log(xhr);
                     }
-                },
-                error: function (xhr, status) {
-                    alert('error: ' + status);
-                    console.log(xhr);
-                }
-            });
-        */
+                });
         }
         //private
         /*
@@ -421,15 +420,15 @@ http://stackoverflow.com/a/7619765/1968930
         TODO: Add functionality for folders and allow the user to rename only one thing at a time
    =====================
    */
-   function rmButton (){
-        var toRemove = $('.highlighted');
-        if(toRemove.length > 1){
+   function renameButton (){
+        var toRename = $('.highlighted');
+        if(toRename.length > 1){
             alert('Cannot rename more than one file or folder.');
         }else{
-            if(toRemove.find('.fileText').html() !== '..'){
+            if(toRename.find('.fileText').html() !== '..'){
                 $('#FileMenu').toggle();
-                toRemove.find('.fileText').attr('contenteditable','true');
-                toRemove.find('.fileText').focus();
+                toRename.find('.fileText').attr('contenteditable','true');
+                toRename.find('.fileText').focus();
             }
         }
    }
