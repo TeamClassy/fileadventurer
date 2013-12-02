@@ -422,16 +422,14 @@ http://stackoverflow.com/a/7619765/1968930
    =====================
    */
    function rmButton (){
-        var filArray = document.getElementsByClassName('file highlighted');
-        if(filArray.length > 1){
+        var toRemove = $('.highlighted');
+        if(toRemove.length > 1){
             alert('Cannot rename more than one file or folder.');
         }else{
-            var elem = document.getElementById(filArray[0].id);
-            var elemName = elem.lastChild.innerHTML;
-            if(elemName !== '..'){
+            if(toRemove.find('#fileText').html() !== '..'){
                 $('#FileMenu').toggle();
-                elem.lastChild.setAttribute('contenteditable','true');
-                $(elem.lastChild).focus();
+                toRemove.find('#fileText').attr('contenteditable','true');
+                toRemove.find('#fileText').focus();
             }
         }
    }
