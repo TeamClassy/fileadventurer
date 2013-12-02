@@ -289,7 +289,7 @@ http://stackoverflow.com/a/7619765/1968930
         	$.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
-                    data: {from: that.path, to: that.el.find('.fileText').html() },
+                    data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? "/" : "") + that.el.find('.fileText').html() },
                     dataType: 'json',
                     success: function (json) {
                 	if(!json.mvFile) {
