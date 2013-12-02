@@ -1,6 +1,6 @@
-/* jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+// jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
 
-//(function (){
+(function(){
 /*
 ====================
 jQuery plugin courtesy of StackOverflow user lonesomeday: http://stackoverflow.com/users/417562/lonesomeday
@@ -21,12 +21,13 @@ http://stackoverflow.com/a/7619765/1968930
     var dirInfo = {dirName: '', files : []},
         files = [],
         ssh,
-        dragging,
-        dropping,
 		downx,
 		downy, 
 		mousex, 
 		mousey;
+	
+	var dragging = 0;
+	var dropping = 0;
 		
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
@@ -49,7 +50,7 @@ http://stackoverflow.com/a/7619765/1968930
             renameButton();
         });
         $('#Upload').on('click',function (event) {
-            alert('Clicked upload');
+            $('#UploadDialog').toggleClass('hidden');
         });
 
 	
@@ -75,8 +76,8 @@ http://stackoverflow.com/a/7619765/1968930
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-		        async: false,
-		        timeout: 30000,
+		async: false,
+		timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
@@ -127,13 +128,15 @@ http://stackoverflow.com/a/7619765/1968930
         });
 
         $('#FileView').mousemove(function (event) {
+			
            	mousex = (event.clientX.toString())-30;
-			mousey = (event.clientY.toString())-50;
+			mousey = (event.clientY.toString())-75;
+			
 			//Making the element dragging 
 			if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10){
 				dragging.el.attr('class', 'dragging');	
 			}
-			$('.dragging').css({ "top": mousey+'px', "left": mousex+'px'});
+			$('.dragging').css({ 'top': mousey+'px', "left": mousex+'px'});
         });     
 
     });
@@ -167,7 +170,7 @@ http://stackoverflow.com/a/7619765/1968930
                 },
                 error: function(xhr, status) {
                     alert('error: ' + status);
-                    console.log(xhr);
+					console.log(xhr);
                 }
             });
         //}
@@ -275,8 +278,9 @@ http://stackoverflow.com/a/7619765/1968930
     ====================
     */
     function File(that) {
-         //private
-        /*
+
+        //private
+		/*
         ====================
         renameFile
             This function is called when the user presses enter while editing a file name
@@ -303,7 +307,7 @@ http://stackoverflow.com/a/7619765/1968930
                     }
                 });
         }
-        //private
+  
         /*
         ====================
         navToDir
@@ -343,7 +347,7 @@ http://stackoverflow.com/a/7619765/1968930
         that.el = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
             id: that.name,
-            html: '<img src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
+            html: '<img id="' + that.path + '" src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
         });
         that.el.click(function (event) {
             event.stopPropagation();
@@ -359,30 +363,45 @@ http://stackoverflow.com/a/7619765/1968930
 		that.el.mousedown(function (event) {
             dragging = that;
 			downx = (event.clientX.toString())-30;
-			downy = (event.clientY.toString())-30;
-           // that.el.attr('class', 'dragging');
-	    	//that.el.addClass('dragging');
+			downy = (event.clientY.toString())-75;
         });
        
-		that.el.mouseover(function (event) {
-			if(dragging !== that){
-				dropping = that;
-			}
-			console.log(that.path);
-			//console.log('butt');
+		/*that.el.mouseover(function (event) {
+		//	if(dragging !== that){
+		//		dropping = that;
+		//	}
+			//console.log(that.path);
+			console.log('Currently over ' + that.name);
 		});
- 
+
+		that.el.mouseenter(function (event) {
+			console.log('Currently over ' + that.name);
+			if(dragging !== that){
+				dropping = that;	
+			}
+		});*/ 
 
         that.el.mouseup(function (event) {
-			//console.log(document.elementFromPoint(mousex, mousey));
+			
+			$('.dragging').css({ 'display': 'none'});
+
+						
+
+			dropping = $(document.elementFromPoint(event.clientX, event.clientY));
 			//if(dragging !== that){
 			//	dropping = that;
 			//}
-            if(dragging !== dropping){
+			//if(dragging !== that){
+			//	dropping = that;	
+			//}
+
+			console.log(dropping.attr('id') + ' === ' + dragging.path);			
+
+            if((dragging !== 0)&&(dragging.path !== dropping.attr('id'))&&(dropping.parent().hasClass('folder'))){
                 $.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
-                    data: {from: dragging.path, to: dropping.path },
+                    data: {from: dragging.path, to: dropping.attr('id') + '/' + dragging.name },
                     dataType: 'json',
                     success: function (json) {
                         if(json.mvFile) {
@@ -391,36 +410,42 @@ http://stackoverflow.com/a/7619765/1968930
                     }
                 });
             }
-			if(dragging !== 0){
+
+			$('.dragging').css({ 'display':'block'});
+			
+			if(dragging !== 0){	
 				dragging.el.removeClass('dragging');
 				dragging.el.addClass('file');
 				dragging = 0;
+			}
+			if(dropping !== 0){
+				dropping = 0;
 			}
         });
 
         if (that.name === '..') {
             that.content = dirInfo.parentDir;
         }
-        
-        that.el.find('.fileText').keydown(function (event){
+       
+		that.el.find('.fileText').keydown(function (event){
            if(event.which===13) {
                 event.preventDefault();
                 renameFile();
            }
         });
 
-        $('#FileView').append(that.el);
+		 $('#FileView').append(that.el);
         return that;
     }
-    /*
-   =====================
-   rmButton
+	 /*
+   	=====================
+   	rmButton
         Changes the contenteditable attr to true of the div holding the file or folders name
         Should focus user on the selected file/folder's name and allow them to edit it.
         TODO: Add functionality for folders and allow the user to rename only one thing at a time
-   =====================
-   */
-   function renameButton (){
+   	=====================
+   	*/
+   	function renameButton (){
         var toRename = $('.highlighted');
         if(toRename.length > 1){
             alert('Cannot rename more than one file or folder.');
@@ -454,4 +479,4 @@ http://stackoverflow.com/a/7619765/1968930
             dirs.files[j] = File(dirs.files[j]);
         }
     }
-//}) ();
+}) ();

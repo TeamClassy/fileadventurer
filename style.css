@@ -49,6 +49,13 @@ body {
 	top:90px;
 	width:100px;
 }
+#UploadInput
+{
+	position: fixed;
+	top:47px;
+	right:114px;
+	width:200px;
+}
 #ToolBar
 {	
 	min-width:750px;
@@ -129,7 +136,16 @@ body {
 	position:absolute;
 	top:40px;
 	right:85px; 
+	z-index:6;
 	width:320px;
+}
+#UploadText
+{
+	font-family:"Verdana";
+	position:relative;
+	bottom:33px;
+	left:8px;
+	font-weight:600;
 }
 
 #LoginTitle

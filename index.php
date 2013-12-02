@@ -33,13 +33,15 @@
 			<div id="LogOutButton"><img src="svgs/LogOutButton.svg" height="30"></div>
 			
 			<div id="SSHButton"><img src="svgs/SSHButton.svg" height="30"></div>
-
-			<div id="UploadDialog" class="hidden">
-			    <img src="svgs/UploadDialog.svg" height="40">
-			</div>
-							
+						
 		</div>
-
+			
+		<div id="UploadDialog" class="hidden"> 
+			<img src="svgs/UploadDialog.svg" height="40">
+			<input type="text" id="UploadInput" value="/" placeholder"Enter Directory Here" width="400px">
+			<div id="UploadText">Upload:</div>
+		</div>
+	
 		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
 
 		<div id="FileMenu" style ="display:none;"><img src="svgs/FileDropdownDropped.svg" height="120">
