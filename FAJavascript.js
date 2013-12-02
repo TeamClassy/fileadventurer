@@ -46,7 +46,7 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Clicked download');
         });
         $('#Rename').on('click',function (event) {
-            alert('Clicked rename');
+            rmButton();
         });
         $('#Upload').on('click',function (event) {
             alert('Clicked upload');
@@ -75,8 +75,8 @@ http://stackoverflow.com/a/7619765/1968930
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-		async: false,
-		timeout: 30000,
+		        async: false,
+		        timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
@@ -275,7 +275,35 @@ http://stackoverflow.com/a/7619765/1968930
     ====================
     */
     function File(that) {
-
+         //private
+        /*
+        ====================
+        renameFile
+            This function is called when the user presses enter while editing a file name
+            Should change the name of the file on the server and return the file's name to uneditable state
+            TODO: Input checking
+        ====================
+        */
+        function renameFile(){
+        that.el.find('.fileText').attr('contenteditable','false');
+        /*$.ajax({
+                url: 'rm_file.php',
+                type: 'POST',
+                data: { file: that.path },
+                dataType: 'json',
+                success: function (json) {
+                    if(!json.rmFile) {
+                        alert('Could not rename file.');
+                        displayFiles(json);
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });
+        */
+        }
         //private
         /*
         ====================
@@ -374,10 +402,39 @@ http://stackoverflow.com/a/7619765/1968930
         if (that.name === '..') {
             that.content = dirInfo.parentDir;
         }
+        
+        that.el.find('.fileText').keydown(function (event){
+           if(event.which===13) {
+                event.preventDefault();
+                renameFile();
+           }
+        });
+
         $('#FileView').append(that.el);
         return that;
     }
-
+    /*
+   =====================
+   rmButton
+        Changes the contenteditable attr to true of the div holding the file or folders name
+        Should focus user on the selected file/folder's name and allow them to edit it.
+        TODO: Add functionality for folders and allow the user to rename only one thing at a time
+   =====================
+   */
+   function rmButton (){
+        var filArray = document.getElementsByClassName('file highlighted');
+        if(filArray.length > 1){
+            alert('Cannot rename more than one file or folder.');
+        }else{
+            var elem = document.getElementById(filArray[0].id);
+            var elemName = elem.lastChild.innerHTML;
+            if(elemName !== '..'){
+                $('#FileMenu').toggle();
+                elem.lastChild.setAttribute('contenteditable','true');
+                $(elem.lastChild).focus();
+            }
+        }
+   }
     /*
     ====================
     displayFiles
