@@ -10,10 +10,9 @@ JSON General flags:
         "sessionStatus" : true/false
 
 File/Directory input string format
-        Path relative to current directory
-                !!!OR!!!
         Absolute path with respect to user's home
                 MUST BEGIN WTIH '/'
+        If it is a directory, never trail with '/'
 
 Files:
 

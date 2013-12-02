@@ -12,6 +12,8 @@ ftp_login($ftp, $_SESSION['username'], get_user_pass());
 
 if(isset($_POST['dir'])) {
 	$dir = filter_var(trim($_POST['dir']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
+	$cur = dirname($dir);
+	ftp_chdir($ftp, $cur);
 	if(!ftp_file_info($ftp, $to)) {
 		//does not exist, create
 		if(ftp_mkdir($ftp, $dir)) {

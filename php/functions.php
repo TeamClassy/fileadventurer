@@ -109,15 +109,9 @@ function ftp_rm_recurse($ftp, $dir)
 //		$file is sanitized
 function ftp_file_info($ftp, $file)
 {
-	if(strpos($file, '/') === 0) {
-		//absolute
-		$path = dirname($file);
-		$name = basename($file);
-	} else {
-		//relative
-		$path = ftp_pwd($ftp);
-		$name = $file;
-	}
+	//get info we need
+	$path = dirname($file);
+	$name = basename($file);
 	foreach (ftp_rawlist($ftp, $path) as $list) {
 		//limit for possible spaces in name
 		$info = preg_split("/\s+/", $list, 9);
