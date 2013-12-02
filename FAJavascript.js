@@ -426,10 +426,10 @@ http://stackoverflow.com/a/7619765/1968930
         if(toRemove.length > 1){
             alert('Cannot rename more than one file or folder.');
         }else{
-            if(toRemove.find('#fileText').html() !== '..'){
+            if(toRemove.find('.fileText').html() !== '..'){
                 $('#FileMenu').toggle();
-                toRemove.find('#fileText').attr('contenteditable','true');
-                toRemove.find('#fileText').focus();
+                toRemove.find('.fileText').attr('contenteditable','true');
+                toRemove.find('.fileText').focus();
             }
         }
    }
