@@ -11,7 +11,7 @@ $ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
 ftp_login($ftp, $_SESSION['username'], get_user_pass());
 
 if(isset($_POST['file'])) {
-	$file = filter_var(trim($_POST['from']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
+	$file = filter_var(trim($_POST['file']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
 	$cur  = dirname($file);
 	ftp_chdir($ftp, $cur);
 	$type = ftp_file_info($ftp, $file);
