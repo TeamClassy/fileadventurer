@@ -41,7 +41,26 @@ http://stackoverflow.com/a/7619765/1968930
             $('#FileMenu').toggle();
         });
         $('#Delete').on('click',function (event) {
-            alert('Clicked delete');
+            var toDelete = $('.highlighted');
+            if(confirm("Are you sure you want to delete " + toDelete.find('.fileText').html() + "?")) {
+            	$.ajax({
+                    url: 'rm_file.php',
+                    type: 'POST',
+                    data: { file: toDelete.find('img').attr('id') },
+                    dataType: 'json',
+                    success: function (json) {
+                        if(json.rmFile) {
+                            displayFiles(json);
+                        } else {
+                            alert('Error: ' + toDelete.find('.fileText').html() + ' was not deleted');
+                        }
+                    },
+                    error: function (xhr, status) {
+                        alert('Request Failed');
+                        console.log(xhr);
+                    }
+                });
+            }
         });
         $('#Download').on('click',function (event) {
             alert('Clicked download');
