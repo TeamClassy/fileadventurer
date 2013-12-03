@@ -19,7 +19,7 @@ if(isset($_POST['file'])) {
 		//check recursion
 		if(isset($_POST['recursive']) && $_POST['recursive'] === 'true') {
 			if(ftp_rm_recurse($ftp, $file)) {
-				echo json_dir('rmFile','true');
+				echo json_dir($ftp,'rmFile','true');
 				ftp_close($ftp);
 				exit(0);
 			}
@@ -27,7 +27,7 @@ if(isset($_POST['file'])) {
 	} elseif($type) {	//file OR link
 		//just a file
 		if(ftp_delete($ftp, $file)) {
-			echo json_dir('rmFile','true');
+			echo json_dir($ftp,'rmFile','true');
 			ftp_close($ftp);
 			exit(0);
 		}
