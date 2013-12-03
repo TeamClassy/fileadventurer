@@ -21,11 +21,11 @@ CURRENTLY TESTING:
 rm_file.php
         inputs:
                 file      - file/directory destination
-                recursive - 'true' - if 'file' is a directory, delete the entire directory / 'false'
         outputs:
                 JSON directory
         flags:
-                "rmFile" : true/false !!!! may still partially delete if false && recursive
+                "rmFile" : true/false
+                "rmFail" : ["/path/fail/1", "/path/fail/2"] !!! only if "rmFile" is false
 
 mv_file.php
         inputs:

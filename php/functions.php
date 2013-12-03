@@ -75,28 +75,32 @@ function get_user_pass()
 //		$ftp - valid ftp resource handler
 //		$dir - directory to recursively delete
 //	Returns:
-//		true/false - may still partially delete if false
+//		true - if success
+//		file - if fail, array of bad files
 //	Assumptions:
 //		$dir is sanitized
 function ftp_rm_recurse($ftp, $dir)
 {
+	$bad_files = array();
 	foreach (ftp_rawlist($ftp, $dir) as $file) {
 		$info = preg_split("/\s+/", $file, 9);
 		//see ftp_file_info() for breakdown of array
 		if($info[0][0] === 'd') {
 			//directory, recurse
-			if(!ftp_rm_recurse($ftp, $dir.'/'.trim($info[8]))) return false;
+			if(ftp_rm_recurse($ftp, $dir.'/'.trim($info[8])) !== true) array_push($bad_files, $dir);
 		} elseif($info[0][0] === 'l') {
 			//link, parse [8] more
 			$link_split = explode('->', $info[8]);
-			if(!ftp_delete($ftp, $dir.'/'.trim($link_split[0]))) return false;
+			if(ftp_delete($ftp, $dir.'/'.trim($link_split[0])) !== true) array_push($bad_files, $dir);
 		} else {
 			//normal file
-			if(!ftp_delete($ftp, $dir.'/'.trim($info[8]))) return false;
+			if(!ftp_delete($ftp, $dir.'/'.trim($info[8]))) array_push($bad_files, $dir);
 		}
 	}
-	if(!ftp_rmdir($ftp, $dir));
-	return true;
+	if(!ftp_rmdir($ftp, $dir)) array_push($bad_files, $dir);
+	if(empty($bad_files))
+		return true;
+	return $bad_files;
 }
 
 //=====================================
@@ -109,6 +113,8 @@ function ftp_rm_recurse($ftp, $dir)
 //		$file is sanitized
 function ftp_file_info($ftp, $file)
 {
+	//safety root check
+	if($file === '/') return 'dir';
 	//get info we need
 	$path = dirname($file);
 	$name = basename($file);
@@ -237,17 +243,17 @@ function files_in_cur_dir($ftp,$depth = 1)
 //		$ftp   - ftp resource handle
 //		$flag  - flag name to enter into JSON
 //		$value - value of flag to assign
+//		$bad_files - array of files that caused issues
 //	Returns:
 //		JSON directory plus supplied flags
 //	Assumptions:
 //		session is already started
 //		$ftp is set with initiated FTP resource
-function json_dir($ftp, $flag = FALSE, $value = FALSE)
+function json_dir($ftp, $flag = FALSE, $value = FALSE, $bad_files = FALSE)
 {
 	//flags
-    error_log("in json_dir");
     $json_data = array();
-	
+  
 	//save current directory
 	$curdir = ftp_pwd($ftp);
 
@@ -255,22 +261,24 @@ function json_dir($ftp, $flag = FALSE, $value = FALSE)
     $files = files_in_cur_dir($ftp,1);
 
     $parent_dir = array();
-	//parent dir JSON
-	//ftp_cdup($ftp);
-	if(@ftp_cdup($ftp)) {
+    //parent dir JSON
+  	//check for root, cdup returns true
+	if($curdir!=='/' && @ftp_cdup($ftp)) {
 		$parent_dir = files_in_cur_dir($ftp,0);
 		ftp_chdir($ftp, $curdir);
 	}
-    $json_data[SESSION_STATUS] = true;
-    if($flag !== FALSE)
-    {
-        //Bill: this is the 'flag' in the back/front doc
-        $json_data[$flag] = $value;
-    }
-    $json_data[CUR_DIR] = $curdir;
-    $json_data[FILES] = $files;
-    $json_data[PARENT_DIR] = $parent_dir;
-    error_log("returning data");
+	$json_data[SESSION_STATUS] = true;
+	if($flag !== FALSE)
+	{
+	    $json_data[$flag] = $value;
+	    if($flag === 'rmFile' && $value === 'false') {
+	    	//include $files
+	    	$json_data['rmFail'] = $bad_files;
+	    }
+	}
+	$json_data[CUR_DIR] = $curdir;
+	$json_data[FILES] = $files;
+	$json_data[PARENT_DIR] = $parent_dir;
 	return json_encode($json_data);
 }
 
