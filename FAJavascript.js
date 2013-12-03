@@ -24,10 +24,9 @@ http://stackoverflow.com/a/7619765/1968930
 		downx,
 		downy, 
 		mousex, 
-		mousey;
-	
-	var dragging = 0;
-	var dropping = 0;
+		mousey,
+		dragging = 0,
+		dropping = 0;
 		
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
@@ -41,8 +40,12 @@ http://stackoverflow.com/a/7619765/1968930
             $('#FileMenu').toggle();
         });
         $('#Delete').on('click',function (event) {
-            var toDelete = $('.highlighted');
-            if(confirm("Are you sure you want to delete " + toDelete.find('.fileText').html() + "?")) {
+            var toDelete = $('.highlighted'),
+            	filename = toDelete.find('.fileText').html();
+            
+            $('#FileMenu').toggle();
+            
+            if(confirm("Are you sure you want to delete " + ($(toDelete[0]).hasClass('folder') ? filename + " and all of its contents" : filename) + "?")) {
             	$.ajax({
                     url: 'rm_file.php',
                     type: 'POST',
@@ -52,7 +55,7 @@ http://stackoverflow.com/a/7619765/1968930
                         if(json.rmFile) {
                             displayFiles(json);
                         } else {
-                            alert('Error: ' + toDelete.find('.fileText').html() + ' was not deleted');
+                            alert('Error: ' + filename + ' was not deleted');
                         }
                     },
                     error: function (xhr, status) {
@@ -368,10 +371,15 @@ http://stackoverflow.com/a/7619765/1968930
             id: that.name,
             html: '<img id="' + that.path + '" src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
         });
-        that.el.click(function (event) {
-            event.stopPropagation();
-            that.el.toggleClass('highlighted');
-        });
+        if (that.name === '..') {
+            that.content = dirInfo.parentDir;
+        } else {
+            that.el.click(function (event) {
+                event.stopPropagation();
+                that.el.toggleClass('highlighted');
+            });
+        }
+        
         if(that.type === 'dir') {
             that.el.dblclick(function (event) {
                 event.stopPropagation();
@@ -441,10 +449,6 @@ http://stackoverflow.com/a/7619765/1968930
 				dropping = 0;
 			}
         });
-
-        if (that.name === '..') {
-            that.content = dirInfo.parentDir;
-        }
        
 		that.el.find('.fileText').keydown(function (event){
            if(event.which===13) {
