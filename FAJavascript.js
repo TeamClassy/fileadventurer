@@ -98,8 +98,8 @@ http://stackoverflow.com/a/7619765/1968930
             if($('#ftpInput').val() !== '') {
                 ftpDefault = $('#ftpInput').val();
             }
-            $('#LoginBtn').addClass('hidden');
-            $('#LoginGif').removeClass('hidden');
+            $('#loginBtn').addClass('hidden');
+            $('#loginGif').removeClass('hidden');
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
@@ -108,8 +108,8 @@ http://stackoverflow.com/a/7619765/1968930
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
-                    $('#LoginBtn').removeClass('hidden');
-                    $('#LoginGif').addClass('hidden');
+                    $('#loginBtn').removeClass('hidden');
+                    $('#loginGif').addClass('hidden');
                     if(json.sessionStatus) {
                         $('#LoginDiv').addClass('hidden');
                         displayFiles(json);
