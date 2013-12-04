@@ -259,19 +259,31 @@
             displayFiles({dirName: that.path, files: that.content});
         }
       
-      function PostDownloadPath() {
-      $.ajax({
+        function PostDownloadPath() {
+            $.ajax({
                 url: 'set_download_path.php',
                 type: 'POST',
                 data: { path: that.path },
-                dataType: 'json',
-                success: function (json) {
-                },
-                error: function (xhr, status) {
-                    //alert('error: ' + status);
-                    console.log(xhr);
+                dataType: 'json'
+            });
+        }
+
+        function highlight(i) {
+            if(i === undefined) {
+                if(!that.el.hasClass('highlighted')) {
+                    highlighted.push(that);
+                } else {
+                    highlighted.splice($.inArray(that, highlighted), 1);
                 }
-            });}
+                that.el.toggleClass('highlighted');
+            } else {
+               if(!dirInfo[i].el.hasClass('highlighted')) {
+                    highlighted.push(dirInfo[i]);
+                    dirInfo[i].el.addClass('highlighted');
+                }
+            }
+            
+        }
 
         //public
         that.parent = dirInfo.dirName;
@@ -288,22 +300,28 @@
             that.content = dirInfo.parentDir;
         } else {
             that.el.click(function (event) {
+                var i;
                 event.stopPropagation();
                 if (event.ctrlKey) {
                 } else if (event.shiftKey) {
-                    
+                    i = $.inArray(highlighted[0], dirInfo.files);
+                    that.index = $.inArray(that, dirInfo.files);
+                    if (i > that.index) {
+                        for(; i > that.index; i --) {
+                            highlight(i);
+                        }
+                    } else if (i < that.index) {
+                        for(; i < that.index; i++) {
+                            highlight(i);
+                        }
+                    }
                 } else {
-                    for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+                    for (i = dirInfo.files.length - 1; i >= 0; i--) {
                         dirInfo.files[i].el.removeClass('highlighted');
                         highlighted.length = 0;
                     }
                 }
-                if(!that.el.hasClass('highlighted')) {
-                    highlighted.push(that);
-                } else {
-                    highlighted.splice($.inArray(that, highlighted), 1);
-                }
-                that.el.toggleClass('highlighted');
+                highlight();
             });
         }
         
@@ -312,12 +330,12 @@
                 event.stopPropagation();
                 navToDir();
             });
-        } else  { 
+        } else {
           that.el.dblclick(function (event) {
-            console.log("filename : " + that.name);
-            console.log("file path : " + that.path);
+            console.log('filename : ' + that.name);
+            console.log('file path : ' + that.path);
             PostDownloadPath();
-            window.open("download.php");
+            window.open('download.php');
             });
         }
         
