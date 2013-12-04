@@ -140,8 +140,8 @@
         $('#FileView').click(function (event) {
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].el.removeClass('highlighted');
-                highlighted.length = 0;
             }
+            highlighted.length = 0;
         });
 
         $('#FileView').mousemove(function (event) {
@@ -271,15 +271,15 @@
         function highlight(i) {
             if(i === undefined) {
                 if(!that.el.hasClass('highlighted')) {
-                    highlighted.push(that);
+                    highlighted.unshift(that);
                 } else {
                     highlighted.splice($.inArray(that, highlighted), 1);
                 }
                 that.el.toggleClass('highlighted');
             } else {
-               if(!dirInfo[i].el.hasClass('highlighted')) {
+               if(!dirInfo.files[i].el.hasClass('highlighted')) {
                     highlighted.push(dirInfo[i]);
-                    dirInfo[i].el.addClass('highlighted');
+                    dirInfo.files[i].el.addClass('highlighted');
                 }
             }
             
@@ -303,15 +303,20 @@
                 var i;
                 event.stopPropagation();
                 if (event.ctrlKey) {
+                    highlight();
                 } else if (event.shiftKey) {
+                    for (i = dirInfo.files.length - 1; i > 0; i--) {
+                        dirInfo.files[i].el.removeClass('highlighted');
+                    }
+                    highlighted.length = 1;
                     i = $.inArray(highlighted[0], dirInfo.files);
                     that.index = $.inArray(that, dirInfo.files);
                     if (i > that.index) {
-                        for(; i > that.index; i --) {
+                        for(; i > that.index - 1; i--) {
                             highlight(i);
                         }
                     } else if (i < that.index) {
-                        for(; i < that.index; i++) {
+                        for(; i < that.index + 1; i++) {
                             highlight(i);
                         }
                     }
@@ -320,8 +325,8 @@
                         dirInfo.files[i].el.removeClass('highlighted');
                         highlighted.length = 0;
                     }
+                    highlight();
                 }
-                highlight();
             });
         }
         
