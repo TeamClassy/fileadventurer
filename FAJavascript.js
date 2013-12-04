@@ -42,10 +42,12 @@ http://stackoverflow.com/a/7619765/1968930
             
             $('#FileMenu').toggle();
             if(highlighted.length > 1) {
-                multipleFileDelete();
+                if(confirm('Are you sure you want to permanently delete these ' + highlighted.length + ' items?')) {
+                    multipleFileDelete();
+                }
             } else if(highlighted.length > 0) {
                 toDelete = highlighted[0];
-                if(confirm('Are you sure you want to delete ' + toDelete.name + (toDelete.type === 'dir' ? ' and all of its contents?' : '?'))) {
+                if(confirm('Are you sure you want to permanently delete ' + toDelete.name + (toDelete.type === 'dir' ? ' and all of its contents?' : '?'))) {
                     $.ajax({
                         url: 'rm_file.php',
                         type: 'POST',
@@ -474,15 +476,16 @@ http://stackoverflow.com/a/7619765/1968930
                 if(this.failedFiles.length) {
                     alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
                 }
-                displayFiles();
+                displayFiles(this.dirinfo);
             },
-            failedFiles: []
+            failedFiles: [],
+            dirInfo: {}
         });
 
         function onSuccess (json) {
             deleteDlg.advance();
             if(json.rmFile) {
-                dirInfo = json;
+                deleteDlg.dirInfo = json;
             } else {
                 deleteDlg.failedFiles.push(json.rmFail);
             }
