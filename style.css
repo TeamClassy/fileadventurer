@@ -197,3 +197,38 @@ input
 {	
 	cursor:pointer;
 }
+
+#ProgressDialog
+{
+position: absolute;
+top: 0px;
+left: 0px;
+width: 100%;
+height: 100%;
+background-color: rgba(100, 100, 100, 0.3);
+}
+
+#ProgressDialog  > div
+{
+background-color: #F4F4F4;
+border: 3px solid #D8D8D8;
+box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);
+position: relative;
+margin: auto;
+top: 250px;
+}
+
+#ProgressDialog h3 
+{
+font-weight: normal;
+margin-left: 10px;
+margin-bottom: 15px;
+}
+
+#ProgressDialog > div > div
+{
+font-weight: normal;
+margin-left: 45px;
+margin-bottom: 10px;
+}
+

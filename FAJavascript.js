@@ -42,7 +42,7 @@ http://stackoverflow.com/a/7619765/1968930
             
             $('#FileMenu').toggle();
             if(highlighted.length > 1) {
-                //insert multiple file deletion code here
+                multipleFileDelete();
             } else if(highlighted.length > 0) {
                 toDelete = highlighted[0];
                 if(confirm('Are you sure you want to delete ' + toDelete.name + (toDelete.type === 'dir' ? ' and all of its contents?' : '?'))) {
@@ -55,7 +55,7 @@ http://stackoverflow.com/a/7619765/1968930
                             if(json.rmFile) {
                                 displayFiles(json);
                             } else {
-                                alert('Error: ' + toDelete.name + ' was not deleted');
+                                alert('Error: ' + json.rmFail + ' was not deleted');
                             }
                         },
                         error: function (xhr, status) {
@@ -77,9 +77,9 @@ http://stackoverflow.com/a/7619765/1968930
         });
 
     
-    $('#UploadButton').on('click',function (event) {
-       $('#UploadDialog').toggleClass('hidden');
-    });
+        $('#UploadButton').on('click',function (event) {
+           $('#UploadDialog').toggleClass('hidden');
+        });
 
 
         $('#loginBtn').on('click', function (eventObject) {
@@ -96,8 +96,8 @@ http://stackoverflow.com/a/7619765/1968930
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-        async: false,
-        timeout: 30000,
+                async: false,
+                timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
@@ -408,6 +408,100 @@ http://stackoverflow.com/a/7619765/1968930
         for(var j in dirs.files)
         {
             dirs.files[j] = File(dirs.files[j]);
+        }
+    }
+
+    /*
+    ====================
+    progressDialog
+        creates a dialog which displays the progress of a task
+        that = {
+            dialogTitle : 'MyDialog',
+            tasks: 3,                   //number of things that need doing
+            finish: function(){}        //a function to run after the dialog closes
+        }
+    ====================
+    */
+    function progressDialog(that) {
+        var tasks,
+            dialog,
+            progressBar,
+            val = 0;
+
+        that = that || {};
+        tasks = that.tasks || 0;
+        dialog = $('<div>', {
+            id: 'ProgressDialog',
+            html: '<div><h3>' + (that.dialogTitle || '') + '</h3><div id="progressMsg"></div><progress val="0" max="' + tasks * 10 + '"></progress></div>'
+        });
+
+        $('body').append(dialog);
+        progressBar = dialog.find('progress');
+
+        that.close = function () {
+            dialog.remove();
+            if('finish' in that) {
+                that.finish();
+            }
+        };
+
+        that.advance = function(num) {
+            num = num || 1;
+            $({value: val * 10}).animate({value: (val + num) * 10}, {
+                duration: 500,
+                step: function () {
+                    progressBar.attr('value', this.value);
+                }
+            });
+            val = val + num;
+            if(val >= tasks) {
+                setTimeout(that.close, 700);
+            }
+        };
+
+        that.message = function (newmsg) {
+            dialog.find('#progressMsg').html(newmsg);
+        };
+
+        return that;
+    }
+
+    function multipleFileDelete() {
+        var deleteDlg = progressDialog({
+            dialogTitle: 'Deleting Multiple Files',
+            tasks: highlighted.length,
+            finish: function () {
+                if(this.failedFiles.length) {
+                    alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
+                }
+                displayFiles();
+            },
+            failedFiles: []
+        });
+
+        function onSuccess (json) {
+            deleteDlg.advance();
+            if(json.rmFile) {
+                dirInfo = json;
+            } else {
+                deleteDlg.failedFiles.push(json.rmFail);
+            }
+        }
+
+        function onError  (xhr, status) {
+            alert('Request Failed');
+            console.log(xhr);
+        }
+
+        for (var i = highlighted.length - 1; i >= 0; i--) {
+            $.ajax({
+                url: 'rm_file.php',
+                type: 'POST',
+                data: { file: highlighted[i].path },
+                dataType: 'json',
+                success: onSuccess,
+                error: onError
+            });
         }
     }
 }) ();
