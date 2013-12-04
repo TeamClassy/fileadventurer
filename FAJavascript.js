@@ -477,7 +477,7 @@ http://stackoverflow.com/a/7619765/1968930
                     if(this.failedFiles.length) {
                         alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
                     }
-                    displayFiles(this.dirinfo);
+                    displayFiles(this.dirInfo);
                 },
                 failedFiles: [],
                 dirInfo: {}
