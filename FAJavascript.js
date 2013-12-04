@@ -469,20 +469,23 @@ http://stackoverflow.com/a/7619765/1968930
     }
 
     function multipleFileDelete() {
-        var deleteDlg = progressDialog({
-            dialogTitle: 'Deleting Multiple Files',
-            tasks: highlighted.length,
-            finish: function () {
-                if(this.failedFiles.length) {
-                    alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
-                }
-                displayFiles(this.dirinfo);
-            },
-            failedFiles: [],
-            dirInfo: {}
-        });
+        var count = highlighted.length - 1,
+            deleteDlg = progressDialog({
+                dialogTitle: 'Deleting Multiple Files',
+                tasks: highlighted.length,
+                finish: function () {
+                    if(this.failedFiles.length) {
+                        alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
+                    }
+                    displayFiles(this.dirinfo);
+                },
+                failedFiles: [],
+                dirInfo: {}
+            });
 
         function onSuccess (json) {
+            deleteDlg.message('Deleting ' + highlighted[count].name);
+            count--;
             deleteDlg.advance();
             if(json.rmFile) {
                 deleteDlg.dirInfo = json;
@@ -495,8 +498,8 @@ http://stackoverflow.com/a/7619765/1968930
             alert('Request Failed');
             console.log(xhr);
         }
-
-        for (var i = highlighted.length - 1; i >= 0; i--) {
+        deleteDlg.message('Deleting... ');
+        for (var i = count; i >= 0; i--) {
             $.ajax({
                 url: 'rm_file.php',
                 type: 'POST',

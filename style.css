@@ -216,6 +216,7 @@ box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);
 position: relative;
 margin: auto;
 top: 250px;
+width: 250px;
 }
 
 #ProgressDialog h3 
