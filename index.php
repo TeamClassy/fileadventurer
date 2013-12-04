@@ -59,6 +59,7 @@
 				<input type="text" id="hostInput" placeholder="Hostname">
 				<input type="text" id="ftpInput" placeholder="FTP Port">
 				<input id="loginBtn" type="submit" value="Login">
+				<img id="loginGif" class='hidden' src="ajax-loader.gif">
 			</form>
 		</div>
 	</body>

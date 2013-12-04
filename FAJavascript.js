@@ -40,7 +40,7 @@ http://stackoverflow.com/a/7619765/1968930
         $('#Delete').on('click',function (event) {
             var toDelete;
             
-            $('#FileMenu').toggle();
+            $('#FileMenu').hide();
             if(highlighted.length > 1) {
                 if(confirm('Are you sure you want to permanently delete these ' + highlighted.length + ' items?')) {
                     multipleFileDelete();
@@ -70,12 +70,15 @@ http://stackoverflow.com/a/7619765/1968930
         });
         $('#Download').on('click',function (event) {
             alert('Clicked download');
+            $('#FileMenu').hide();
         });
         $('#Rename').on('click',function (event) {
+            $('#FileMenu').hide();
             renameButton();
         });
         $('#Upload').on('click',function (event) {
             $('#UploadDialog').toggleClass('hidden');
+            $('#FileMenu').hide();
         });
 
     
@@ -95,6 +98,8 @@ http://stackoverflow.com/a/7619765/1968930
             if($('#ftpInput').val() !== '') {
                 ftpDefault = $('#ftpInput').val();
             }
+            $('#loginBtn').addClass('hidden');
+            $('#loginGif').removeClass('hidden');
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
@@ -103,17 +108,21 @@ http://stackoverflow.com/a/7619765/1968930
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
+                    $('#loginBtn').removeClass('hidden');
+                    $('#loginGif').addClass('hidden');
                     if(json.sessionStatus) {
-                        $('#LoginDiv').toggleClass('hidden');
+                        $('#LoginDiv').addClass('hidden');
                         displayFiles(json);
-                        $('#ToolBar').toggleClass('hidden');
-                        $('#LoginTitle').toggleClass('hidden');
+                        $('#ToolBar').removeClass('hidden');
+                        $('#LoginTitle').addClass('hidden');
             
                     } else {
                         alert('Login Failed');
                     }
                 },
                 error: function (xhr, status) {
+                    $('#LoginBtn').removeClass('hidden');
+                    $('#LoginGif').addClass('hidden');
                     alert('Request Failed');
                     console.log(xhr);
                 }
@@ -128,9 +137,10 @@ http://stackoverflow.com/a/7619765/1968930
                 dataType:'json',
                 success: function (json) {
                     if(!json.sessionStatus) {
-                        $('#LoginDiv').toggleClass('hidden');
-                        $('#ToolBar').toggleClass('hidden');
-                        $('#LoginTitle').toggleClass('hidden');
+                        $('#LoginDiv').removeClass('hidden');
+                        $('#ToolBar').addClass('hidden');
+                        $('#UploadDialog').addClass('hidden');
+                        $('#LoginTitle').removeClass('hidden');
                         displayFiles({dirname:''});
                     } else {
                         alert('Logout Failed');
@@ -146,6 +156,7 @@ http://stackoverflow.com/a/7619765/1968930
         $('#FileView').click(function (event) {
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].el.removeClass('highlighted');
+                highlighted.length = 0;
             }
         });
 
@@ -419,10 +430,12 @@ http://stackoverflow.com/a/7619765/1968930
     */
     function displayFiles(json) {
         var dirs = json || dirInfo;
-        $('#dirInput').attr('data-curDir', dirs.dirName + '/').val(dirs.dirName + '/');
+        $('#dirInput').attr('data-curDir', dirs.dirName).val(dirs.dirName);
         highlighted.length = 0;
-        for (var i = dirInfo.files.length - 1; i >= 0; i--) {
-            dirInfo.files[i].el.remove();
+        if('files' in dirInfo) {
+            for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+                dirInfo.files[i].el.remove();
+            }
         }
         dirInfo = dirs;
         if('parentDir' in dirs && dirs.parentDir.length !== 0) {
@@ -498,7 +511,7 @@ http://stackoverflow.com/a/7619765/1968930
                     if(this.failedFiles.length) {
                         alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
                     }
-                    displayFiles(this.dirinfo);
+                    displayFiles(this.dirInfo);
                 },
                 failedFiles: [],
                 dirInfo: {}
