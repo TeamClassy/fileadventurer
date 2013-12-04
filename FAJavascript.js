@@ -1,21 +1,6 @@
 // jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, unused: vars, devel: true, browser: true, newcap: false
 
 (function(){
-/*
-====================
-jQuery plugin courtesy of StackOverflow user lonesomeday: http://stackoverflow.com/users/417562/lonesomeday
-http://stackoverflow.com/a/7619765/1968930
-====================
-*/
-/*$.fn.appendText = function(text) {
-    'use strict';
-    this.each(function() {
-        var textNode = document.createTextNode(text);
-        $(this).append(textNode);
-    });
-};*/
-
-
     'use strict';
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
@@ -103,7 +88,6 @@ http://stackoverflow.com/a/7619765/1968930
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-                async: false,
                 timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
@@ -305,6 +289,15 @@ http://stackoverflow.com/a/7619765/1968930
         } else {
             that.el.click(function (event) {
                 event.stopPropagation();
+                if (event.ctrlKey) {
+                } else if (event.shiftKey) {
+                    
+                } else {
+                    for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+                        dirInfo.files[i].el.removeClass('highlighted');
+                        highlighted.length = 0;
+                    }
+                }
                 if(!that.el.hasClass('highlighted')) {
                     highlighted.push(that);
                 } else {
