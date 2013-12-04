@@ -263,6 +263,20 @@ http://stackoverflow.com/a/7619765/1968930
             });
             displayFiles({dirName: that.path, files: that.content});
         }
+      
+      function PostDownloadPath() {
+      $.ajax({
+                url: 'set_download_path.php',
+                type: 'POST',
+                data: { path: that.path },
+                dataType: 'json',
+                success: function (json) {
+                },
+                error: function (xhr, status) {
+                    //alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });}
 
         //public
         that.parent = dirInfo.dirName;
@@ -293,6 +307,13 @@ http://stackoverflow.com/a/7619765/1968930
             that.el.dblclick(function (event) {
                 event.stopPropagation();
                 navToDir();
+            });
+        } else  { 
+          that.el.dblclick(function (event) {
+            console.log("filename : " + that.name);
+            console.log("file path : " + that.path);
+            PostDownloadPath();
+            window.open("download.php");
             });
         }
         
