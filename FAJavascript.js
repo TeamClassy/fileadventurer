@@ -278,7 +278,7 @@
                 that.el.toggleClass('highlighted');
             } else {
                if(!dirInfo.files[i].el.hasClass('highlighted')) {
-                    highlighted.push(dirInfo[i]);
+                    highlighted.push(dirInfo.files[i]);
                     dirInfo.files[i].el.addClass('highlighted');
                 }
             }
@@ -320,6 +320,7 @@
                             highlight(i);
                         }
                     }
+                    highlighted.shift();
                 } else {
                     for (i = dirInfo.files.length - 1; i >= 0; i--) {
                         dirInfo.files[i].el.removeClass('highlighted');
