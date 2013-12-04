@@ -1,4 +1,4 @@
-// jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, newcap: false */
+// jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, unused: vars, devel: true, browser: true, newcap: false
 
 (function(){
 /*
@@ -19,15 +19,15 @@ http://stackoverflow.com/a/7619765/1968930
     'use strict';
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
-        files = [],
+        highlighted = [],
         ssh,
-		downx,
-		downy, 
-		mousex, 
-		mousey,
-		dragging = 0,
-		dropping = 0;
-		
+        downx,
+        downy,
+        mousex,
+        mousey,
+        dragging = 0,
+        dropping = 0;
+        
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
         ssh = SSH();
@@ -40,29 +40,32 @@ http://stackoverflow.com/a/7619765/1968930
             $('#FileMenu').toggle();
         });
         $('#Delete').on('click',function (event) {
-            var toDelete = $('.highlighted'),
-            	filename = toDelete.find('.fileText').html();
+            var toDelete;
             
             $('#FileMenu').toggle();
-            
-            if(confirm("Are you sure you want to delete " + ($(toDelete[0]).hasClass('folder') ? filename + " and all of its contents" : filename) + "?")) {
-            	$.ajax({
-                    url: 'rm_file.php',
-                    type: 'POST',
-                    data: { file: toDelete.find('img').attr('id') },
-                    dataType: 'json',
-                    success: function (json) {
-                        if(json.rmFile) {
-                            displayFiles(json);
-                        } else {
-                            alert('Error: ' + filename + ' was not deleted');
+            if(highlighted.length > 1) {
+                //insert multiple file deletion code here
+            } else if(highlighted.length > 0) {
+                toDelete = highlighted[0];
+                if(confirm('Are you sure you want to delete ' + toDelete.name + (toDelete.type === 'dir' ? ' and all of its contents?' : '?'))) {
+                    $.ajax({
+                        url: 'rm_file.php',
+                        type: 'POST',
+                        data: { file: toDelete.path },
+                        dataType: 'json',
+                        success: function (json) {
+                            if(json.rmFile) {
+                                displayFiles(json);
+                            } else {
+                                alert('Error: ' + toDelete.name + ' was not deleted');
+                            }
+                        },
+                        error: function (xhr, status) {
+                            alert('Request Failed');
+                            console.log(xhr);
                         }
-                    },
-                    error: function (xhr, status) {
-                        alert('Request Failed');
-                        console.log(xhr);
-                    }
-                });
+                    });
+                }
             }
         });
         $('#Download').on('click',function (event) {
@@ -75,10 +78,10 @@ http://stackoverflow.com/a/7619765/1968930
             $('#UploadDialog').toggleClass('hidden');
         });
 
-	
-	$('#UploadButton').on('click',function (event) {
-	   $('#UploadDialog').toggleClass('hidden'); 
-	});
+    
+    $('#UploadButton').on('click',function (event) {
+       $('#UploadDialog').toggleClass('hidden');
+    });
 
 
         $('#loginBtn').on('click', function (eventObject) {
@@ -86,20 +89,20 @@ http://stackoverflow.com/a/7619765/1968930
                 sshDefault = '7822',
                 ftpDefault = '7821';
             eventObject.preventDefault();
-            if($('#hostInput').val() !== "") {
+            if($('#hostInput').val() !== '') {
                 hostDefault = $('#hostInput').val();
             }
-            if($('#sshInput').val() !== "") {
+            if($('#sshInput').val() !== '') {
                 sshDefault = $('#sshInput').val();
             }
-            if($('#ftpInput').val() !== "") {
+            if($('#ftpInput').val() !== '') {
                 ftpDefault = $('#ftpInput').val();
             }
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
-		async: false,
-		timeout: 30000,
+        async: false,
+        timeout: 30000,
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
@@ -131,7 +134,7 @@ http://stackoverflow.com/a/7619765/1968930
                         $('#LoginDiv').toggleClass('hidden');
                         $('#ToolBar').toggleClass('hidden');
                         $('#LoginTitle').toggleClass('hidden');
-                        displayFiles({dirname:""});
+                        displayFiles({dirname:''});
                     } else {
                         alert('Logout Failed');
                     }
@@ -150,16 +153,16 @@ http://stackoverflow.com/a/7619765/1968930
         });
 
         $('#FileView').mousemove(function (event) {
-			
-           	mousex = (event.clientX.toString())-30;
-			mousey = (event.clientY.toString())-75;
-			
-			//Making the element dragging 
-			if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10){
-				dragging.el.attr('class', 'dragging');	
-			}
-			$('.dragging').css({ 'top': mousey+'px', "left": mousex+'px'});
-        });     
+            
+            mousex = (event.clientX.toString())-30;
+            mousey = (event.clientY.toString())-75;
+            
+            //Making the element dragging 
+            if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10){
+                dragging.el.attr('class', 'dragging');
+            }
+            $('.dragging').css({ 'top': mousey+'px', 'left': mousex+'px'});
+        });
 
     });
     
@@ -175,7 +178,7 @@ http://stackoverflow.com/a/7619765/1968930
     ====================
     */
     function goToDir(newDir) {
-        var curDir = dirInfo.dirname;
+        //var curDir = dirInfo.dirname;
 
         //if(newDir !== curDir) {
             $.ajax({
@@ -192,7 +195,7 @@ http://stackoverflow.com/a/7619765/1968930
                 },
                 error: function(xhr, status) {
                     alert('error: ' + status);
-					console.log(xhr);
+                    console.log(xhr);
                 }
             });
         //}
@@ -259,10 +262,10 @@ http://stackoverflow.com/a/7619765/1968930
             }
         }
 
-        that.el = $("#SSH");
+        that.el = $('#SSH');
         $('#SSHButton').on('click', function (event) {
             that.el.toggle();
-            if(!that.el.is(":hidden")) {
+            if(!that.el.is(':hidden')) {
                 $(that.el['0'].lastChild).focus();
             }
         });
@@ -302,7 +305,7 @@ http://stackoverflow.com/a/7619765/1968930
     function File(that) {
 
         //private
-		/*
+        /*
         ====================
         renameFile
             This function is called when the user presses enter while editing a file name
@@ -311,21 +314,21 @@ http://stackoverflow.com/a/7619765/1968930
         ====================
         */
         function renameFile(){
-        	that.el.find('.fileText').attr('contenteditable','false');
-        	$.ajax({
+            that.el.find('.fileText').attr('contenteditable','false');
+            $.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
-                    data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? "/" : "") + that.el.find('.fileText').html() },
+                    data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? '/' : '') + that.el.find('.fileText').html() },
                     dataType: 'json',
                     success: function (json) {
-                	if(!json.mvFile) {
-                	   alert('Could not rename file.');
-                	   displayFiles(json);
-                    	}
-        	    },
+                    if(!json.mvFile) {
+                       alert('Could not rename file.');
+                       displayFiles(json);
+                        }
+                },
                     error: function (xhr, status) {
-                    	alert('error: ' + status);
-                    	console.log(xhr);
+                        alert('error: ' + status);
+                        console.log(xhr);
                     }
                 });
         }
@@ -338,7 +341,6 @@ http://stackoverflow.com/a/7619765/1968930
         ====================
         */
         function navToDir() {
-            var curDir = dirInfo.dirName;
             $.ajax({
                 url: 'change_dir.php',
                 type: 'POST',
@@ -357,7 +359,7 @@ http://stackoverflow.com/a/7619765/1968930
                     console.log(xhr);
                 }
             });
-            displayFiles({dirName: that.path, files: that.content});   
+            displayFiles({dirName: that.path, files: that.content});
         }
 
         //public
@@ -376,6 +378,11 @@ http://stackoverflow.com/a/7619765/1968930
         } else {
             that.el.click(function (event) {
                 event.stopPropagation();
+                if(!that.el.hasClass('highlighted')) {
+                    highlighted.push(that);
+                } else {
+                    highlighted.splice($.inArray(that, highlighted), 1);
+                }
                 that.el.toggleClass('highlighted');
             });
         }
@@ -386,43 +393,43 @@ http://stackoverflow.com/a/7619765/1968930
                 navToDir();
             });
         }
-		
-		that.el.mousedown(function (event) {
+        
+        that.el.mousedown(function (event) {
             dragging = that;
-			downx = (event.clientX.toString())-30;
-			downy = (event.clientY.toString())-75;
+            downx = (event.clientX.toString())-30;
+            downy = (event.clientY.toString())-75;
         });
        
-		/*that.el.mouseover(function (event) {
-		//	if(dragging !== that){
-		//		dropping = that;
-		//	}
-			//console.log(that.path);
-			console.log('Currently over ' + that.name);
-		});
+        /*that.el.mouseover(function (event) {
+        //  if(dragging !== that){
+        //      dropping = that;
+        //  }
+            //console.log(that.path);
+            console.log('Currently over ' + that.name);
+        });
 
-		that.el.mouseenter(function (event) {
-			console.log('Currently over ' + that.name);
-			if(dragging !== that){
-				dropping = that;	
-			}
-		});*/ 
+        that.el.mouseenter(function (event) {
+            console.log('Currently over ' + that.name);
+            if(dragging !== that){
+                dropping = that;    
+            }
+        });*/
 
         that.el.mouseup(function (event) {
-			
-			$('.dragging').css({ 'display': 'none'});
+            
+            $('.dragging').css({ 'display': 'none'});
 
-						
+                        
 
-			dropping = $(document.elementFromPoint(event.clientX, event.clientY));
-			//if(dragging !== that){
-			//	dropping = that;
-			//}
-			//if(dragging !== that){
-			//	dropping = that;	
-			//}
+            dropping = $(document.elementFromPoint(event.clientX, event.clientY));
+            //if(dragging !== that){
+            //  dropping = that;
+            //}
+            //if(dragging !== that){
+            //  dropping = that;    
+            //}
 
-			console.log(dropping.attr('id') + ' === ' + dragging.path);			
+            console.log(dropping.attr('id') + ' === ' + dragging.path);
 
             if((dragging !== 0)&&(dragging.path !== dropping.attr('id'))&&(dropping.parent().hasClass('folder'))){
                 $.ajax({
@@ -438,45 +445,45 @@ http://stackoverflow.com/a/7619765/1968930
                 });
             }
 
-			$('.dragging').css({ 'display':'block'});
-			
-			if(dragging !== 0){	
-				dragging.el.removeClass('dragging');
-				dragging.el.addClass('file');
-				dragging = 0;
-			}
-			if(dropping !== 0){
-				dropping = 0;
-			}
+            $('.dragging').css({ 'display':'block'});
+            
+            if(dragging !== 0){
+                dragging.el.removeClass('dragging');
+                dragging.el.addClass('file');
+                dragging = 0;
+            }
+            if(dropping !== 0){
+                dropping = 0;
+            }
         });
        
-		that.el.find('.fileText').keydown(function (event){
+        that.el.find('.fileText').keydown(function (event){
            if(event.which===13) {
                 event.preventDefault();
                 renameFile();
            }
         });
 
-		 $('#FileView').append(that.el);
+         $('#FileView').append(that.el);
         return that;
     }
-	 /*
-   	=====================
-   	rmButton
+     /*
+    =====================
+    rmButton
         Changes the contenteditable attr to true of the div holding the file or folders name
         Should focus user on the selected file/folder's name and allow them to edit it.
         TODO: Add functionality for folders and allow the user to rename only one thing at a time
-   	=====================
-   	*/
-   	function renameButton (){
-        var toRename = $('.highlighted');
-        if(toRename.length > 1){
+    =====================
+    */
+    function renameButton (){
+        var toRename = highlighted[0];
+        if(highlighted.length > 1){
             alert('Cannot rename more than one file or folder.');
         }else{
-            if(toRename.find('.fileText').html() !== '..'){
+            if(toRename.name !== '..'){
                 $('#FileMenu').toggle();
-                toRename.find('.fileText').attr('contenteditable','true');
-                toRename.find('.fileText').focus();
+                toRename.el.find('.fileText').attr('contenteditable','true');
+                toRename.el.find('.fileText').focus();
             }
         }
    }
@@ -490,6 +497,7 @@ http://stackoverflow.com/a/7619765/1968930
     function displayFiles(json) {
         var dirs = json || dirInfo;
         $('#dirInput').attr('data-curDir', dirs.dirName + '/').val(dirs.dirName + '/');
+        highlighted.length = 0;
         for (var i = dirInfo.files.length - 1; i >= 0; i--) {
             dirInfo.files[i].el.remove();
         }
