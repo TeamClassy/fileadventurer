@@ -31,8 +31,6 @@
 			<div id="UploadButton"><img src="svgs/UploadButton.svg" height="30"></div>
 			
 			<div id="LogOutButton"><img src="svgs/LogOutButton.svg" height="30"></div>
-			
-			<div id="SSHButton"><img src="svgs/SSHButton.svg" height="30"></div>
 						
 		</div>
 			
@@ -59,13 +57,9 @@
 				<input type="text" id="userInput" placeholder="Username">
 				<input type="password" id="passInput" placeholder="Password">
 				<input type="text" id="hostInput" placeholder="Hostname">
-				<input type="text" id="sshInput" placeholder="SSH Port">
 				<input type="text" id="ftpInput" placeholder="FTP Port">
 				<input id="loginBtn" type="submit" value="Login">
 			</form>
-		</div>
-		<div id="SSH" contenteditable="true">
-			<span id="sshStatic" contenteditable="false"><span class="sshUser">user@server</span><span>:</span><span class="sshPath">~</span><span>$</span></span> 
 		</div>
 	</body>
 </html>

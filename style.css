@@ -99,14 +99,6 @@ body {
 	left:-10px;
 }
 
-#SSHButton
-{
-	position:fixed;
-	top:3px;
-	right:172px;
-	width:60px;
-}
-
 #LogOutButton
 {	
 	position:fixed;
@@ -201,32 +193,7 @@ body {
 	background:#D8D8D8;
 }
 
-#SSH
-{
-	position:absolute;
-	left:10%;
-	width:80%;
-	height:600px;
-	background-color:black;
-	margin-top:150px;
-	display: none;
-	color:white;
-	font-size:12pt;
-	font-family:Courier, "Courier New", monospace;
-}
-
 input
 {	
 	cursor:pointer;
 }
-
-.sshUser 
-{
-	color: lime;
-}
-
-.sshPath 
-{
-	color: #1400FF;	
-}
-

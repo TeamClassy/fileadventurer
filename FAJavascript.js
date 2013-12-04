@@ -20,7 +20,6 @@ http://stackoverflow.com/a/7619765/1968930
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
         highlighted = [],
-        ssh,
         downx,
         downy,
         mousex,
@@ -30,7 +29,6 @@ http://stackoverflow.com/a/7619765/1968930
         
     //This should prepare and initialize the window for proper opperation
     $(document).ready(function () {
-        ssh = SSH();
         $('#goToDir').on('click', function (event) {
             goToDir($('#dirInput').val());
         });
@@ -91,9 +89,6 @@ http://stackoverflow.com/a/7619765/1968930
             eventObject.preventDefault();
             if($('#hostInput').val() !== '') {
                 hostDefault = $('#hostInput').val();
-            }
-            if($('#sshInput').val() !== '') {
-                sshDefault = $('#sshInput').val();
             }
             if($('#ftpInput').val() !== '') {
                 ftpDefault = $('#ftpInput').val();
@@ -200,101 +195,6 @@ http://stackoverflow.com/a/7619765/1968930
             });
         //}
     }
-
-    /*
-    ====================
-    SSH
-        
-    ====================
-    */
-    function SSH(obj) {
-        var that = obj || {},
-            cmdHist = [],
-            cmdHistIndex = 0;
-
-        function sendCmd(inputNode, input) {
-            /*$.ajax({
-                url: 'ssh.php',
-                type: 'POST',
-                data: { cmd: input },
-                dataType: 'text',
-                success: function (text) {
-
-                },
-                error: function (xhr, status) {
-                    alert('Request Failed');
-                    console.log(xhr);
-                }
-            });*/
-            cmdHist.push(cmdHist.length - 1, 0, input);
-            cmdHistIndex = cmdHist.length - 1;
-            inputNode.remove();
-            that.el.find('div').remove();
-            that.el.append('<div></div>');
-            $('#sshStatic').append('<span">' + input + '</span><br>');
-        }
-
-        /*
-        ====================
-        function courtesy of StackOverflow user Tim down: http://stackoverflow.com/users/96100/tim-down
-        http://stackoverflow.com/a/3976125/1968930
-        ====================
-        */
-        function getCaretPosition(editableDiv) {
-            var caretPos = 0, sel, range;
-            sel = window.getSelection();
-            if (sel.rangeCount) {
-                range = sel.getRangeAt(0);
-                if (range.commonAncestorContainer.parentNode === that.el['0'] || range.commonAncestorContainer.parentNode === that.el.find('div')['0']) {
-                    caretPos = range.endOffset;
-                }
-            }
-            return caretPos;
-        }
-
-        function setInput(s, inputNode) {
-            if(inputNode.nodeValue) {
-                inputNode.nodeValue = s;
-            } else if(inputNode.localName === 'div' && inputNode.id === '') {
-                inputNode.innerText = s;
-            } else {
-                inputNode.lastChild.nodeValue = s;
-            }
-        }
-
-        that.el = $('#SSH');
-        $('#SSHButton').on('click', function (event) {
-            that.el.toggle();
-            if(!that.el.is(':hidden')) {
-                $(that.el['0'].lastChild).focus();
-            }
-        });
-        if(that.el['0'].firstChild.nodeName === '#text') {
-            that.el['0'].firstChild.remove();
-        }
-        that.el.keydown(function (event) {
-            var inputNode = window.getSelection().focusNode,
-                input = inputNode.nodeValue || ((inputNode.localName === 'div' && inputNode.id === '') ? inputNode.innerText : inputNode.lastChild.nodeValue);
-            if(that.el['0'].firstChild.nodeName === '#text') {
-                that.el.appendText(that.el['0'].firstChild.nodeValue);
-                that.el['0'].firstChild.remove();
-            }
-            if(event.which === 13) {
-                sendCmd(inputNode, input);
-            } else if(event.which === 8 && getCaretPosition(this) < 1) {
-                event.preventDefault();
-            } else if(event.which === 38) {
-                event.preventDefault();
-                setInput(cmdHist[cmdHistIndex], inputNode);
-                cmdHistIndex = cmdHistIndex > 0 ? cmdHistIndex - 1 : 0;
-            } else if(event.which === 40) {
-                event.preventDefault();
-                cmdHistIndex = cmdHistIndex < (cmdHist.length - 1) ? cmdHistIndex + 1 : cmdHist.length - 1;
-                setInput(cmdHist[cmdHistIndex], inputNode);
-            }
-        });
-    }
-
 
     /*
     ====================
