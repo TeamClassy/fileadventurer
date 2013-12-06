@@ -18,6 +18,25 @@ Files:
 
 CURRENTLY TESTING:
 
+download.php
+        inputs:
+                file - file to download
+        outputs:
+                browser downloads file, does not display even if can
+                if download fails, sends back 'FAILURE'
+        flags:
+                none
+
+mkdir.php
+        inputs:
+                dir - directory to create
+        outputs:
+                JSON directory
+        flags:
+                "mkDir" : true/false
+
+COMPLETE:
+
 rm_file.php
         inputs:
                 file      - file/directory destination
@@ -36,16 +55,6 @@ mv_file.php
                 JSON directory
         flags:
                 "mvFile"    : true/false
-
-mkdir.php
-        inputs:
-                dir - directory to create
-        outputs:
-                JSON directory
-        flags:
-                "mkDir" : true/false
-
-COMPLETE:
 
 login.php
         inputs:
@@ -98,10 +107,3 @@ upload.php
         flags:
                 TODO: this
 
-download.php
-        inputs:
-                file - file to download
-        outputs:
-                JSON directory
-        flags:
-                TODO: this
