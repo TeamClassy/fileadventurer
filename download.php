@@ -12,16 +12,14 @@ if(isset($_POST['file'])) {
     if($write = fopen('php://output', 'w')) {
         $ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
         ftp_login($ftp, $_SESSION['username'], get_user_pass());
-        //
+        //set header to always download
         header('Content-Type: application/octet-stream');
         header('Content-Transfer-Encoding: Binary');
         header('Content-disposition: attachment; filename="'.basename($file).'"');
-        if(!ftp_fget($ftp, $write, $file, FTP_BINARY)) {
-            //failure
+        if(!ftp_fget($ftp, $write, $file, FTP_BINARY))
             echo 'FAILURE';
-        }
-        //
         ftp_close($ftp);
+        fclose($write);
         exit(0);
     }
 }
