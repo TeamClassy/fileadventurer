@@ -339,7 +339,7 @@
         that.el = $('<div>', {
             'class': that.type === 'dir' ? 'folder' : 'file',
             id: that.name,
-            html: '<img id="' + that.path + '" src="svgs/' + (that.type === 'dir' ? 'Folder' : 'File') + 'Graphic.svg" ><div class="fileText">'+ that.name+ '</div>'
+            html: '<div id="' + that.path + '" class="' + (that.type === 'dir' ? 'Folder' : 'File') + '" ><div class="fileText">'+ that.name + '</div></div>'
         });
         if (that.name === '..') {
             that.content = dirInfo.parentDir;
