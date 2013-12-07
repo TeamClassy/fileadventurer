@@ -109,6 +109,7 @@
                         tasks: e.total
                     });
                 },
+                dataType: 'json',
                 success: function (json) {
                     upProgDlg.close();
                     if(json.uploadSuccess) {
