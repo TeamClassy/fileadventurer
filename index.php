@@ -33,12 +33,11 @@
 			<div id="LogOutButton"><img src="svgs/LogOutButton.svg" height="30"></div>
 						
 		</div>
-			
-		<div id="UploadDialog" style="display:none;"> 
+		<form enctype="multipart/form-data" id="UploadDialog" style="display:none;">
 			<img src="svgs/UploadDialog.svg" height="40">
-			<input type="text" id="UploadInput" value="/" placeholder"Enter Directory Here" width="400px">
-			<div id="UploadText">Upload:</div>
-		</div>
+		    <input name="file" type="file" />
+		    <input type="button" value="Upload" />
+		</form>
 	
 		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
 

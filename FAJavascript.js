@@ -69,7 +69,7 @@
             event.stopPropagation();
             //$('#UploadDialog').toggle();
             //$('#UploadDialog').toggleClass('hidden');
-          window.open("upload/temp_upload_form.html");
+            window.open('upload/temp_upload_form.html');
             $('#FileMenu').hide();
         });
 
@@ -83,6 +83,39 @@
         $('#DownloadButton').on('click',function (event) {
             Download();
         });
+
+        $('#UploadDialog :button').click(function(){
+            var formData = new FormData($('form')[0]);
+            $.ajax({
+                url: 'upload/upload_file.php',  //Server script to process data
+                type: 'POST',
+                xhr: function() {  // Custom XMLHttpRequest
+                    var myXhr = $.ajaxSettings.xhr();
+                    if(myXhr.upload){ // Check if upload property exists
+                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                    }
+                    return myXhr;
+                },
+                //Ajax events
+                //beforeSend: beforeSendHandler,
+                //success: completeHandler,
+                //error: errorHandler,
+                // Form data
+                data: formData,
+                //Options to tell jQuery not to process data or worry about content-type.
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+
+        function progressHandlingFunction(e){
+            if(e.lengthComputable){
+                console.log(e.loaded);
+                console.log(e.total);
+                //$('progress').attr({value:e.loaded,max:e.total});
+            }
+        }
 
 
         $('#loginBtn').on('click', function (eventObject) {
