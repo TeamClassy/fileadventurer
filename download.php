@@ -7,7 +7,7 @@ if(!is_user_valid()) {
 	exit(0);
 }
 
-if(isset($_POST['file'])) {
+if(isset($_GET['file'])) {
     $file = filter_var(trim($_POST['file']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
     if($write = fopen('php://output', 'w')) {
         $ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
