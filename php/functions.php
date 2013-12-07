@@ -103,6 +103,45 @@ function ftp_rm_recurse($ftp, $dir)
 	return $bad_files;
 }
 
+//====================================
+//	Inputs:
+//		$path - absolute path of file
+//	Returns:
+//		mime type or false
+//	Assumptions:
+//		$path is sanitized
+function get_mime_type($path)
+{
+	$file = trim(basename($path));
+	//get extension
+	if($pos=strpos($file, '.')) {
+		$ext = trim(substr($file,$pos),'.');
+	} else {
+		//either no '.'' or at pos 0, no extention
+		return false;
+	}
+	//check system mime file for ours
+	$mime = false;
+	if($sys_mime = fopen('/etc/mime.types','r')) {
+		while(!$mime && ($line=fgets($sys_mime)) !== false) {
+			$line = trim($line);
+			if($line && $line[0]!=='#') {
+				$parts = preg_split('/\s+/', $line);
+				if(count($parts) !== 1) {
+					foreach ($parts as $extension) {
+						if($extension === $ext) {
+							$mime = $parts[0];
+							break;
+						}
+					}
+				}
+			}
+		}
+		fclose($sys_mime);
+	}
+	return $mime;
+}
+
 //=====================================
 //	Inputs:
 //		$ftp  - valid ftp resource handler
@@ -167,6 +206,7 @@ function parse_raw_element($element)
     else
     {
         $return_file[FILE_TYPE] = trim(substr($filename,strrpos($filename,'.')),'.');
+        //$return_file[FILE_TYPE] = get_mime_type($filename);
     }
     //$return_file['permissions'] = $tokens[0];
     //$return_file['id'] = $tokens[1];

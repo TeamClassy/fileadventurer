@@ -67,7 +67,9 @@
         });
         $('#Upload').on('click',function (event) {
             event.stopPropagation();
-            $('#UploadDialog').toggle();
+            //$('#UploadDialog').toggle();
+            //$('#UploadDialog').toggleClass('hidden');
+          window.open("upload/temp_upload_form.html");
             $('#FileMenu').hide();
         });
 
