@@ -46,6 +46,7 @@ if( isset($_POST['user'])
 							$_SESSION['host']     = $host;
 							$_SESSION['ftp_port'] = $ftp_port;
 							$_SESSION['fingerprint'] = sha1($_SERVER['HTTP_USER_AGENT']);
+                            $_SESSION['current_dir'] = "/";
 							echo json_dir($ftp_resource);
 							ssh2_exec($ssh_resource, 'exit');
 							ftp_close($ftp_resource);

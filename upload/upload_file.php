@@ -6,12 +6,29 @@ if(!is_user_valid()) {
 	echo json_bad();
 	exit(0);
 }
+error_log($_SESSION['current_dir']."");
+
+$ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
+if(ftp_login($ftp, $_SESSION['username'], get_user_pass())) {
+        //echo "ftp login succeded"."<br>";
+} else {
+        //echo "ftp login failed"."<br>";
+}
+
+if(!ftp_chdir($ftp,$_SESSION['current_dir']))
+{
+    error_log("ftp failed to change directory.");
+    //TODO better error correcting here, it is not immediately clear
+    //what should be done here
+    //TODO remove profanity
+    echo "{'SomethingSeriouslyFuckedUp': true}";
+}
 
 if ($_FILES["file"]["error"] > 0)
   {
     // there was an error during the upload print information about it
     //echo "Error: " . $_FILES["file"]["error"] . "<br>";
-    echo '{"uploadSuccess":false}';
+    echo json_dir($ftp,"uploadSuccess",false);
   }
 else
   {
@@ -26,12 +43,7 @@ else
     //echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
     //echo "Stored in: " . $_FILES["file"]["tmp_name"]."<br>";
     
-    $ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
-    if(ftp_login($ftp, $_SESSION['username'], get_user_pass())) {
-        //echo "ftp login succeded"."<br>";
-    } else {
-        //echo "ftp login failed"."<br>";
-    }
+   
 
     $temp_file_handle = fopen($temp_file,'r');
     //echo "Storing in the directory: ".ftp_pwd($ftp)."<br>";
@@ -42,11 +54,11 @@ else
     if(ftp_fput($ftp,$upload_file_name,$temp_file_handle,$ftp_transfer_mode)) {
         error_log("upload succeded");
         //echo "Successfully uploaded file to ftp server"."<br>";
-        echo '{"uploadSuccess":true}';
+        echo json_dir($ftp,"uploadSuccess",true);
     } else {
         error_log("upload failed");
         //echo "Error file upload failed"."<br>";
-        echo '{"uploadSuccess":false}';
+        echo json_dir($ftp,"uploadSuccess",false);
     }
     
   }
