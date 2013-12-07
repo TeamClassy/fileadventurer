@@ -62,5 +62,6 @@
 				<img id="loginGif" class='hidden' src="ajax-loader.gif">
 			</form>
 		</div>
+		<iframe class="download-frame" name="frame"></iframe>
 	</body>
 </html>
