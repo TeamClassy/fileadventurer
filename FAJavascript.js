@@ -1,6 +1,6 @@
 // jshint jquery: true, curly: true, bitwise: true, eqeqeq: true, immed: true, strict: true, unused: vars, devel: true, browser: true, newcap: false
 
-(function(){
+(function () {
     'use strict';
     //This object should always contain information about the current directory
     var dirInfo = {dirName: '', files : []},
@@ -158,7 +158,7 @@
             highlighted.length = 0;
         });
 
-        $('ToolBar').click(function (event) {
+        $('#ToolBar').click(function (event) {
             $('#FileMenu').hide();
             $('#UploadDialog').hide();
         });
@@ -169,7 +169,7 @@
             mousey = (event.clientY.toString())-75;
             
             //Making the element dragging 
-            if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10){
+            if((dragging !== 0)&&(Math.abs(mousex - downx)) > 10) {
                 dragging.el.attr('class', 'dragging');
             }
             $('.dragging').css({ 'top': mousey+'px', 'left': mousex+'px'});
@@ -204,7 +204,7 @@
                         alert(newDir + ' does not exist');
                     }
                 },
-                error: function(xhr, status) {
+                error: function (xhr, status) {
                     alert('error: ' + status);
                     console.log(xhr);
                 }
@@ -229,7 +229,7 @@
             TODO: Input checking
         ====================
         */
-        function renameFile(){
+        function renameFile() {
             that.el.find('.fileText').attr('contenteditable','false');
             $.ajax({
                     url: 'mv_file.php',
@@ -359,7 +359,7 @@
         });
        
         /*that.el.mouseover(function (event) {
-        //  if(dragging !== that){
+        //  if(dragging !== that) {
         //      dropping = that;
         //  }
             //console.log(that.path);
@@ -368,7 +368,7 @@
 
         that.el.mouseenter(function (event) {
             console.log('Currently over ' + that.name);
-            if(dragging !== that){
+            if(dragging !== that) {
                 dropping = that;    
             }
         });*/
@@ -380,16 +380,16 @@
                         
 
             dropping = $(document.elementFromPoint(event.clientX, event.clientY));
-            //if(dragging !== that){
+            //if(dragging !== that) {
             //  dropping = that;
             //}
-            //if(dragging !== that){
+            //if(dragging !== that) {
             //  dropping = that;    
             //}
 
             console.log(dropping.attr('id') + ' === ' + dragging.path);
 
-            if((dragging !== 0)&&(dragging.path !== dropping.attr('id'))&&(dropping.parent().hasClass('folder'))){
+            if((dragging !== 0)&&(dragging.path !== dropping.attr('id'))&&(dropping.parent().hasClass('folder'))) {
                 $.ajax({
                     url: 'mv_file.php',
                     type: 'POST',
@@ -405,17 +405,17 @@
 
             $('.dragging').css({ 'display':'block'});
             
-            if(dragging !== 0){
+            if(dragging !== 0) {
                 dragging.el.removeClass('dragging');
                 dragging.el.addClass('file');
                 dragging = 0;
             }
-            if(dropping !== 0){
+            if(dropping !== 0) {
                 dropping = 0;
             }
         });
        
-        that.el.find('.fileText').keydown(function (event){
+        that.el.find('.fileText').keydown(function (event) {
            if(event.which===13) {
                 event.preventDefault();
                 renameFile();
@@ -433,12 +433,12 @@
         TODO: Add functionality for folders and allow the user to rename only one thing at a time
     =====================
     */
-    function renameButton (){
+    function renameButton () {
         var toRename = highlighted[0];
-        if(highlighted.length > 1){
+        if(highlighted.length > 1) {
             alert('Cannot rename more than one file or folder.');
         }else{
-            if(toRename.name !== '..'){
+            if(toRename.name !== '..') {
                 toRename.el.find('.fileText').attr('contenteditable','true');
                 toRename.el.find('.fileText').focus();
             }
@@ -477,7 +477,7 @@
         that = {
             dialogTitle : 'MyDialog',
             tasks: 3,                   //number of things that need doing
-            finish: function(){}        //a function to run after the dialog closes
+            finish: function () {}        //a function to run after the dialog closes
         }
     ====================
     */
@@ -504,7 +504,7 @@
             }
         };
 
-        that.advance = function(num) {
+        that.advance = function (num) {
             num = num || 1;
             $({value: val * 10}).animate({value: (val + num) * 10}, {
                 duration: 500,
@@ -572,7 +572,7 @@
         var frames = [],
             rand = Math.floor(Math.random() * 1000);
 
-        function removeFrames(){
+        function removeFrames() {
             for (var i = frames.length - 1; i >= 0; i--) {
                 frames[i].remove();
             }
