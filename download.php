@@ -16,8 +16,13 @@ if(isset($_GET['file'])) {
         header('Content-Type: application/octet-stream');
         header('Content-Transfer-Encoding: Binary');
         header('Content-disposition: attachment; filename="'.basename($file).'"');
-        if(!ftp_fget($ftp, $write, $file, FTP_BINARY))
+        if(!ftp_fget($ftp, $write, $file, FTP_BINARY)) {
+            header_remove('Content-Type');
+            header_remove('Content-Transfer-Encoding');
+            header_remove('Content-disposition');
+            header('Content-Type: text/html');
             echo 'FAILURE';
+        }
         ftp_close($ftp);
         fclose($write);
         exit(0);
