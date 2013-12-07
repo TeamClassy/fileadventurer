@@ -17,12 +17,13 @@ if(ftp_login($ftp, $_SESSION['username'], get_user_pass())) {
 
 if(!ftp_chdir($ftp,$_SESSION['current_dir']))
 {
-    error_log("ftp failed to change directory.");
+    error_log("ftp failed to change dirs:".$_SESSION['currentDir']."");
     //TODO better error correcting here, it is not immediately clear
     //what should be done here
     //TODO remove profanity
     echo "{'SomethingSeriouslyFuckedUp': true}";
-}
+    
+} else {
 
 if ($_FILES["file"]["error"] > 0)
   {
@@ -62,4 +63,5 @@ else
     }
     
   }
+}
 ?>
