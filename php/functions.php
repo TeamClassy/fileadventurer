@@ -112,8 +112,9 @@ function ftp_rm_recurse($ftp, $dir)
 //		$path is sanitized
 function get_mime_type($path)
 {
+	$file = trim(basename($path));
 	//get extension
-	if($pos=strpos(trim(basename($file)), '.')) {
+	if($pos=strpos($file, '.')) {
 		$ext = trim(substr($file,$pos),'.');
 	} else {
 		//either no '.'' or at pos 0, no extention
@@ -205,6 +206,7 @@ function parse_raw_element($element)
     else
     {
         $return_file[FILE_TYPE] = trim(substr($filename,strrpos($filename,'.')),'.');
+        //$return_file[FILE_TYPE] = get_mime_type($filename);
     }
     //$return_file['permissions'] = $tokens[0];
     //$return_file['id'] = $tokens[1];
