@@ -181,11 +181,6 @@ body {
 	margin:0px;
 }
 
-.hidden
-{
-	display: none!important;
-}
-
 .highlighted 
 {
 	outline:3px gray solid;

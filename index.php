@@ -15,7 +15,7 @@
 	</head>
 	
 	<body>
-		<div id="ToolBar" class="hidden">
+		<div id="ToolBar" style="display:none;">
 			<div id="FileDropdown">
 				<img src="svgs/FileDropdown.svg" height="30">
 			</div>
@@ -34,7 +34,7 @@
 						
 		</div>
 			
-		<div id="UploadDialog" class="hidden"> 
+		<div id="UploadDialog" style="display:none;"> 
 			<img src="svgs/UploadDialog.svg" height="40">
 			<input type="text" id="UploadInput" value="/" placeholder"Enter Directory Here" width="400px">
 			<div id="UploadText">Upload:</div>
@@ -59,7 +59,7 @@
 				<input type="text" id="hostInput" placeholder="Hostname">
 				<input type="text" id="ftpInput" placeholder="FTP Port">
 				<input id="loginBtn" type="submit" value="Login">
-				<img id="loginGif" class='hidden' src="ajax-loader.gif">
+				<img id="loginGif" style="display:none;" src="ajax-loader.gif">
 			</form>
 		</div>
 		<iframe class="download-frame" name="frame"></iframe>
