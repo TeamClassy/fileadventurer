@@ -85,21 +85,42 @@
         });
 
         $('#UploadDialog :button').click(function(){
-            var formData = new FormData($('form')[0]);
+            var formData = new FormData($('#UploadDialog')[0]),
+                upProgDlg;
+            $('#UploadDialog').hide();
             $.ajax({
                 url: 'upload/upload_file.php',  //Server script to process data
                 type: 'POST',
                 xhr: function() {  // Custom XMLHttpRequest
                     var myXhr = $.ajaxSettings.xhr();
                     if(myXhr.upload){ // Check if upload property exists
-                        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+                        myXhr.upload.addEventListener('progress',function (e){
+                            if(e.lengthComputable){
+                                upProgDlg.progressSet(e.loaded - 1);
+                            }
+                        }, false); // For handling the progress of the upload
                     }
                     return myXhr;
                 },
                 //Ajax events
-                //beforeSend: beforeSendHandler,
-                //success: completeHandler,
-                //error: errorHandler,
+                beforeSend: function (e) {
+                    upProgDlg = progressDialog({
+                        dialogTitle: 'Uploading...',
+                        tasks: e.total
+                    });
+                },
+                success: function (json) {
+                    upProgDlg.close();
+                    if(json.uploadSuccess) {
+                        displayFiles(json);
+                    } else {
+                        alert('Error: Upload failed');
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('Request Failed');
+                    console.log(xhr);
+                },
                 // Form data
                 data: formData,
                 //Options to tell jQuery not to process data or worry about content-type.
@@ -108,14 +129,6 @@
                 processData: false
             });
         });
-
-        function progressHandlingFunction(e){
-            if(e.lengthComputable){
-                console.log(e.loaded);
-                console.log(e.total);
-                //$('progress').attr({value:e.loaded,max:e.total});
-            }
-        }
 
 
         $('#loginBtn').on('click', function (eventObject) {
@@ -536,6 +549,19 @@
             dialog.remove();
             if('finish' in that) {
                 that.finish();
+            }
+        };
+
+        that.progressSet = function (progress) {
+            $({value: val * 10}).animate({value: progress * 10}, {
+                duration: 500,
+                step: function () {
+                    progressBar.attr('value', this.value);
+                }
+            });
+            val = progress;
+            if(val >= tasks) {
+                setTimeout(that.close, 700);
             }
         };
 
