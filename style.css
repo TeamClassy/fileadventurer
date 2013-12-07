@@ -174,13 +174,14 @@ body {
     outline:3px white solid;
 	width:65px;
 	text-align:center;
+	overflow:hidden;
 }
 
 .fileText
 {
 	position:relative;
 	top:65px;
-	left:-2px;
+	left:0px;
 }
 
 .Folder
