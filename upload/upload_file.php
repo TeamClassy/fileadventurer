@@ -41,9 +41,11 @@ else
     if(ftp_fput($ftp,$upload_file_name,$temp_file_handle,$ftp_transfer_mode)) {
         error_log("upload succeded");
         echo "Successfully uploaded file to ftp server"."<br>";
+        return '{"uploadSuccess":true}';
     } else {
         error_log("upload failed");
         echo "Error file upload failed"."<br>";
+        return '{"uploadSuccess":false}';
     }
     
   }
