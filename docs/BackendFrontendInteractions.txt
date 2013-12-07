@@ -35,6 +35,14 @@ mkdir.php
         flags:
                 "mkDir" : true/false
 
+upload.php
+        inputs:
+                file - destination to upload to
+        outputs:
+                JSON directory
+        flags:
+                "uploadSuccess": true/false
+
 COMPLETE:
 
 rm_file.php
@@ -99,11 +107,5 @@ ssh.php
         flags:
                 NONE
 
-upload.php
-        inputs:
-                file - destination to upload to
-        outputs:
-                JSON directory
-        flags:
-                TODO: this
+
 
