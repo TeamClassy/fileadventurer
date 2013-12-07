@@ -567,7 +567,6 @@
             setTimeout(removeFrames, 30000);
         } else if (path || highlighted.length) {
             path = path || highlighted[0].path;
-            frames = $('<iframe class="download-frame" name="frame"></iframe>').appendTo('body');
             window.open('download.php?file=' + encodeURIComponent(path), 'frame');
         }
     }
