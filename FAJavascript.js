@@ -20,12 +20,18 @@
         
         //shows working order of file dropdown buttons
         $('#FileDropdown').on('click',function (event) {
+            event.stopPropagation();
             $('#FileMenu').toggle();
         });
+
+        $('#FileMenu').on('click',function (event) {
+            $('#UploadDialog').hide();
+            $('#FileMenu').hide();
+        });
+
         $('#Delete').on('click',function (event) {
             var toDelete;
             
-            $('#FileMenu').hide();
             if(highlighted.length > 1) {
                 if(confirm('Are you sure you want to permanently delete these ' + highlighted.length + ' items?')) {
                     multipleFileDelete();
@@ -54,21 +60,26 @@
             }
         });
         $('#Download').on('click',function (event) {
-            $('#FileMenu').hide();
             Download();
         });
         $('#Rename').on('click',function (event) {
-            $('#FileMenu').hide();
             renameButton();
         });
         $('#Upload').on('click',function (event) {
-            $('#UploadDialog').toggleClass('hidden');
+            event.stopPropagation();
+            $('#UploadDialog').toggle();
             $('#FileMenu').hide();
         });
 
     
         $('#UploadButton').on('click',function (event) {
-           $('#UploadDialog').toggleClass('hidden');
+            event.stopPropagation();
+            $('#FileMenu').hide();
+           $('#UploadDialog').toggle();
+        });
+
+        $('#DownloadButton').on('click',function (event) {
+            Download();
         });
 
 
@@ -83,8 +94,8 @@
             if($('#ftpInput').val() !== '') {
                 ftpDefault = $('#ftpInput').val();
             }
-            $('#loginBtn').addClass('hidden');
-            $('#loginGif').removeClass('hidden');
+            $('#loginBtn').hide();
+            $('#loginGif').show();
             $.ajax({
                 url: 'login.php',
                 type: 'POST',
@@ -92,21 +103,21 @@
                 data: { user: $('#userInput').val(), pass: $('#passInput').val(), host : hostDefault, ssh_port: sshDefault, ftp_port: ftpDefault },
                 dataType: 'json',
                 success: function (json) {
-                    $('#loginBtn').removeClass('hidden');
-                    $('#loginGif').addClass('hidden');
+                    $('#loginBtn').show();
+                    $('#loginGif').hide();
                     if(json.sessionStatus) {
-                        $('#LoginDiv').addClass('hidden');
+                        $('#LoginDiv').hide();
                         displayFiles(json);
-                        $('#ToolBar').removeClass('hidden');
-                        $('#LoginTitle').addClass('hidden');
+                        $('#ToolBar').show();
+                        $('#LoginTitle').hide();
             
                     } else {
                         alert('Login Failed');
                     }
                 },
                 error: function (xhr, status) {
-                    $('#LoginBtn').removeClass('hidden');
-                    $('#LoginGif').addClass('hidden');
+                    $('#LoginBtn').show();
+                    $('#LoginGif').hide();
                     alert('Request Failed');
                     console.log(xhr);
                 }
@@ -114,6 +125,8 @@
         });
 
         $('#LogOutButton').on('click', function (eventObject) {
+            $('#UploadDialog').hide();
+            $('#FileMenu').hide();
             eventObject.preventDefault();
             $.ajax({
                 url: 'logout.php',
@@ -121,10 +134,9 @@
                 dataType:'json',
                 success: function (json) {
                     if(!json.sessionStatus) {
-                        $('#LoginDiv').removeClass('hidden');
-                        $('#ToolBar').addClass('hidden');
-                        $('#UploadDialog').addClass('hidden');
-                        $('#LoginTitle').removeClass('hidden');
+                        $('#LoginDiv').show();
+                        $('#ToolBar').hide();
+                        $('#LoginTitle').show();
                         displayFiles({dirname:''});
                     } else {
                         alert('Logout Failed');
@@ -138,10 +150,17 @@
         });
         
         $('#FileView').click(function (event) {
+            $('#FileMenu').hide();
+            $('#UploadDialog').hide();
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].el.removeClass('highlighted');
             }
             highlighted.length = 0;
+        });
+
+        $('ToolBar').click(function (event) {
+            $('#FileMenu').hide();
+            $('#UploadDialog').hide();
         });
 
         $('#FileView').mousemove(function (event) {
