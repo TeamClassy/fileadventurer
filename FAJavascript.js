@@ -54,8 +54,8 @@
             }
         });
         $('#Download').on('click',function (event) {
-            alert('Clicked download');
             $('#FileMenu').hide();
+            Download();
         });
         $('#Rename').on('click',function (event) {
             $('#FileMenu').hide();
@@ -258,15 +258,6 @@
             });
             displayFiles({dirName: that.path, files: that.content});
         }
-      
-        function PostDownloadPath() {
-            $.ajax({
-                url: 'set_download_path.php',
-                type: 'POST',
-                data: { path: that.path },
-                dataType: 'json'
-            });
-        }
 
         function highlight(i) {
             if(i === undefined) {
@@ -338,10 +329,7 @@
             });
         } else {
           that.el.dblclick(function (event) {
-            console.log('filename : ' + that.name);
-            console.log('file path : ' + that.path);
-            PostDownloadPath();
-            window.open('download.php');
+            Download();
             });
         }
         
@@ -432,7 +420,6 @@
             alert('Cannot rename more than one file or folder.');
         }else{
             if(toRename.name !== '..'){
-                $('#FileMenu').toggle();
                 toRename.el.find('.fileText').attr('contenteditable','true');
                 toRename.el.find('.fileText').focus();
             }
@@ -561,4 +548,28 @@
             });
         }
     }
+
+    function Download(path) {
+        var frames = [],
+            rand = Math.floor(Math.random() * 1000);
+
+        function removeFrames(){
+            for (var i = frames.length - 1; i >= 0; i--) {
+                frames[i].remove();
+            }
+        }
+        removeFrames();
+        if(!path && highlighted.length > 1) {
+            for (var i = highlighted.length - 1; i >= 0; i--) {
+                frames.push($('<iframe class="download-frame" name="frame' + (i * rand) + '"></iframe>').appendTo('body'));
+                window.open('download.php?file=' + encodeURIComponent(highlighted[i].path), 'frame' + (i * rand));
+            }
+            setTimeout(removeFrames, 30000);
+        } else if (path || highlighted.length) {
+            path = path || highlighted[0].path;
+            frames = $('<iframe class="download-frame" name="frame"></iframe>').appendTo('body');
+            window.open('download.php?file=' + encodeURIComponent(path), 'frame');
+        }
+    }
+
 }) ();
