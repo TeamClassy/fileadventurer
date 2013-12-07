@@ -160,8 +160,10 @@ body {
 	margin:5px;
     border:4px white solid;
     outline:3px white solid;
-	width:80px;
+	width:65px;
+	height:85px;
 	text-align:center;
+	overflow:hidden;
 }
 
 .folder
@@ -170,22 +172,41 @@ body {
 	margin:5px;
     border:4px white solid;
     outline:3px white solid;
-	width:80px;
+	width:65px;
 	text-align:center;
 }
 
 .fileText
 {
 	position:relative;
-	top:-5px;
-	margin:0px;
+	top:65px;
+	left:-2px;
 }
+
+.Folder
+{
+	background:url('svgs/FolderGraphic.svg');
+	background-repeat:no-repeat;
+	width:65px;
+	height:80px;
+}
+
+.File
+{
+	background:url('svgs/FileGraphic.svg');
+	background-repeat:no-repeat;
+	width:65px;
+	height:80px;
+}
+
 
 .highlighted 
 {
 	outline:3px gray solid;
     border:4px #D8D8D8 solid;
 	background:#D8D8D8;
+	overflow:visible;
+	!important;
 }
 
 input
