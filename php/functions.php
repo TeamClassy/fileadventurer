@@ -157,7 +157,7 @@ function ftp_file_info($ftp, $file)
 	//get info we need
 	$path = dirname($file);
 	$name = basename($file);
-	foreach (ftp_rawlist($ftp, $path) as $list) {
+	foreach (ftp_rawlist($ftp, ' -A '.$path) as $list) {
 		//limit for possible spaces in name
 		$info = preg_split("/\s+/", $list, 9);
 		// [0]permissions	- drwxr-x---
