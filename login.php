@@ -36,7 +36,8 @@ if( isset($_POST['user'])
 							break;
 						case 0:
 							//child
-							child_ssh($username, $password, $host, $ssh_port);
+							//child_ssh($username, $password, $host, $ssh_port);
+							sleep(2);
 							posix_kill(posix_getpid(), SIGHUP);
 							break;
 						default:
@@ -45,8 +46,8 @@ if( isset($_POST['user'])
 							$_SESSION['password'] = set_user_pass($password);
 							$_SESSION['host']     = $host;
 							$_SESSION['ftp_port'] = $ftp_port;
+							$_SESSION['current_dir'] = '/';
 							$_SESSION['fingerprint'] = sha1($_SERVER['HTTP_USER_AGENT']);
-                            $_SESSION['current_dir'] = "/";
 							echo json_dir($ftp_resource);
 							ssh2_exec($ssh_resource, 'exit');
 							ftp_close($ftp_resource);

@@ -27,6 +27,7 @@ function is_user_valid()
 	|| !isset($_SESSION['host'])
 	|| !isset($_SESSION['ftp_port'])
 	|| !isset($_SESSION['fingerprint'])
+	|| !isset($_SESSION['current_dir'])
 	|| $_SESSION['fingerprint'] !== sha1($_SERVER['HTTP_USER_AGENT']))
 		return false;
 	return true;
@@ -67,6 +68,7 @@ function get_user_pass()
 {
 	if(isset($_COOKIE['FILEADVENTURER_KEY']))
 		return rtrim(@mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $_COOKIE['FILEADVENTURER_KEY'], $_SESSION['password'], MCRYPT_MODE_CBC),'\0');
+		//trim trailing NULL chars from end
 	return false;
 }
 
@@ -76,7 +78,7 @@ function get_user_pass()
 //		$dir - directory to recursively delete
 //	Returns:
 //		true - if success
-//		file - if fail, array of bad files
+//			   if fail, array of bad files
 //	Assumptions:
 //		$dir is sanitized
 function ftp_rm_recurse($ftp, $dir)
@@ -110,6 +112,8 @@ function ftp_rm_recurse($ftp, $dir)
 //		mime type or false
 //	Assumptions:
 //		$path is sanitized
+//	Warnings:
+//		THIS IS SLOW
 function get_mime_type($path)
 {
 	$file = trim(basename($path));
@@ -363,8 +367,7 @@ function child_ssh($username, $password, $host, $port)
 	stream_set_blocking($sh, false);
 	//work loop
 	$last_time = time();
-	while(false)	//UNTIL FULLY IMPLEMENTED
-	//while(true)
+	while(true)
 	{
 		//shell commands
 		if($tmp_in=@socket_accept($in)) {	//non-blocking, will return false if nothing
@@ -388,7 +391,7 @@ function child_ssh($username, $password, $host, $port)
 		}
 		//safety time-out
 		$cur_time = time()-$last_time;
-		if($cur_time > 10) break;
+		if($cur_time > 10) break;	//TODO: set to 10 min or so
 		//don't kill system
 		usleep(100000);	//0.1 seconds
 	}

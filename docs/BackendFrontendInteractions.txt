@@ -27,6 +27,14 @@ download.php
         flags:
                 none
 
+view_file.php
+        input:
+                file - file to view (image/text)
+        outputs:
+                requested file
+        flags:
+                TODO: this
+
 mkdir.php
         inputs:
                 dir - directory to create
@@ -86,14 +94,6 @@ change_dir.php
                 "dirChange" : true/false
 
 INCOMPLETE:
-
-view_file.php
-        input:
-                file - file to view (image/text)
-        outputs:
-                requested file
-        flags:
-                TODO: this
 
 ssh.php
         input:
