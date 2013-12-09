@@ -681,6 +681,9 @@
                 } else if ($(frameDocument.children[0]).is('svg')) {
                     frameHeight = frameDocument.children[0].height.baseVal.value;
                     frameWidth = frameDocument.children[0].width.baseVal.value;
+                } else if(frameDocument.body && $(frameDocument.body.children[0]).is('embed')) {
+                    frameHeight = $(window).height()/1.1;
+                    frameWidth = $(window).width()/1.15;
                 } else /* if($(frameDocument.body.children[0]).is('pre')*/ {
                     frameHeight = $(frameDocument.children[0]).height();
                     frameWidth = $(window).width()/1.5;
