@@ -45,7 +45,9 @@
                         data: { file: toDelete.path },
                         dataType: 'json',
                         success: function (json) {
-                            if(json.rmFile) {
+                            if (!json.sessionStatus) {
+                                logout();
+                            } else if(json.rmFile) {
                                 displayFiles(json);
                             } else {
                                 alert('Error: ' + json.rmFail + ' was not deleted');
@@ -110,7 +112,9 @@
                 dataType: 'json',
                 success: function (json) {
                     upProgDlg.close();
-                    if(json.uploadSuccess) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.uploadSuccess) {
                         displayFiles(json);
                     } else {
                         alert('Error: Upload failed');
@@ -245,7 +249,9 @@
                 data: { dir: newDir },
                 dataType: 'json',
                 success: function (json) {
-                    if(json.dirChange) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.dirChange) {
                         displayFiles(json);
                     } else {
                         alert(newDir + ' does not exist');
@@ -279,21 +285,25 @@
         function renameFile() {
             that.el.find('.fileText').attr('contenteditable','false');
             $.ajax({
-                    url: 'mv_file.php',
-                    type: 'POST',
-                    data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? '/' : '') + that.el.find('.fileText').html() },
-                    dataType: 'json',
-                    success: function (json) {
-                    if(!json.mvFile) {
-                       alert('Could not rename file.');
-                       displayFiles(json);
-                        }
-                },
-                    error: function (xhr, status) {
-                        alert('error: ' + status);
-                        console.log(xhr);
+                url: 'mv_file.php',
+                type: 'POST',
+                data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? '/' : '') + that.el.find('.fileText').html() },
+                dataType: 'json',
+                success: function (json) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(!json.mvFile) {
+                        alert('Could not rename file.');
+                        displayFiles(json);
+                    } else {
+                        displayFiles(json);
                     }
-                });
+                },
+                error: function (xhr, status) {
+                    alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });
         }
   
         /*
@@ -310,7 +320,9 @@
                 data: { dir: that.path },
                 dataType: 'json',
                 success: function (json) {
-                    if(json.dirChange) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.dirChange) {
                         displayFiles(json);
                     } else {
                         alert(that.path + 'does not exist');
@@ -443,7 +455,12 @@
                     data: {from: dragging.path, to: dropping.attr('id') + '/' + dragging.name },
                     dataType: 'json',
                     success: function (json) {
-                        if(json.mvFile) {
+                        if (!json.sessionStatus) {
+                           logout();
+                        } else if(json.mvFile) {
+                            displayFiles(json);
+                        } else {
+                            alert('file move failed');
                             displayFiles(json);
                         }
                     }
@@ -591,20 +608,27 @@
                 dialogTitle: 'Deleting Multiple Files',
                 tasks: highlighted.length,
                 finish: function () {
-                    if(this.failedFiles.length) {
+                    if (this.loggedOut) {
+                        logout();
+                    } else if(this.failedFiles.length) {
                         alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
+                        displayFiles(this.dirInfo);
+                    } else {
+                        displayFiles(this.dirInfo);
                     }
-                    displayFiles(this.dirInfo);
                 },
-                failedFiles: [],
-                dirInfo: {}
+                failedFiles : [],
+                dirInfo : {},
+                loggedOut : false
             });
 
         function onSuccess (json) {
             deleteDlg.message('Deleting ' + highlighted[count].name);
             count--;
             deleteDlg.advance();
-            if(json.rmFile) {
+            if (!json.sessionStatus) {
+                deleteDlg.loggedout = true;
+            } else if(json.rmFile) {
                 deleteDlg.dirInfo = json;
             } else {
                 deleteDlg.failedFiles.push(json.rmFail);
@@ -694,6 +718,14 @@
             }).appendTo('body');
             window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
         }
+    }
+    
+    function logout() {
+        $('#LoginDiv').show();
+        $('#ToolBar').hide();
+        $('#LoginTitle').show();
+        displayFiles({dirname:''});
+        alert('You have been logged out');
     }
 
 }) ();
