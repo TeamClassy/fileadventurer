@@ -675,17 +675,18 @@
                 var frameDocument = this.contentWindow? this.contentWindow.document : this.contentDocument.defaultView.document,
                     frameHeight,
                     frameWidth;
-                if($(frameDocument.body.children[0]).is('img')) {
+                if(frameDocument.body && $(frameDocument.body.children[0]).is('img')) {
                     frameHeight = $(frameDocument.body.children[0]).height();
                     frameWidth = $(frameDocument.body.children[0]).width();
                 } else if ($(frameDocument.children[0]).is('svg')) {
-                    frameHeight = $(frameDocument.children[0]).height.baseVal.value;
-                    frameWidth = $(frameDocument.children[0]).width.baseVal.value;
-                } else /*if($(frameDocument.body.children[0]).is('pre'))*/ {
-                    frameHeight = $(frameDocument.body.children[0]).height;
-                    frameWidth = 500;
+                    frameHeight = frameDocument.children[0].height.baseVal.value;
+                    frameWidth = frameDocument.children[0].width.baseVal.value;
+                } else /* if($(frameDocument.body.children[0]).is('pre')*/ {
+                    frameHeight = $(frameDocument.children[0]).height();
+                    frameWidth = $(window).width()/1.5;
                 }
-                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': frameHeight/-2 + 'px 0 0 ' + frameWidth/-2 + 'px'});
+                
+                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? 100 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? 100 : frameWidth/-2) + 'px'});
                 
             }).appendTo('body');
             window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
