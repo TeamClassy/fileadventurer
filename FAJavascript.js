@@ -719,7 +719,10 @@
                 } else if(frameDocument.body && $(frameDocument.body.children[0]).is('embed')) {
                     frameHeight = $(window).height() * 0.95;
                     frameWidth = $(window).width() * 0.9;
-                } else /* if($(frameDocument.body.children[0]).is('pre')*/ {
+                } else if(frameDocument.childNodes && frameDocument.childNodes.length > 1) {
+                    frameHeight = $(window).height()
+                    frameWidth = $(window).width() * 0.9;
+                } else /* if($(frameDocument.body.children[0]).is('pre'))*/ {
                     frameHeight = $(frameDocument.children[0]).height();
                     frameWidth = $(window).width()/1.5;
                 }
