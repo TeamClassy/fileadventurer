@@ -275,12 +275,20 @@ margin-left: 45px;
 margin-bottom: 10px;
 }
 
-iframe {
-	border-width: 0px;
-}
-
 .download-frame
 {
+	border-width: 0px;
 	width: 0px;
 	height: 0px;
+}
+
+.view-frame
+{
+	position: absolute;
+	z-index: 15;
+	top: 50%;
+	left: 50%;
+	background: #DADADA;
+	border: 5px solid;
+	border-color: #A8A8A8;
 }
