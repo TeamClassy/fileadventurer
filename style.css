@@ -235,7 +235,7 @@ input
 
 #ProgressDialog
 {
-position: absolute;
+position: fixed;
 top: 0px;
 left: 0px;
 width: 100%;
@@ -284,7 +284,7 @@ margin-bottom: 10px;
 
 .view-frame
 {
-	position: absolute;
+	position: relative;
 	z-index: 15;
 	top: 50%;
 	left: 50%;
