@@ -669,9 +669,9 @@
             path = path || highlighted[0].path;
             $('<div>', { id: 'ProgressDialog'}).appendTo('body').click(function (event) {
                 frames.remove();
-                $(this).remove()
+                $(this).remove();
             });
-            frames = $('<iframe class="view-frame" name="view-frame"></iframe>')load(function (event) {
+            frames = $('<iframe class="view-frame" name="view-frame"></iframe>').load(function (event) {
                 var frameDocument = this.contentWindow? this.contentWindow.document : this.contentDocument.defaultView.document,
                     frameHeight,
                     frameWidth;
