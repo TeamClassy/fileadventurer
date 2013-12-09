@@ -686,7 +686,7 @@
                     frameWidth = $(window).width()/1.5;
                 }
                 
-                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? 100 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? 100 : frameWidth/-2) + 'px'});
+                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? -100 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? -100 : frameWidth/-2) + 'px'});
                 
             }).appendTo('body');
             window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
