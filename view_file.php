@@ -14,7 +14,7 @@ if(isset($_GET['file'])) {
 		$mime = get_mime_type($file);
 		//login to ftp
 		$ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
-		if(ftp_login($_SESSION['user'], get_user_pass())) {
+		if(ftp_login($ftp, $_SESSION['username'], get_user_pass())) {
 			//set header to correct mime type
 			header('Content-Type: '.$mime);
 			header('Content-Transfer-Encoding: Binary');
