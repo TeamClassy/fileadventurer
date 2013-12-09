@@ -702,18 +702,29 @@
                 if(frameDocument.body && $(frameDocument.body.children[0]).is('img')) {
                     frameHeight = $(frameDocument.body.children[0]).height();
                     frameWidth = $(frameDocument.body.children[0]).width();
+                    if(frameHeight > $(window).height() || frameWidth > $(window).width()) {
+                        if(frameHeight > frameWidth) {
+                            frameHeight = $(window).height() * 0.95
+                            $(frameDocument.body.children[0]).css({'height': frameHeight})
+                            frameWidth = $(frameDocument.body.children[0]).width();
+                        } else {
+                            frameWidth = $(window).width() * 0.9
+                            $(frameDocument.body.children[0]).css({'width': frameWidth})
+                            frameHeight = $(frameDocument.body.children[0]).height();
+                        }
+                    }
                 } else if ($(frameDocument.children[0]).is('svg')) {
                     frameHeight = frameDocument.children[0].height.baseVal.value;
                     frameWidth = frameDocument.children[0].width.baseVal.value;
                 } else if(frameDocument.body && $(frameDocument.body.children[0]).is('embed')) {
-                    frameHeight = $(window).height()/1.1;
-                    frameWidth = $(window).width()/1.15;
+                    frameHeight = $(window).height() * 0.95;
+                    frameWidth = $(window).width() * 0.9;
                 } else /* if($(frameDocument.body.children[0]).is('pre')*/ {
                     frameHeight = $(frameDocument.children[0]).height();
                     frameWidth = $(window).width()/1.5;
                 }
                 
-                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? $(window).height()/-4 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? -$(window).width()/-4 : frameWidth/-2) + 'px'});
+                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? $(window).height()/-2 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? $(window).width()/-2.5 : frameWidth/-2) + 'px'});
                 
             }).appendTo('body');
             window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
