@@ -67,17 +67,15 @@
         });
         $('#Upload').on('click',function (event) {
             event.stopPropagation();
-            //$('#UploadDialog').toggle();
-            //$('#UploadDialog').toggleClass('hidden');
-            window.open('upload/temp_upload_form.html');
             $('#FileMenu').hide();
+            $('#UploadDialog').toggle();
         });
 
     
         $('#UploadButton').on('click',function (event) {
             event.stopPropagation();
             $('#FileMenu').hide();
-           $('#UploadDialog').toggle();
+            $('#UploadDialog').toggle();
         });
 
         $('#DownloadButton').on('click',function (event) {
@@ -89,7 +87,7 @@
                 upProgDlg;
             $('#UploadDialog').hide();
             $.ajax({
-                url: 'upload/upload_file.php',  //Server script to process data
+                url: 'upload.php',  //Server script to process data
                 type: 'POST',
                 xhr: function() {  // Custom XMLHttpRequest
                     var myXhr = $.ajaxSettings.xhr();
@@ -397,7 +395,7 @@
             });
         } else {
           that.el.dblclick(function (event) {
-            Download();
+            viewFile(that.path);
             });
         }
         
@@ -639,7 +637,7 @@
                 frames[i].remove();
             }
         }
-        removeFrames();
+        //removeFrames();
         if(!path && highlighted.length > 1) {
             for (var i = highlighted.length - 1; i >= 0; i--) {
                 frames.push($('<iframe class="download-frame" name="frame' + (i * rand) + '"></iframe>').appendTo('body'));
@@ -649,6 +647,48 @@
         } else if (path || highlighted.length) {
             path = path || highlighted[0].path;
             window.open('download.php?file=' + encodeURIComponent(path), 'frame');
+        }
+    }
+    
+    function viewFile(path) {
+        var frames = [];
+
+        /* (function removeFrames() {
+            for (var i = frames.length - 1; i >= 0; i--) {
+                frames[i].remove();
+            }
+        }
+        removeFrames();
+        if(!path && highlighted.length > 1) {
+            for (var i = highlighted.length - 1; i >= 0; i--) {
+                frames.push($('<iframe class="view-frame" name="view-frame' + i + '"></iframe>').appendTo('body'));
+                window.open('download.php?file=' + encodeURIComponent(highlighted[i].path), 'view-frame' + i);
+            }
+            setTimeout(removeFrames, 30000);
+        } else */ if (path || highlighted.length) {
+            path = path || highlighted[0].path;
+            $('<div>', { id: 'ProgressDialog'}).appendTo('body').click(function (event) {
+                frames.remove();
+                $(this).remove()
+            });
+            frames = $('<iframe class="view-frame" name="view-frame"></iframe>')load(function (event) {
+                var frameDocument = this.contentWindow? this.contentWindow.document : this.contentDocument.defaultView.document,
+                    frameHeight,
+                    frameWidth;
+                if($(frameDocument.body.children[0]).is('img')) {
+                    frameHeight = $(frameDocument.body.children[0]).height();
+                    frameWidth = $(frameDocument.body.children[0]).width();
+                } else if ($(frameDocument.children[0]).is('svg')) {
+                    frameHeight = $(frameDocument.children[0]).height.baseVal.value;
+                    frameWidth = $(frameDocument.children[0]).width.baseVal.value;
+                } else /*if($(frameDocument.body.children[0]).is('pre'))*/ {
+                    frameHeight = $(frameDocument.body.children[0]).height;
+                    frameWidth = 500;
+                }
+                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': frameHeight/-2 + 'px 0 0 ' + frameWidth/-2 + 'px'});
+                
+            }).appendTo('body');
+            window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
         }
     }
 
