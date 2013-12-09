@@ -15,9 +15,8 @@ require_once 'php/functions.php';
 
     if(ftp_chdir($ftp, $_SESSION['current_dir'])) {
         //we have to check here that the array $_FILES was passed
-        //We Also must verify that the file has a name
         //And that there was no error in the file transfer
-        if(isset($_FILES) && isset($_FILES['files']['name']) && (!$_FILES['files']['error'])) {
+        if(isset($_FILES['file']) && !$_FILES['file']['error']) {
             //no error, woot
             $file_name = filter_var(trim($_FILES['file']['name']),FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_HIGH | FILTER_FLAG_ENCODE_LOW);
             $temp_name = $_FILES['file']['tmp_name'];
