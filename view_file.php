@@ -13,8 +13,8 @@ if(isset($_GET['file'])) {
     	//get mime type
 		$mime = get_mime_type($file);
 		//login to ftp
-		$ftp = ftp_connect('localhost', 7821);
-		if(ftp_login($ftp, 'connor', 'carboxylic')) {
+		$ftp = ftp_connect($_SESSION['host'], $_SESSION['ftp_port']);
+		if(ftp_login($ftp, $_SESSION['user', get_user_pass())) {
 			//set header to correct mime type
 			header('Content-Type: '.$mime);
 			header('Content-Transfer-Encoding: Binary');

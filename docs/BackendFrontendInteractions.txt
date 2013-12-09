@@ -31,7 +31,8 @@ view_file.php
         input:
                 file - file to view (image/text)
         outputs:
-                requested file
+                browser displays file if possible, otherwise downloads
+                if fails, sends back 'FAILURE'
         flags:
                 TODO: this
 
