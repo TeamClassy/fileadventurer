@@ -27,6 +27,15 @@ download.php
         flags:
                 none
 
+view_file.php
+        input:
+                file - file to view (image/text)
+        outputs:
+                browser displays file if possible, otherwise downloads
+                if fails, sends back 'FAILURE'
+        flags:
+                TODO: this
+
 mkdir.php
         inputs:
                 dir - directory to create
@@ -86,14 +95,6 @@ change_dir.php
                 "dirChange" : true/false
 
 INCOMPLETE:
-
-view_file.php
-        input:
-                file - file to view (image/text)
-        outputs:
-                requested file
-        flags:
-                TODO: this
 
 ssh.php
         input:
