@@ -21,15 +21,16 @@
         //shows working order of file dropdown buttons
         $('#FileDropdown').on('click',function (event) {
             event.stopPropagation();
-            $('#FileMenu').toggle();
+            $('.FileMenu').css({top: '35px', left: 'inherit', height: '120px'});
+            $('.FileMenu').toggle();
         });
 
-        $('#FileMenu').on('click',function (event) {
+        $('.FileMenu').on('click',function (event) {
             $('#UploadDialog').hide();
-            $('#FileMenu').hide();
+            $('.FileMenu').hide();
         });
 
-        $('#Delete').on('click',function (event) {
+        $(document.body).on('click', '.Delete', function (event) {
             var toDelete;
             
             if(highlighted.length > 1) {
@@ -45,7 +46,9 @@
                         data: { file: toDelete.path },
                         dataType: 'json',
                         success: function (json) {
-                            if(json.rmFile) {
+                            if (!json.sessionStatus) {
+                                logout();
+                            } else if(json.rmFile) {
                                 displayFiles(json);
                             } else {
                                 alert('Error: ' + json.rmFail + ' was not deleted');
@@ -59,29 +62,17 @@
                 }
             }
         });
-        $('#Download').on('click',function (event) {
+        $(document.body).on('click', '.DownloadButton', function (event) {
             Download();
         });
-        $('#Rename').on('click',function (event) {
+        $(document.body).on('click', 'Rename', function (event) {
             renameButton();
         });
-        $('#Upload').on('click',function (event) {
-            event.stopPropagation();
-            //$('#UploadDialog').toggle();
-            //$('#UploadDialog').toggleClass('hidden');
-            window.open('upload/temp_upload_form.html');
-            $('#FileMenu').hide();
-        });
-
     
-        $('#UploadButton').on('click',function (event) {
+        $('.UploadButton').on('click',function (event) {
             event.stopPropagation();
-            $('#FileMenu').hide();
-           $('#UploadDialog').toggle();
-        });
-
-        $('#DownloadButton').on('click',function (event) {
-            Download();
+            $('.FileMenu').hide();
+            $('#UploadDialog').toggle();
         });
 
         $('#UploadDialog :button').click(function(){
@@ -89,7 +80,7 @@
                 upProgDlg;
             $('#UploadDialog').hide();
             $.ajax({
-                url: 'upload/upload_file.php',  //Server script to process data
+                url: 'upload.php',  //Server script to process data
                 type: 'POST',
                 xhr: function() {  // Custom XMLHttpRequest
                     var myXhr = $.ajaxSettings.xhr();
@@ -112,7 +103,9 @@
                 dataType: 'json',
                 success: function (json) {
                     upProgDlg.close();
-                    if(json.uploadSuccess) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.uploadSuccess) {
                         displayFiles(json);
                     } else {
                         alert('Error: Upload failed');
@@ -175,7 +168,7 @@
 
         $('#LogOutButton').on('click', function (eventObject) {
             $('#UploadDialog').hide();
-            $('#FileMenu').hide();
+            $('.FileMenu').hide();
             eventObject.preventDefault();
             $.ajax({
                 url: 'logout.php',
@@ -199,7 +192,7 @@
         });
         
         $('#FileView').click(function (event) {
-            $('#FileMenu').hide();
+            $('.FileMenu').hide();
             $('#UploadDialog').hide();
             for (var i = dirInfo.files.length - 1; i >= 0; i--) {
                 dirInfo.files[i].el.removeClass('highlighted');
@@ -208,7 +201,7 @@
         });
 
         $('#ToolBar').click(function (event) {
-            $('#FileMenu').hide();
+            $('.FileMenu').hide();
             $('#UploadDialog').hide();
         });
 
@@ -247,7 +240,9 @@
                 data: { dir: newDir },
                 dataType: 'json',
                 success: function (json) {
-                    if(json.dirChange) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.dirChange) {
                         displayFiles(json);
                     } else {
                         alert(newDir + ' does not exist');
@@ -281,21 +276,25 @@
         function renameFile() {
             that.el.find('.fileText').attr('contenteditable','false');
             $.ajax({
-                    url: 'mv_file.php',
-                    type: 'POST',
-                    data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? '/' : '') + that.el.find('.fileText').html() },
-                    dataType: 'json',
-                    success: function (json) {
-                    if(!json.mvFile) {
-                       alert('Could not rename file.');
-                       displayFiles(json);
-                        }
-                },
-                    error: function (xhr, status) {
-                        alert('error: ' + status);
-                        console.log(xhr);
+                url: 'mv_file.php',
+                type: 'POST',
+                data: {from: that.path, to: that.parent + ((that.parent[that.parent.length - 1] !== '/') ? '/' : '') + that.el.find('.fileText').html() },
+                dataType: 'json',
+                success: function (json) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(!json.mvFile) {
+                        alert('Could not rename file.');
+                        displayFiles(json);
+                    } else {
+                        displayFiles(json);
                     }
-                });
+                },
+                error: function (xhr, status) {
+                    alert('error: ' + status);
+                    console.log(xhr);
+                }
+            });
         }
   
         /*
@@ -312,7 +311,9 @@
                 data: { dir: that.path },
                 dataType: 'json',
                 success: function (json) {
-                    if(json.dirChange) {
+                    if (!json.sessionStatus) {
+                        logout();
+                    } else if(json.dirChange) {
                         displayFiles(json);
                     } else {
                         alert(that.path + 'does not exist');
@@ -383,8 +384,8 @@
                 } else {
                     for (i = dirInfo.files.length - 1; i >= 0; i--) {
                         dirInfo.files[i].el.removeClass('highlighted');
-                        highlighted.length = 0;
                     }
+                    highlighted.length = 0;
                     highlight();
                 }
             });
@@ -396,8 +397,8 @@
                 navToDir();
             });
         } else {
-          that.el.dblclick(function (event) {
-            Download();
+            that.el.dblclick(function (event) {
+                viewFile(that.path);
             });
         }
         
@@ -445,7 +446,12 @@
                     data: {from: dragging.path, to: dropping.attr('id') + '/' + dragging.name },
                     dataType: 'json',
                     success: function (json) {
-                        if(json.mvFile) {
+                        if (!json.sessionStatus) {
+                           logout();
+                        } else if(json.mvFile) {
+                            displayFiles(json);
+                        } else {
+                            alert('file move failed');
                             displayFiles(json);
                         }
                     }
@@ -471,6 +477,19 @@
            }
         });
 
+        that.el.on('contextmenu', function (event) {
+            event.preventDefault();
+            if(highlighted.indexOf(that) === -1) {
+                for (var i = dirInfo.files.length - 1; i >= 0; i--) {
+                    dirInfo.files[i].el.removeClass('highlighted');
+                }
+                highlighted.length = 0;
+                highlight();
+            }
+            $('.FileMenu').show();
+            $('.FileMenu').css({top: event.clientY + 'px', left: event.clientX + 'px', height: '89px'});
+        });
+
          $('#FileView').append(that.el);
         return that;
     }
@@ -482,7 +501,7 @@
         TODO: Add functionality for folders and allow the user to rename only one thing at a time
     =====================
     */
-    function renameButton () {
+    function renameButton() {
         var toRename = highlighted[0];
         if(highlighted.length > 1) {
             alert('Cannot rename more than one file or folder.');
@@ -593,20 +612,27 @@
                 dialogTitle: 'Deleting Multiple Files',
                 tasks: highlighted.length,
                 finish: function () {
-                    if(this.failedFiles.length) {
+                    if (this.loggedOut) {
+                        logout();
+                    } else if(this.failedFiles.length) {
                         alert('The folowing files were not deleted: \n' + this.failedFiles.toString().replace(/,/g, '\n'));
+                        displayFiles(this.dirInfo);
+                    } else {
+                        displayFiles(this.dirInfo);
                     }
-                    displayFiles(this.dirInfo);
                 },
                 failedFiles: [],
-                dirInfo: {}
+                dirInfo: {},
+                loggedOut: false
             });
 
         function onSuccess (json) {
             deleteDlg.message('Deleting ' + highlighted[count].name);
             count--;
             deleteDlg.advance();
-            if(json.rmFile) {
+            if (!json.sessionStatus) {
+                deleteDlg.loggedout = true;
+            } else if(json.rmFile) {
                 deleteDlg.dirInfo = json;
             } else {
                 deleteDlg.failedFiles.push(json.rmFail);
@@ -639,7 +665,7 @@
                 frames[i].remove();
             }
         }
-        removeFrames();
+        //removeFrames();
         if(!path && highlighted.length > 1) {
             for (var i = highlighted.length - 1; i >= 0; i--) {
                 frames.push($('<iframe class="download-frame" name="frame' + (i * rand) + '"></iframe>').appendTo('body'));
@@ -651,5 +677,74 @@
             window.open('download.php?file=' + encodeURIComponent(path), 'frame');
         }
     }
+
+    function viewFile(path) {
+        var frames = [];
+
+        /* (function removeFrames() {
+            for (var i = frames.length - 1; i >= 0; i--) {
+                frames[i].remove();
+            }
+        }
+        removeFrames();
+        if(!path && highlighted.length > 1) {
+            for (var i = highlighted.length - 1; i >= 0; i--) {
+                frames.push($('<iframe class="view-frame" name="view-frame' + i + '"></iframe>').appendTo('body'));
+                window.open('download.php?file=' + encodeURIComponent(highlighted[i].path), 'view-frame' + i);
+            }
+            setTimeout(removeFrames, 30000);
+        } else */ if (path || highlighted.length) {
+            path = path || highlighted[0].path;
+            $('<div>', { id: 'ProgressDialog'}).appendTo('body').click(function (event) {
+                frames.remove();
+                $(this).remove();
+            });
+            frames = $('<iframe class="view-frame" name="view-frame"></iframe>').load(function (event) {
+                var frameDocument = this.contentWindow? this.contentWindow.document : this.contentDocument.defaultView.document,
+                    frameHeight,
+                    frameWidth;
+                if(frameDocument.body && $(frameDocument.body.children[0]).is('img')) {
+                    frameHeight = $(frameDocument.body.children[0]).height();
+                    frameWidth = $(frameDocument.body.children[0]).width();
+                    if(frameHeight > $(window).height() || frameWidth > $(window).width()) {
+                        if(frameHeight > frameWidth) {
+                            frameHeight = $(window).height() * 0.95;
+                            $(frameDocument.body.children[0]).css({'height': frameHeight});
+                            frameWidth = $(frameDocument.body.children[0]).width();
+                        } else {
+                            frameWidth = $(window).width() * 0.9;
+                            $(frameDocument.body.children[0]).css({'width': frameWidth});
+                            frameHeight = $(frameDocument.body.children[0]).height();
+                        }
+                    }
+                } else if ($(frameDocument.children[0]).is('svg')) {
+                    frameHeight = frameDocument.children[0].height.baseVal.value;
+                    frameWidth = frameDocument.children[0].width.baseVal.value;
+                } else if(frameDocument.body && $(frameDocument.body.children[0]).is('embed')) {
+                    frameHeight = $(window).height() * 0.95;
+                    frameWidth = $(window).width() * 0.9;
+                } else if(frameDocument.childNodes && frameDocument.childNodes.length > 1) {
+                    frameHeight = $(window).height();
+                    frameWidth = $(window).width() * 0.9;
+                } else /* if($(frameDocument.body.children[0]).is('pre'))*/ {
+                    frameHeight = $(frameDocument.children[0]).height();
+                    frameWidth = $(window).width()/1.5;
+                }
+                
+                $(this).animate({'height': frameHeight + 'px', 'width': frameWidth + 'px', 'margin': (frameHeight > $(window).height() ? $(window).height()/-2 : frameHeight/-2) + 'px 0 0 ' + (frameWidth > $(window).width() ? $(window).width()/-2.5 : frameWidth/-2) + 'px'});
+                
+            }).appendTo('body');
+            window.open('view_file.php?file=' + encodeURIComponent(path), 'view-frame');
+        }
+    }
+    
+    function logout() {
+        $('#LoginDiv').show();
+        $('#ToolBar').hide();
+        $('#LoginTitle').show();
+        displayFiles({dirname:''});
+        alert('You have been logged out');
+    }
+
 
 }) ();

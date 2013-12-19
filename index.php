@@ -26,11 +26,11 @@
 					<input id="goToDir" type="button" value=">">
 			</div>
 			
-			<div id="DownloadButton"><img src="svgs/DownloadButton.svg" height="30"></div>
+			<div class="DownloadButton"><img src="svgs/DownloadButton.svg" height="30"></div>
 			
-			<div id="UploadButton"><img src="svgs/UploadButton.svg" height="30"></div>
+			<div class="UploadButton"><img src="svgs/UploadButton.svg" height="30"></div>
 			
-			<div id="LogOutButton"><img src="svgs/LogOutButton.svg" height="30"></div>
+			<div class="LogOutButton"><img src="svgs/LogOutButton.svg" height="30"></div>
 						
 		</div>
 		<form enctype="multipart/form-data" id="UploadDialog" style="display:none;">
@@ -41,15 +41,14 @@
 	
 		<div id="LoginTitle"><img src="svgs/LoginBar.svg" height="40"></div>
 
-		<div id="FileMenu" style ="display:none;"><img src="svgs/FileDropdownDropped.svg" height="120">
-			<div id='Delete'></div>
-			<div id='Download'></div>
-			<div id='Rename'></div>
-			<div id='Upload'></div>
+		<div class="FileMenu" style ="display:none;"><img src="svgs/FileDropdownDropped.svg" height="120">
+			<div class="Delete"></div>
+			<div class="DownloadButton"></div>
+			<div class="Rename"></div>
+			<div class="UploadButton"></div>
 		</div>
 		
 		<div id="FileView">
-				<!-- This will automatically fill with file descriptions -->
 		</div>
 		<div id="LoginDiv">
 			<form>

@@ -6,49 +6,55 @@ body {
 	user-select: none; 
 }
 
- #LoginDiv 
- {
- 	position: absolute;
- 	top: 50px;
- }
-#FileMenu
- {
- 	position: absolute;
- 	top: 35px;
- 	z-index:5;
- }
-#Delete
+#LoginDiv 
+{
+	position: absolute;
+	top: 50px;
+}
+
+.FileMenu
+{
+	position: absolute;
+	z-index:5;
+	overflow: hidden;
+}
+
+.Delete
 {
 	height: 30px;
 	z-index:6;
 	position: absolute;
 	top:0px;
-	width:100px;
+	width:90px;
 }
-#Download
+
+.DownloadButton
 {
 	height: 30px;
 	z-index:6;
 	position: absolute;
 	top:30px;
-	width:100px;
+	width:90px;
 }
-#Rename
+
+.Rename
 {
 	height: 30px;
 	z-index:6;
 	position: absolute;
 	top:60px;
-	width:100px;
+	width:90px;
 }
-#Upload
+
+.Upload
 {
 	height: 30px;
 	z-index:6;
 	position: absolute;
 	top:90px;
-	width:100px;
+	width:90px;
 }
+
 #UploadInput
 {
 	position: fixed;
@@ -59,7 +65,7 @@ body {
 #ToolBar
 {	
 	min-width:750px;
-	position:fixed;				
+	position:fixed;
 	top:0;
 	left:0;
 	background:url('svgs/ToolbarBack.svg');
@@ -85,7 +91,7 @@ body {
 	width:70px;
 }
 
-#DirectoryBox	
+#DirectoryBox
 {
 	font-family:"Verdana";
 	font-weight:600;
@@ -100,7 +106,7 @@ body {
 	left:-10px;
 }
 
-#LogOutButton
+.LogOutButton
 {	
 	position:fixed;
 	top:3px;
@@ -108,7 +114,7 @@ body {
 	width:35px;
 }
 
-#UploadButton
+#ToolBar .UploadButton
 {	
 	position:fixed;
 	top:3px;
@@ -116,7 +122,7 @@ body {
 	width:35px;
 }
 
-#DownloadButton
+#ToolBar .DownloadButton
 {	
 	position:fixed;
 	top:3px;
@@ -175,8 +181,8 @@ body {
 {
 	float:left;
 	margin:5px;
-    border:4px white solid;
-    outline:3px white solid;
+	border:4px white solid;
+	outline:3px white solid;
 	width:65px;
 	height:85px;
 	text-align:center;
@@ -187,8 +193,8 @@ body {
 {
 	float:left;
 	margin:5px;
-    border:4px white solid;
-    outline:3px white solid;
+	border:4px white solid;
+	outline:3px white solid;
 	width:65px;
 	text-align:center;
 	overflow:hidden;
@@ -222,7 +228,7 @@ body {
 .highlighted 
 {
 	outline:3px gray solid;
-    border:4px #D8D8D8 solid;
+	border:4px #D8D8D8 solid;
 	background:#D8D8D8;
 	overflow:visible;
 	!important;
@@ -235,52 +241,60 @@ input
 
 #ProgressDialog
 {
-position: absolute;
-top: 0px;
-left: 0px;
-width: 100%;
-height: 100%;
-background-color: rgba(100, 100, 100, 0.3);
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(100, 100, 100, 0.3);
 }
 
 #ProgressDialog  > div
 {
-background-color: #F4F4F4;
-border: 3px solid #D8D8D8;
-box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);
-position: relative;
-margin: auto;
-top: 250px;
-width: 250px;
+	background-color: #F4F4F4;
+	border: 3px solid #D8D8D8;
+	box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.3);
+	position: relative;
+	margin: auto;
+	top: 250px;
+	width: 250px;
 }
 
 #ProgressDialog h3 
 {
-font-weight: normal;
-margin-left: 10px;
-margin-bottom: 15px;
+	font-weight: normal;
+	margin-left: 10px;
+	margin-bottom: 15px;
 }
 
 #ProgressDialog > div > div
 {
-font-weight: normal;
-margin-left: 45px;
-margin-bottom: 10px;
+	font-weight: normal;
+	margin-left: 45px;
+	margin-bottom: 10px;
 }
 
 
 #ProgressDialog progress
 {
-margin-left: 45px;
-margin-bottom: 10px;
-}
-
-iframe {
-	border-width: 0px;
+	margin-left: 45px;
+	margin-bottom: 10px;
 }
 
 .download-frame
 {
+	border-width: 0px;
 	width: 0px;
 	height: 0px;
+}
+
+.view-frame
+{
+	position: absolute;
+	z-index: 15;
+	top: 50%;
+	left: 50%;
+	background: #DADADA;
+	border: 5px solid;
+	border-color: #A8A8A8;
 }
